@@ -31,6 +31,12 @@
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5}
 .wrap{max-width:1180px;margin:0 auto;padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 header{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 16px;margin-bottom:18px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex:1 1 100%}
+.themebtn{flex:none;width:44px;height:44px;display:grid;place-items:center;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--accent-text);cursor:pointer;padding:0}
+.themebtn:hover{border-color:var(--accent)}
+.themebtn .i-sun{display:none}
+html.is-dark .themebtn .i-sun{display:block}
+html.is-dark .themebtn .i-moon{display:none}
 h1{font-family:var(--f-disp);font-weight:700;font-size:2.3rem;line-height:1;margin:0;letter-spacing:.01em;text-wrap:balance}
 header p{margin:0;color:var(--muted);max-width:60ch}
 .grid{display:grid;grid-template-columns:minmax(0,1fr);gap:20px}
@@ -119,7 +125,13 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 <body>
 <div class="wrap">
   <header>
-    <h1>Otwory na półki</h1>
+    <div class="top">
+      <h1>Otwory na półki</h1>
+      <button type="button" class="themebtn" id="themeBtn" aria-label="Przełącz tryb ciemny" title="Tryb ciemny">
+        <svg class="i-moon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="i-sun" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>
+      </button>
+    </div>
     <p>Podaj wymiary boku i liczbę półek. Kalkulator wyznacza osie otworów pod podpórki, mierzone od dolnej krawędzi boku.</p>
   </header>
 
@@ -331,6 +343,13 @@ $("copy").addEventListener("click",()=>{const ta=$("copyOut");ta.hidden=false;
 function stepN(d){const v=Math.min(20,Math.max(1,(Math.round(state.n)||0)+d));$("n").value=v;fromForm();render();}
 $("nMinus").addEventListener("click",()=>stepN(-1));
 $("nPlus").addEventListener("click",()=>stepN(1));
+const root=document.documentElement;
+function isDark(){const t=root.getAttribute("data-theme");if(t)return t==="dark";return window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches;}
+function syncTheme(){const d=isDark();root.classList.toggle("is-dark",d);$("themeBtn").setAttribute("aria-pressed",d);$("themeBtn").title=d?"Tryb jasny":"Tryb ciemny";}
+try{const th=localStorage.getItem("otwory-motyw");if(th==="dark"||th==="light")root.setAttribute("data-theme",th);}catch(e){}
+syncTheme();
+try{matchMedia("(prefers-color-scheme: dark)").addEventListener("change",syncTheme);}catch(e){}
+$("themeBtn").addEventListener("click",()=>{const next=isDark()?"light":"dark";root.setAttribute("data-theme",next);try{localStorage.setItem("otwory-motyw",next);}catch(e){}syncTheme();});
 $("reset").addEventListener("click",()=>{state={...DEF};toForm();render();});
 toForm();render();
 })();
