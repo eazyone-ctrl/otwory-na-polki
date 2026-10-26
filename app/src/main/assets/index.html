@@ -80,13 +80,13 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
 .seg button{border:0;background:transparent;border-radius:999px;min-height:44px;padding:6px 10px;font-weight:600;font-size:.9rem;color:var(--muted);cursor:pointer;transition:background .15s,color .15s,box-shadow .15s}
 .seg button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink);box-shadow:0 2px 6px rgba(30,37,27,.2)}
 
-.stepper{display:grid;grid-template-columns:56px minmax(0,1fr) 56px;align-items:center;background:var(--surface-2);border-radius:18px;padding:6px}
-.stp{width:56px;height:52px;border:0;border-radius:14px;background:var(--surface);color:var(--accent-text);padding:0;line-height:0;display:grid;place-items:center;justify-self:center;cursor:pointer;box-shadow:var(--shadow);touch-action:manipulation}
+.stepper{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:center;background:var(--surface-2);border-radius:18px;padding:6px}
+.stp{width:44px;height:48px;border:0;border-radius:12px;background:var(--surface);color:var(--accent-text);padding:0;line-height:0;display:grid;place-items:center;justify-self:center;cursor:pointer;box-shadow:var(--shadow);touch-action:manipulation}
 .stp:active{background:var(--accent);color:var(--accent-ink)}
 .stp:disabled{opacity:.35;cursor:default;box-shadow:none}
-.stepper input{all:unset;display:block;width:100%;box-sizing:border-box;text-align:center;font:700 2rem var(--f-disp);color:var(--ink);min-width:0}
+.stepper input{all:unset;display:block;width:100%;box-sizing:border-box;text-align:center;font:700 1.8rem var(--f-disp);color:var(--ink);min-width:0}
 .stepper>div{min-width:0;text-align:center}
-.stepper .cap{display:block;text-align:center;font-size:.72rem;color:var(--muted);font-weight:600;margin-top:-4px}
+.stepper .cap{display:block;text-align:center;font-size:.66rem;color:var(--muted);font-weight:600;margin-top:-4px}
 
 .switch{display:flex;align-items:center;gap:14px;min-height:48px;cursor:pointer;padding:4px 4px}
 .switch input{position:absolute;opacity:0;width:1px;height:1px}
@@ -139,6 +139,8 @@ body{padding-bottom:calc(58px + env(safe-area-inset-bottom,0px))}
 .toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 24px);transform:translateX(-50%);z-index:60;background:var(--ink);color:var(--surface);padding:12px 18px;border-radius:999px;font-weight:600;font-size:.92rem;box-shadow:0 6px 20px rgba(0,0,0,.3);animation:fade .2s;max-width:calc(100% - 32px);text-align:center}
 .appbar.hide{transform:translateY(calc(-100% - 12px))}
 input::placeholder{color:var(--muted);opacity:.55}
+.nrow{align-items:stretch}
+.nrow .stepper{padding:5px;height:100%}
 /* dolny arkusz historii */
 .scrim{position:fixed;inset:0;z-index:40;background:rgba(6,9,5,.72);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);animation:fade .25s}
 .sheet{position:fixed;left:0;right:0;top:0;z-index:41;max-height:88vh;overflow:auto;background:var(--bg);border-radius:0 0 26px 26px;box-shadow:0 10px 30px rgba(0,0,0,.3);padding-bottom:16px;animation:down .3s ease-out}
@@ -226,14 +228,14 @@ input::placeholder{color:var(--muted);opacity:.55}
       <span class="sec-t">Półki</span>
     </div>
     <div class="body">
-      <div>
+      <div class="grid2 nrow">
         <div class="stepper">
           <button type="button" class="stp" id="nMinus" aria-label="Mniej półek"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg></button>
           <div><input type="number" inputmode="numeric" id="n" value="2" min="1" max="20" step="1" aria-label="Liczba półek"><span class="cap">liczba półek</span></div>
           <button type="button" class="stp" id="nPlus" aria-label="Więcej półek"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg></button>
         </div>
+        <label class="field"><span class="f-lab">Grubość półki</span><span class="f-row"><input type="number" inputmode="decimal" id="ts" value="18" min="1" step="0.5"><span class="f-unit">mm</span></span></label>
       </div>
-      <label class="field"><span class="f-lab">Grubość półki</span><span class="f-row"><input type="number" inputmode="decimal" id="ts" value="18" min="1" step="0.5"><span class="f-unit">mm</span></span></label>
       <div class="grid2">
         <label class="field"><span class="f-lab">Średnica otworu</span><span class="f-row"><input type="number" inputmode="decimal" id="dia" value="5" min="2" step="0.5"><span class="f-unit">mm</span></span></label>
         <label class="field"><span class="f-lab">Oś otworu poniżej spodu półki</span><span class="f-row"><input type="number" inputmode="decimal" id="p" value="2.5" min="0" step="0.5"><span class="f-unit">mm</span></span></label>
