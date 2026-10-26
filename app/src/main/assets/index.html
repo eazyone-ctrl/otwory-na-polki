@@ -66,6 +66,17 @@ input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid 
 .summary dt{color:var(--muted);font-size:.74rem;text-transform:uppercase;letter-spacing:.07em}
 .summary dd{margin:0;font:500 1.15rem var(--f-mono);font-variant-numeric:tabular-nums}
 .drawing{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+.fold-h{display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;list-style:none;min-height:40px;user-select:none}
+.fold-h::-webkit-details-marker{display:none}
+.fold-h h2{margin:0;font-size:1.1rem;letter-spacing:.02em}
+.lg{font-family:var(--f-disp);font-weight:600;font-size:.95rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.sumhint{display:inline-flex;align-items:center;gap:8px;font:500 .9rem var(--f-body);color:var(--accent-text)}
+.sumhint::after{content:"";width:8px;height:8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg) translateY(-2px)}
+.fold[open]>.fold-h .sumhint::after{transform:rotate(-135deg) translate(-2px,0)}
+.fold-h:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:4px}
+details.fold{display:block}
+.fold-b{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;margin-top:8px}
+.card.fold .fold-b{margin-top:12px}
 .drawing svg{width:100%;height:auto;max-height:78vh;display:block;margin-inline:auto}
 .legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.78rem;color:var(--muted)}
 .legend i{display:inline-block;width:10px;height:10px;border-radius:50%;vertical-align:-1px;margin-right:5px}
@@ -120,6 +131,22 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
   .drawing svg{max-height:70vh}
 }
 @media (prefers-reduced-motion:no-preference){.seg button{transition:background .15s}}
+
+/* Większe czcionki */
+html{font-size:18.5px}
+body{font-size:1.06rem}
+label,.lbl{font-size:.96rem}
+.check{font-size:1rem}
+.hint{font-size:.9rem}
+.lg{font-size:1.02rem}
+.summary dt{font-size:.86rem}
+.summary dd{font-size:1.25rem}
+.legend{font-size:.9rem}
+th{font-size:.9rem}
+.seg button{font-size:.95rem}
+.btn{font-size:1rem;padding:11px 16px}
+.sumhint{font-size:1rem}
+@media (max-width:600px){td[data-l]::before{font-size:1rem}}
 </style>
 </head>
 <body>
@@ -138,7 +165,9 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
   <div class="grid">
     <form class="card" id="f" autocomplete="off">
       <fieldset>
-        <legend>Bok szafki</legend>
+        <details class="fold" open data-key="bok">
+        <summary class="fold-h"><span class="lg">Bok szafki</span><span class="sumhint"></span></summary>
+        <div class="fold-b">
         <div class="row2">
           <label><span>Wysokość boku</span><div class="unit"><input type="number" inputmode="decimal" id="H" value="720" min="100" step="1"></div></label>
           <label><span>Grubość wieńców</span><div class="unit"><input type="number" inputmode="decimal" id="t" value="18" min="0" step="0.5"></div></label>
@@ -146,14 +175,18 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
         <label><span>Wieńce górny i dolny</span>
           <div class="seg" id="kon">
             <button type="button" data-v="between" aria-pressed="true">Między bokami</button>
-            <button type="button" data-v="over" aria-pressed="false">Nakładane na boki</button>
+            <button type="button" data-v="over" aria-pressed="false">Nakładane</button>
           </div>
         </label>
         <label id="cokolWrap"><span>Wieniec dolny podniesiony o (cokół)</span><div class="unit"><input type="number" inputmode="decimal" id="c" value="0" min="0" step="1"></div></label>
+      </div>
+        </details>
       </fieldset>
 
       <fieldset>
-        <legend>Półki</legend>
+        <details class="fold" open data-key="polki">
+        <summary class="fold-h"><span class="lg">Półki</span><span class="sumhint"></span></summary>
+        <div class="fold-b">
         <div class="row2">
           <div class="lbl"><label for="n">Liczba półek</label><div class="stepper"><button type="button" class="stp" id="nMinus" aria-label="Mniej półek">−</button><input type="number" inputmode="numeric" id="n" value="2" min="1" max="20" step="1"><button type="button" class="stp" id="nPlus" aria-label="Więcej półek">+</button></div></div>
           <label><span>Grubość półki</span><div class="unit"><input type="number" inputmode="decimal" id="ts" value="18" min="1" step="0.5"></div></label>
@@ -171,19 +204,25 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
           <select id="k"><option value="0">1 otwór</option><option value="1" selected>3 otwory</option><option value="2">5 otworów</option><option value="3">7 otworów</option></select>
         </label>
         <label class="check" id="fullWrap" hidden><input type="checkbox" id="full"> Wierć pełny rząd rastra</label>
-        <label class="check"><input type="checkbox" id="round"> Zaokrąglaj do pełnych milimetrów</label>
+        <label class="check"><input type="checkbox" id="round" checked> Zaokrąglaj do pełnych milimetrów</label>
+      </div>
+        </details>
       </fieldset>
 
     </form>
 
     <div class="out">
-      <section class="card" aria-label="Podsumowanie">
+      <details class="card fold" open data-key="pods">
+        <summary class="fold-h"><h2>Podsumowanie</h2><span class="sumhint"></span></summary>
+        <div class="fold-b">
         <dl class="summary" id="sum"></dl>
-        <div id="warn" class="warn" hidden style="margin-top:12px"></div>
-      </section>
+        <div id="warn" class="warn" hidden></div>
+        </div>
+      </details>
 
-      <section class="card drawing" aria-label="Rysunek boku">
-        <h2>Bok od strony wnętrza</h2>
+      <details class="card drawing fold" data-key="rysunek" data-default="0">
+        <summary class="fold-h"><h2>Rysunek boku</h2><span class="sumhint"></span></summary>
+        <div class="fold-b">
         <div class="legend">
           <span><i style="background:var(--hole)"></i>otwór środkowy (półka)</span>
           <span><i style="background:var(--hole-soft)"></i>otwór regulacyjny ±32</span>
@@ -191,17 +230,20 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
           <span>przód boku po lewej</span>
         </div>
         <div id="svgHost"></div>
-      </section>
+        </div>
+      </details>
 
-      <section class="card">
-        <h2>Tabela wiercenia</h2>
+      <details class="card fold" open data-key="tabela">
+        <summary class="fold-h"><h2>Wymiary od dołu</h2><span class="sumhint"></span></summary>
+        <div class="fold-b">
         <div class="tablewrap"><table id="tbl"></table></div>
         <div class="actions">
           <button type="button" class="btn" id="copy">Kopiuj wymiary</button>
           <button type="button" class="btn ghost" id="reset">Przywróć domyślne</button>
         </div>
         <textarea id="copyOut" rows="6" readonly hidden aria-label="Wymiary do skopiowania"></textarea>
-      </section>
+      </div>
+      </details>
 
     </div>
   </div>
@@ -210,10 +252,10 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 <script>
 (function(){
 const $=id=>document.getElementById(id);
-const DEF={H:720,D:560,t:18,c:0,n:2,ts:18,p:2.5,k:1,fx:37,bx:37,dia:5,full:false,round:false,kon:"between",mode:"equal"};
+const DEF={H:720,D:560,t:18,c:0,n:2,ts:18,p:2.5,k:1,fx:37,bx:37,dia:5,full:false,round:true,kon:"between",mode:"equal"};
 const numIds=["H","t","c","n","ts","p","dia"];
 let state={...DEF};
-try{const s=JSON.parse(localStorage.getItem("otwory-polki-v4")||"null");if(s)state={...DEF,...s};}catch(e){}
+try{const s=JSON.parse(localStorage.getItem("otwory-polki-v5")||"null");if(s)state={...DEF,...s};}catch(e){}
 
 function toForm(){numIds.forEach(id=>$(id).value=state[id]);$("k").value=state.k;$("full").checked=state.full;$("round").checked=state.round;
   setSeg("kon",state.kon);setSeg("mode",state.mode);}
@@ -263,7 +305,7 @@ function compute(s){
 
 function svgEl(s,R){
   const H=s.H,D=560, big=Math.max(H,D);
-  const fs=Math.max(12,big/38), padL=fs*3.2, padR=fs*6.5, padT=fs*2.6, padB=fs*2.4;
+  const fs=Math.max(14,big/31), padL=fs*3.2, padR=fs*6.5, padT=fs*2.6, padB=fs*2.4;
   const vbW=D+padL+padR, vbH=H+padT+padB;
   const Y=y=>padT+H-y, X=x=>padL+x;
   const hr=Math.max(s.dia/2,big/220);
@@ -285,13 +327,21 @@ function svgEl(s,R){
   // raster pełny
   if(s.mode==="raster"&&s.full){R.raster.forEach(y=>xs.forEach(x=>{o+=`<circle cx="${r1(X(x))}" cy="${r1(Y(y))}" r="${r1(hr*.8)}" fill="none" stroke="var(--board-edge)" stroke-width="${r1(fs*.07)}"/>`;}));}
   // otwory
+  const labels=new Map();
   R.shelves.forEach(sh=>{
-    sh.adj.forEach(y=>xs.forEach(x=>{o+=`<circle cx="${r1(X(x))}" cy="${r1(Y(y))}" r="${r1(hr)}" fill="var(--hole-soft)"/>`;}));
+    sh.adj.forEach(y=>{xs.forEach(x=>{o+=`<circle cx="${r1(X(x))}" cy="${r1(Y(y))}" r="${r1(hr)}" fill="var(--hole-soft)"/>`;});if(!labels.has(r1(y)))labels.set(r1(y),false);});
     xs.forEach(x=>{o+=`<circle cx="${r1(X(x))}" cy="${r1(Y(sh.hole))}" r="${r1(hr*1.15)}" fill="var(--hole)"/>`;});
-    // linia wymiarowa
-    const yy=r1(Y(sh.hole));
-    o+=`<line x1="${r1(X(D-37)+hr*1.6)}" y1="${yy}" x2="${r1(X(D)+fs*.7)}" y2="${yy}" stroke="var(--hole)" stroke-width="${r1(fs*.07)}" stroke-dasharray="${r1(fs*.3)} ${r1(fs*.2)}"/>`;
-    o+=`<text x="${r1(X(D)+fs*.9)}" y="${r1(Y(sh.hole)+fs*.35)}" fill="var(--hole)" font-weight="500">${fmt(sh.hole)}</text>`;
+    labels.set(r1(sh.hole),true);
+  });
+  // linie wymiarowe przy wszystkich otworach, rozsunięte gdy napisy by się nakładały
+  const ys=[...labels.keys()].sort((a,b)=>a-b), gapMin=fs*1.08, sw=r1(fs*.07), dash=`${r1(fs*.3)} ${r1(fs*.2)}`;
+  let prevT=Infinity;
+  ys.forEach(y=>{
+    const hy=Y(y); let ty=Math.min(hy,prevT-gapMin); prevT=ty;
+    const main=labels.get(y), xa=X(D)+fs*.5, xb=X(D)+fs*.9;
+    o+=`<line x1="${r1(X(D-37)+hr*1.6)}" y1="${r1(hy)}" x2="${r1(xa)}" y2="${r1(hy)}" stroke="var(--hole)" stroke-width="${sw}" stroke-dasharray="${dash}"/>`;
+    o+=`<line x1="${r1(xa)}" y1="${r1(hy)}" x2="${r1(xb)}" y2="${r1(ty)}" stroke="var(--hole)" stroke-width="${sw}"/>`;
+    o+=`<text x="${r1(xb+fs*.15)}" y="${r1(ty+fs*.35)}" fill="var(--hole)" font-weight="${main?600:400}">${fmt(y)}</text>`;
   });
   // wymiar H po lewej
   const lx=r1(padL-fs*1.4);
@@ -315,14 +365,12 @@ function render(){
   const gaps=R.shelves.map(x=>x.gapBelow).concat(R.shelves.length?[R.gapTop]:[]);
   $("sum").innerHTML=[
     ["Wnętrze",R.inner>0?fmt(R.inner)+" mm":"—"],
-    ["Wnętrze od",fmt(R.inB)+" do "+fmt(R.inT)],
     ["Prześwit",gaps.length?(s.mode==="equal"?fmt(gaps[0]):fmt(Math.min(...gaps))+"–"+fmt(Math.max(...gaps)))+" mm":"—"],
   ].map(([a,b])=>`<div><dt>${a}</dt><dd>${b}</dd></div>`).join("");
   $("svgHost").innerHTML=R.inner>0?svgEl(s,R):"";
-  let t=`<thead><tr><th>Półka</th><th>Oś otworu od dołu</th><th>Od góry boku</th><th>Spód półki</th><th>Prześwit pomiędzy</th><th>Wszystkie otwory półki</th></tr></thead><tbody>`;
-  R.shelves.slice().reverse().forEach((sh,idx)=>{
-    if(idx===0)t+=`<tr class="gaprow"><td>nad półką ${sh.i}</td><td class="e"></td><td class="e"></td><td class="e"></td><td data-l="Prześwit">${fmt(R.gapTop)}</td><td class="e"></td></tr>`;
-    t+=`<tr><td class="sh"><span class="m">Półka </span>${sh.i}</td><td class="key" data-l="Oś otworu od dołu">${fmt(sh.hole)}</td><td data-l="Od góry boku">${fmt(s.H-sh.hole)}</td><td data-l="Spód półki">${fmt(sh.bottom)}</td><td data-l="Prześwit pomiędzy">${fmt(sh.gapBelow)}</td><td class="adj" data-l="Otwory">${sh.adj.concat([sh.hole]).sort((a,b)=>a-b).map(y=>y===sh.hole?"<b>"+fmt(y)+"</b>":fmt(y)).join(" · ")}</td></tr>`;
+  let t=`<thead><tr><th>Półka</th><th>Oś otworu od dołu</th><th>Od góry boku</th><th>Spód półki</th><th>Wszystkie otwory półki</th></tr></thead><tbody>`;
+  R.shelves.forEach((sh,idx)=>{
+    t+=`<tr><td class="sh"><span class="m">Półka </span>${sh.i}</td><td class="key" data-l="Oś otworu od dołu">${fmt(sh.hole)}</td><td data-l="Od góry boku">${fmt(s.H-sh.hole)}</td><td data-l="Spód półki">${fmt(sh.bottom)}</td><td class="adj" data-l="Otwory">${sh.adj.concat([sh.hole]).sort((a,b)=>a-b).map(y=>y===sh.hole?"<b>"+fmt(y)+"</b>":fmt(y)).join(" · ")}</td></tr>`;
   });
   t+="</tbody>";
   $("tbl").innerHTML=R.shelves.length?t:"<tbody><tr><td>Brak półek do wyznaczenia.</td></tr></tbody>";
@@ -331,7 +379,7 @@ function render(){
   if(s.mode==="raster"&&s.full&&R.raster.length)L.push(`Pełny raster 32 mm: od ${fmt(R.raster[0])} do ${fmt(R.raster[R.raster.length-1])} mm od dołu (${R.raster.length} otworów w rzędzie)`);
   R.shelves.forEach(sh=>L.push(`Półka ${sh.i}: oś ${fmt(sh.hole)} mm od dołu`+(sh.adj.length?` — otwory: ${sh.adj.concat([sh.hole]).sort((a,b)=>a-b).map(fmt).join(", ")}`:"")));
   $("copyOut").value=L.join("\n");
-  try{localStorage.setItem("otwory-polki-v4",JSON.stringify(state));}catch(e){}
+  try{localStorage.setItem("otwory-polki-v5",JSON.stringify(state));}catch(e){}
 }
 
 $("f").addEventListener("input",()=>{fromForm();render();});
@@ -349,7 +397,19 @@ function syncTheme(){const d=isDark();root.classList.toggle("is-dark",d);$("them
 try{const th=localStorage.getItem("otwory-motyw");if(th==="dark"||th==="light")root.setAttribute("data-theme",th);}catch(e){}
 syncTheme();
 try{matchMedia("(prefers-color-scheme: dark)").addEventListener("change",syncTheme);}catch(e){}
-$("themeBtn").addEventListener("click",()=>{const next=isDark()?"light":"dark";root.setAttribute("data-theme",next);try{localStorage.setItem("otwory-motyw",next);}catch(e){}syncTheme();});
+function sysDark(){return !!(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches);}
+$("themeBtn").addEventListener("click",()=>{const next=isDark()?"light":"dark";
+  if((next==="dark")===sysDark()){root.removeAttribute("data-theme");try{localStorage.removeItem("otwory-motyw");}catch(e){}}
+  else{root.setAttribute("data-theme",next);try{localStorage.setItem("otwory-motyw",next);}catch(e){}}
+  syncTheme();});
+document.querySelectorAll("details.fold").forEach(d=>{
+  const key="otwory-zw-"+d.dataset.key, hint=d.querySelector(".sumhint");
+  let open=d.dataset.default!=="0";
+  try{const v=localStorage.getItem(key);if(v==="1")open=true;else if(v==="0")open=false;}catch(e){}
+  d.open=open;
+  const sync=()=>{hint.textContent=d.open?"Ukryj":"Pokaż";};sync();
+  d.addEventListener("toggle",()=>{sync();try{localStorage.setItem(key,d.open?"1":"0");}catch(e){}});
+});
 $("reset").addEventListener("click",()=>{state={...DEF};toForm();render();});
 toForm();render();
 })();
