@@ -10,27 +10,30 @@
 <style>
 /* Layout: warsztatowa karta — formularz po lewej, rysunek boku i tabela wiercenia po prawej; na telefonie jedna kolumna */
 :root{
-  --bg:#F3F1EC; --panel:#FFFFFF; --ink:#2A2620; --muted:#6E6658; --line:#DCD5C7;
-  --board:#EFE6D3; --board-edge:#A88E5E; --rim:#D8C8A6;
-  --accent:#BE944F; --accent-ink:#231A0C; --accent-text:#86642A; --hole:#8C3317; --hole-soft:#D7A58C; --shelf:#86642A;
+  --bg:#EEF1EB; --panel:#FFFFFF; --ink:#222A1F; --muted:#626D5C; --line:#D3DACD;
+  --board:#F3EBD9; --board-edge:#B09460; --rim:#DCCCA8;
+  --accent:#56694E; --accent-ink:#FFF8EA; --accent-text:#4A5D42; --hole:#8A6420; --hole-soft:#DCC394; --shelf:#56694E;
+  --hdr1:#687E5E; --hdr2:#475A40; --brass:#D6B06C; --brass-hi:#EED29A;
   --warn-bg:#FBEFD8; --warn:#7A4E0A;
   --f-disp:"Barlow Condensed","Arial Narrow",sans-serif;
   --f-body:"IBM Plex Sans",system-ui,sans-serif;
   --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#181613; --panel:#221F1A; --ink:#EDE8DF; --muted:#A59C8C; --line:#3A342B;
-  --board:#3A3226; --board-edge:#8E7A55; --rim:#4B4130;
-  --accent:#BE944F; --accent-ink:#1A1309; --accent-text:#D9B675; --hole:#EE8A5C; --hole-soft:#9A5A3E; --shelf:#D9B675;
+  --bg:#131712; --panel:#1B2119; --ink:#E6EBE2; --muted:#9BA694; --line:#313B2D;
+  --board:#353025; --board-edge:#8E7A55; --rim:#4B4130;
+  --accent:#7F9871; --accent-ink:#10150E; --accent-text:#AFC59F; --hole:#E3BC74; --hole-soft:#7D6536; --shelf:#9DB58E;
+  --hdr1:#334130; --hdr2:#222B1F; --brass:#D6B06C; --brass-hi:#EED29A;
   --warn-bg:#3A2C12; --warn:#F2C26B; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#181613; --panel:#221F1A; --ink:#EDE8DF; --muted:#A59C8C; --line:#3A342B;
-  --board:#3A3226; --board-edge:#8E7A55; --rim:#4B4130;
-  --accent:#BE944F; --accent-ink:#1A1309; --accent-text:#D9B675; --hole:#EE8A5C; --hole-soft:#9A5A3E; --shelf:#D9B675;
+  --bg:#131712; --panel:#1B2119; --ink:#E6EBE2; --muted:#9BA694; --line:#313B2D;
+  --board:#353025; --board-edge:#8E7A55; --rim:#4B4130;
+  --accent:#7F9871; --accent-ink:#10150E; --accent-text:#AFC59F; --hole:#E3BC74; --hole-soft:#7D6536; --shelf:#9DB58E;
+  --hdr1:#334130; --hdr2:#222B1F; --brass:#D6B06C; --brass-hi:#EED29A;
   --warn-bg:#3A2C12; --warn:#F2C26B; color-scheme:dark}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5}
 .wrap{max-width:1180px;margin:0 auto;padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-header{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 16px;margin-bottom:18px}
+header{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 16px;margin-bottom:18px;background:linear-gradient(160deg,var(--hdr1),var(--hdr2));border-radius:14px;padding:16px 18px 18px}
 .top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex:1 1 100%}
 .themebtn{flex:none;width:44px;height:44px;display:grid;place-items:center;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--accent-text);cursor:pointer;padding:0}
 .themebtn:hover{border-color:var(--accent)}
@@ -57,7 +60,11 @@ header{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 16px;margin-bott
 html.is-dark .themebtn .i-sun{display:block}
 html.is-dark .themebtn .i-moon{display:none}
 h1{font-family:var(--f-disp);font-weight:700;font-size:2.3rem;line-height:1;margin:0;letter-spacing:.01em;text-wrap:balance}
-header p{margin:0;color:var(--muted);max-width:60ch}
+header p{margin:0;color:#E9E4D3;opacity:.85;max-width:60ch}
+header h1{color:var(--brass);text-shadow:0 2px 6px rgba(0,0,0,.25)}
+header .themebtn{background:rgba(255,255,255,.08);border-color:rgba(214,176,108,.55);color:var(--brass)}
+header .themebtn:hover{border-color:var(--brass)}
+header #histBtn[aria-expanded=true]{background:var(--brass);color:#2A2412;border-color:var(--brass)}
 .grid{display:grid;grid-template-columns:minmax(0,1fr);gap:20px}
 #f{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:20px 28px;align-items:start}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px}
