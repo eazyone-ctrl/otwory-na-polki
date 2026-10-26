@@ -45,7 +45,7 @@ button{font:inherit;color:inherit}
 :focus-visible{outline:3px solid var(--brass);outline-offset:2px}
 
 /* pasek aplikacji */
-.appbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:linear-gradient(135deg,var(--bar1),var(--bar2));color:#F3EEDD;box-shadow:0 2px 12px rgba(0,0,0,.18)}
+.appbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;transition:transform .28s cubic-bezier(.2,.7,.2,1);will-change:transform;background:linear-gradient(135deg,var(--bar1),var(--bar2));color:#F3EEDD;box-shadow:0 2px 12px rgba(0,0,0,.18)}
 .appbar-in{max-width:640px;margin:0 auto;display:flex;align-items:center;gap:12px;padding-block:12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .logo{flex:none;width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.08);display:grid;place-items:center;color:var(--brass)}
 .brand{flex:1;min-width:0}
@@ -107,13 +107,14 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
 .sw-t{font-weight:600;font-size:.95rem}
 
 /* wyniki */
-.hero{background:linear-gradient(140deg,var(--bar1),var(--bar2));color:#F3EEDD;border-radius:22px;padding:18px 18px 16px;box-shadow:var(--shadow);display:grid;gap:12px}
-.hero-t{font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;opacity:.75;font-weight:600}
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.stat{background:rgba(255,255,255,.07);border-radius:16px;padding:10px 12px;text-align:center}
-.stat dt{font-size:.76rem;opacity:.8;font-weight:600}
-.stat dd{margin:2px 0 0;font:700 1.9rem/1.05 var(--f-disp);color:var(--brass);font-variant-numeric:tabular-nums}
-.stat dd small{font:600 .8rem var(--f-body);color:#F3EEDD;opacity:.7;margin-left:3px}
+.sumbar{position:fixed;z-index:15;left:0;right:0;bottom:0;pointer-events:none;padding-bottom:max(8px,env(safe-area-inset-bottom,0px));padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px))}
+.sumbar .stats{pointer-events:auto;max-width:640px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;background:linear-gradient(140deg,var(--bar1),var(--bar2));color:#F3EEDD;border-radius:999px;box-shadow:0 6px 24px rgba(0,0,0,.3);padding:3px 10px}
+.stat{display:flex;align-items:baseline;justify-content:center;gap:7px;padding:5px 8px;border-radius:13px;min-width:0}
+.stat+.stat{border-left:1px solid rgba(243,238,221,.18);border-radius:0}
+.stat dt{font-size:.7rem;opacity:.8;font-weight:600}
+.stat dd{margin:0;font:700 1.2rem/1 var(--f-disp);color:var(--brass);font-variant-numeric:tabular-nums;white-space:nowrap}
+.stat dd small{font:600 .72rem var(--f-body);color:#F3EEDD;opacity:.7;margin-left:2px}
+body{padding-bottom:calc(58px + env(safe-area-inset-bottom,0px))}
 .warn{background:var(--warn-bg);color:var(--warn);border-radius:14px;padding:10px 14px;font-size:.88rem;font-weight:500;display:grid;gap:4px}
 
 .shelves{display:grid;gap:10px}
@@ -156,6 +157,7 @@ html.is-dark .mitem .i-moon{display:none}
 .pdf-pages{display:grid;gap:10px}
 .pdf-pages img{width:100%;border-radius:6px;box-shadow:0 2px 10px rgba(0,0,0,.25);background:#fff}
 .toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 24px);transform:translateX(-50%);z-index:60;background:var(--ink);color:var(--surface);padding:12px 18px;border-radius:999px;font-weight:600;font-size:.92rem;box-shadow:0 6px 20px rgba(0,0,0,.3);animation:fade .2s;max-width:calc(100% - 32px);text-align:center}
+.appbar.hide{transform:translateY(calc(-100% - 12px))}
 /* dolny arkusz historii */
 .scrim{position:fixed;inset:0;z-index:40;background:rgba(6,9,5,.72);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);animation:fade .25s}
 .sheet{position:fixed;left:0;right:0;top:0;z-index:41;max-height:88vh;overflow:auto;background:var(--bg);border-radius:0 0 26px 26px;box-shadow:0 10px 30px rgba(0,0,0,.3);padding-bottom:16px;animation:down .3s ease-out}
@@ -298,6 +300,8 @@ html.is-dark .mitem .i-moon{display:none}
     </div>
   </details>
 
+  <div id="warn" class="warn" hidden></div>
+
   <details class="card fold" open data-key="tabela">
     <summary>
       <span class="sec-ic"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 20V5M4 9l4-4 4 4M16 4v15M12 15l4 4 4-4"/></svg></span>
@@ -314,11 +318,6 @@ html.is-dark .mitem .i-moon{display:none}
     </div>
   </details>
 
-  <section class="hero" aria-label="Podsumowanie">
-    <div class="hero-t">Podsumowanie</div>
-    <dl class="stats" id="sum"></dl>
-    <div id="warn" class="warn" hidden></div>
-  </section>
 
   <button type="button" class="textbtn" id="reset">
     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 3.5V8h4.5"/></svg>
@@ -327,6 +326,10 @@ html.is-dark .mitem .i-moon{display:none}
 </form>
 
 <footer class="foot"><span class="foot-line" aria-hidden="true"></span><span>© <span id="year">2026</span> Pracownia Stolarska Maciej Łagun</span></footer>
+
+<section class="sumbar" aria-label="Podsumowanie" aria-live="polite">
+  <dl class="stats" id="sum"></dl>
+</section>
 
 <div class="scrim" id="scrim" hidden></div>
 <section class="sheet" id="histPanel" hidden aria-label="Historia ustawień" role="dialog" aria-modal="true">
@@ -708,6 +711,14 @@ async function sharePdf(){
 $("shareBtn").addEventListener("click",()=>{sharePdf().catch(()=>toast("Nie udało się przygotować PDF-a."));});
 $("pdfClose").addEventListener("click",()=>{$("pdfModal").hidden=true;});
 $("pdfModal").addEventListener("click",e=>{if(e.target===$("pdfModal"))$("pdfModal").hidden=true;});
+// chowanie nagłówka przy przewijaniu
+(function(){const bar=document.querySelector(".appbar");let last=window.scrollY,ticking=false;
+  window.addEventListener("scroll",()=>{if(ticking)return;ticking=true;requestAnimationFrame(()=>{
+    const y=window.scrollY,d=y-last;
+    if(y<60)bar.classList.remove("hide");
+    else if(d>6&&$("menu").hidden){bar.classList.add("hide");}
+    else if(d<-6)bar.classList.remove("hide");
+    if(Math.abs(d)>6)last=y;ticking=false;});},{passive:true});})();
 // podtytuł tej samej szerokości co nazwa
 function fitSub(){try{const t=$("brandT"),u=$("brandS");u.style.fontSize="";
   const tw=t.getBoundingClientRect().width,uw=u.getBoundingClientRect().width;
