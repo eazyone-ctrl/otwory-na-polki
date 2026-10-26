@@ -16,7 +16,7 @@
   --hole:#7E5A17; --hole-soft:#E6CD98; --board:#EFE6D3; --board-edge:#A88E5E; --shelf:#465C3E;
   --warn-bg:#FBEBCF; --warn:#6E4708;
   --shadow:0 1px 2px rgba(30,37,27,.08),0 6px 20px rgba(30,37,27,.10);
-  --f-disp:"Barlow Condensed","Arial Narrow",sans-serif;
+  --f-disp:"Barlow Condensed","Roboto Condensed","Arial Narrow","sans-serif-condensed",sans-serif;
   --f-body:"Plus Jakarta Sans",system-ui,sans-serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
@@ -49,7 +49,7 @@ button{font:inherit;color:inherit}
 .appbar-in{max-width:640px;margin:0 auto;display:flex;align-items:center;justify-content:flex-start;gap:10px;padding-block:14px 8px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .iconbtn{flex:none;width:46px;height:46px;border-radius:50%;border:0;background:var(--surface);color:var(--accent-text);box-shadow:var(--shadow);display:grid;place-items:center;cursor:pointer;padding:0;transition:background .15s}
 .iconbtn:active{background:var(--surface-2)}
-.appname{flex:1;min-width:0;font:700 1.75rem/1 var(--f-disp);letter-spacing:.05em;color:var(--accent-text);margin:0}
+.appname{flex:1;min-width:0;font:700 clamp(1.3rem,7.2vw,1.75rem)/1.1 var(--f-disp);letter-spacing:.05em;color:var(--accent-text);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .iconbtn .i-sun{display:none}
 html.is-dark .iconbtn .i-sun{display:block}
 html.is-dark .iconbtn .i-moon{display:none}
@@ -80,12 +80,13 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
 .seg button{border:0;background:transparent;border-radius:999px;min-height:44px;padding:6px 10px;font-weight:600;font-size:.9rem;color:var(--muted);cursor:pointer;transition:background .15s,color .15s,box-shadow .15s}
 .seg button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink);box-shadow:0 2px 6px rgba(30,37,27,.2)}
 
-.stepper{display:grid;grid-template-columns:36px minmax(0,1fr) 36px;align-items:center;background:var(--surface-2);border-radius:18px;padding:6px}
-.stp{width:36px;height:38px;border:0;border-radius:11px;background:var(--surface);color:var(--accent-text);padding:0;line-height:0;display:grid;place-items:center;justify-self:center;cursor:pointer;box-shadow:var(--shadow);touch-action:manipulation}
+.stepper{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:center;align-content:space-between;row-gap:4px;background:var(--surface-2);border-radius:18px;padding:6px}
+.stp{width:44px;height:44px;border:0;border-radius:11px;background:var(--surface);color:var(--accent-text);padding:0;line-height:0;display:grid;place-items:center;justify-self:center;cursor:pointer;box-shadow:var(--shadow);touch-action:manipulation}
 .stp:active{background:var(--accent);color:var(--accent-ink)}
 .stp:disabled{opacity:.35;cursor:default;box-shadow:none}
 .stepper input{all:unset;display:block;width:100%;box-sizing:border-box;text-align:center;font:700 1.8rem var(--f-disp);color:var(--ink);min-width:0}
 .stepper>div{min-width:0;text-align:center}
+.stepper .st-lab{grid-column:1/-1;padding:5px 9px 2px}
 .stepper .cap{display:block;text-align:center;font-size:.66rem;color:var(--muted);font-weight:600;margin-top:-4px}
 
 .switch{display:flex;align-items:center;gap:14px;min-height:48px;cursor:pointer;padding:4px 4px}
@@ -99,13 +100,26 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
 
 /* wyniki */
 .sumbar{position:fixed;z-index:15;left:0;right:0;bottom:0;pointer-events:none;padding-bottom:max(8px,env(safe-area-inset-bottom,0px));padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px))}
-.sumbar .stats{pointer-events:auto;max-width:640px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;background:linear-gradient(140deg,var(--bar1),var(--bar2));color:#F3EEDD;border-radius:999px;box-shadow:0 6px 24px rgba(0,0,0,.3);padding:3px 10px}
+.sumbar .stats{pointer-events:auto;max-width:640px;margin:0 auto;display:grid;background:linear-gradient(140deg,var(--bar1),var(--bar2));color:#F3EEDD;border-radius:999px;box-shadow:0 6px 24px rgba(0,0,0,.3);padding:6px;min-height:58px}.bar-a,.bar-b{grid-area:1/1;display:flex;align-items:center;gap:8px;min-width:0;transition:opacity .22s,transform .22s}.stats.results .bar-a,.stats:not(.results) .bar-b{opacity:0;transform:translateY(8px);pointer-events:none;visibility:hidden;transition:opacity .22s,transform .22s,visibility 0s .22s}.bstep{flex:none;display:flex;align-items:center;gap:2px;background:rgba(243,238,221,.1);border-radius:999px;padding:2px}.bstp{width:44px;height:44px;border:0;border-radius:50%;background:transparent;color:#F3EEDD;display:grid;place-items:center;padding:0;cursor:pointer;touch-action:manipulation}.bstp:active{background:rgba(243,238,221,.18)}.bstp:disabled{opacity:.3;cursor:default}.bcount{min-width:2.9em;text-align:center;line-height:1}.bcount b{display:block;font:700 1.35rem/1 var(--f-disp);color:#F3EEDD;font-variant-numeric:tabular-nums}.bcount i{display:block;font:600 .62rem/1.2 var(--f-body);font-style:normal;opacity:.75}.sum-btn{flex:1;min-width:0;display:flex;align-items:center;gap:8px;border:0;background:transparent;color:inherit;font:inherit;text-align:left;padding:0 4px 0 2px;cursor:pointer;min-height:44px}.sum-lab{flex:none;display:grid;place-items:center;width:30px;height:34px}
+.sum-axes{flex:1;min-width:0;display:flex;gap:12px;overflow-x:auto;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 18px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 18px),transparent);padding-right:14px}
+.sum-axes::-webkit-scrollbar{display:none}
+.ax{flex:none;display:inline-flex;align-items:baseline;gap:3px;white-space:nowrap}
+.ax i{font:700 .6rem var(--f-body);font-style:normal;color:#F3EEDD;opacity:.75}
+.ax b{font:700 1.3rem/1 var(--f-disp);color:var(--brass);font-variant-numeric:tabular-nums}
+.ax-empty{font-size:.85rem;opacity:.8}
+.bseg{flex:1;min-width:0;display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:3px;background:rgba(243,238,221,.1);border-radius:999px;padding:3px}
+.bseg button{border:0;border-radius:999px;background:transparent;color:#F3EEDD;font:600 .85rem var(--f-body);min-height:40px;padding:0 8px;cursor:pointer;white-space:nowrap;opacity:.8}
+.bseg button[aria-pressed=true]{background:#F3EEDD;color:var(--bar2);opacity:1}
+.sum-warn{flex:none;width:28px;height:28px;border-radius:50%;background:var(--brass);color:var(--brass-ink);display:grid;place-items:center;font:800 1rem/1 var(--f-body)}
+.dims{margin:0;font-size:.85rem;color:var(--muted);font-weight:600;padding-left:4px}
+.dims b{color:var(--ink);font-variant-numeric:tabular-nums}
 .stat{display:flex;align-items:baseline;justify-content:center;gap:7px;padding:5px 8px;border-radius:13px;min-width:0}
 .stat+.stat{border-left:1px solid rgba(243,238,221,.18);border-radius:0}
 .stat dt{font-size:.7rem;opacity:.8;font-weight:600}
 .stat dd{margin:0;font:700 1.2rem/1 var(--f-disp);color:var(--brass);font-variant-numeric:tabular-nums;white-space:nowrap}
 .stat dd small{font:600 .72rem var(--f-body);color:#F3EEDD;opacity:.7;margin-left:2px}
-body{padding-bottom:calc(58px + env(safe-area-inset-bottom,0px))}
+body{padding-bottom:calc(80px + env(safe-area-inset-bottom,0px))}
+[data-key="tabela"],#warn{scroll-margin-top:12px}
 .warn{background:var(--warn-bg);color:var(--warn);border-radius:14px;padding:10px 14px;font-size:.88rem;font-weight:500;display:grid;gap:4px}
 
 .shelves{display:grid;gap:10px}
@@ -185,6 +199,7 @@ input::placeholder{color:var(--muted);opacity:.55}
 .cbtns .no{background:var(--surface);color:var(--ink)}
 @keyframes down{from{transform:translateY(-100%)}to{transform:none}}
 @keyframes fade{from{opacity:0}to{opacity:1}}
+@media (max-width:340px){.bcount i{display:none}.bcount{min-width:2em}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 @media (max-width:360px){.grid2{grid-template-columns:1fr}}
 </style>
@@ -238,8 +253,9 @@ input::placeholder{color:var(--muted);opacity:.55}
     <div class="body">
       <div class="grid2 nrow">
         <div class="stepper">
+          <span class="f-lab st-lab" aria-hidden="true">Liczba półek</span>
           <button type="button" class="stp" id="nMinus" aria-label="Mniej półek"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg></button>
-          <div><input type="number" inputmode="numeric" id="n" value="2" min="1" max="20" step="1" aria-label="Ilość półek"><span class="cap">ilość półek</span></div>
+          <div><input type="number" inputmode="numeric" id="n" value="2" min="1" max="20" step="1" aria-label="Liczba półek"></div>
           <button type="button" class="stp" id="nPlus" aria-label="Więcej półek"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg></button>
         </div>
         <label class="field"><span class="f-lab">Grubość półki</span><span class="f-row"><input type="number" inputmode="decimal" id="ts" value="18" min="1" step="0.5"><span class="f-unit">mm</span></span></label>
@@ -277,6 +293,7 @@ input::placeholder{color:var(--muted);opacity:.55}
         <button type="button" data-v="dol" aria-pressed="true">Od dołu</button>
         <button type="button" data-v="gora" aria-pressed="false">Od góry</button>
       </div>
+      <p class="dims" id="dims"></p>
       <div class="shelves" id="tbl"></div>
       <div class="shelves" id="tblTop" hidden></div>
     </div>
@@ -303,8 +320,23 @@ input::placeholder{color:var(--muted);opacity:.55}
 
 <footer class="foot"><span class="foot-line" aria-hidden="true"></span><span>© <span id="year">2026</span> Pracownia Stolarska Maciej Łagun</span></footer>
 
-<section class="sumbar" aria-label="Podsumowanie" aria-live="polite">
-  <dl class="stats" id="sum"></dl>
+<section class="sumbar" aria-label="Szybki pasek">
+  <div class="stats" id="bar">
+    <div class="bar-a" id="barA">
+      <div class="bstep">
+        <button type="button" class="bstp" id="bMinus" aria-label="Mniej półek"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg></button>
+        <span class="bcount" aria-live="polite"><b id="bN">2</b><i id="bNl">półki</i></span>
+        <button type="button" class="bstp" id="bPlus" aria-label="Więcej półek"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg></button>
+      </div>
+      <button type="button" class="sum-btn" id="sum" aria-live="polite"></button>
+    </div>
+    <div class="bar-b" id="barB">
+      <div class="bseg" id="dir2" role="group" aria-label="Kierunek pomiaru">
+        <button type="button" data-v="dol" aria-pressed="true">Od dołu</button>
+        <button type="button" data-v="gora" aria-pressed="false">Od góry</button>
+      </div>
+    </div>
+  </div>
 </section>
 
 <div class="scrim" id="scrim" hidden></div>
@@ -435,6 +467,16 @@ function svgEl(s,R,fromTop){
   o+="</svg>";
   return o;
 }
+// ikona: wymiar od krawędzi do osi środkowego otworu
+function axisIcon(top,k){
+  const c="#F3EEDD",soft="rgba(243,238,221,.5)";
+  const side=k?`<circle cx="21" cy="7" r="2.3" fill="none" stroke="${soft}" stroke-width="1.5"/><circle cx="21" cy="25" r="2.3" fill="none" stroke="${soft}" stroke-width="1.5"/>`:"";
+  return `<svg viewBox="0 0 30 34" width="30" height="34"><g${top?' transform="matrix(1 0 0 -1 0 34)"':""}>
+    <path d="M2 31.5H28" stroke="${c}" stroke-width="2" stroke-linecap="round"/>
+    <path d="M6 31.5V16" stroke="${c}" stroke-width="1.5"/><path d="M3.5 18.5L6 15.5L8.5 18.5" fill="none" stroke="${c}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M6 16H17" stroke="${c}" stroke-width="1.2" stroke-dasharray="1.6 1.6" opacity=".8"/>
+    ${side}<circle cx="21" cy="16" r="3.6" fill="var(--brass)"/></g></svg>`;
+}
 function shelfCard(i,main,mainLab,holes,sub){
   return `<article class="shelf">
     <div class="badge"><small>Półka</small><b>${i}</b></div>
@@ -452,10 +494,13 @@ function render(){
   $("nMinus").disabled=s.n<=1;$("nPlus").disabled=s.n>=20;
   const w=$("warn"); w.hidden=!R.warn.length; w.innerHTML=R.warn.map(x=>"<div>"+x+"</div>").join("");
   const gaps=R.shelves.map(x=>x.gapBelow).concat(R.shelves.length?[R.gapTop]:[]);
-  $("sum").innerHTML=[
-    ["Wnętrze",R.inner>0?fmt(R.inner):"—"],
-    ["Prześwit",gaps.length?(s.mode==="equal"?fmt(gaps[0]):fmt(Math.min(...gaps))+"–"+fmt(Math.max(...gaps))):"—"],
-  ].map(([a,b])=>`<div class="stat"><dt>${a}</dt><dd>${b}${b!=="—"?"<small>mm</small>":""}</dd></div>`).join("");
+  const gapTxt=gaps.length?(s.mode==="equal"?fmt(gaps[0]):fmt(Math.min(...gaps))+"–"+fmt(Math.max(...gaps))):"—";
+  $("dims").innerHTML=`Wnętrze <b>${R.inner>0?fmt(R.inner)+" mm":"—"}</b> · prześwit <b>${gapTxt}${gapTxt!=="—"?" mm":""}</b>`;
+  const top=dir==="gora";
+  const axes=R.shelves.length?R.shelves.map(sh=>`<span class="ax"><i>${sh.i}</i><b>${fmt(top?s.H-sh.hole:sh.hole)}</b></span>`).join(""):'<span class="ax-empty">Brak półek</span>';
+  $("bN").textContent=s.n;$("bNl").textContent=plPolki(s.n);$("bMinus").disabled=s.n<=1;$("bPlus").disabled=s.n>=20;
+  $("sum").innerHTML=`<span class="sum-lab" aria-hidden="true">${axisIcon(top,s.k)}</span><span class="sum-axes">${axes}</span>${R.warn.length?'<span class="sum-warn" aria-label="Są ostrzeżenia">!</span>':""}`;
+  $("sum").setAttribute("aria-label",(s.k?"Osie środkowych otworów ":"Osie otworów ")+(top?"od góry":"od dołu")+": "+(R.shelves.map(sh=>"półka "+sh.i+" "+fmt(top?s.H-sh.hole:sh.hole)+" mm").join(", ")||"brak półek")+(R.warn.length?". Są ostrzeżenia.":"")+" Stuknij, aby przejść do wymiarów.");
   const none='<p class="empty">Brak półek do wyznaczenia.</p>';
   $("tbl").innerHTML=R.shelves.length?R.shelves.map(sh=>{
     const all=sh.adj.concat([sh.hole]).sort((a,b)=>a-b);
@@ -477,14 +522,25 @@ $("f").addEventListener("input",()=>{fromForm();render();});
 $("f").addEventListener("change",()=>{fromForm();render();});
 $("f").addEventListener("submit",e=>e.preventDefault());
 let dir="dol";try{if(localStorage.getItem("otwory-kierunek")==="gora")dir="gora";}catch(e){}
-function syncDir(anim){setSeg("dir",dir);$("tbl").hidden=dir!=="dol";$("tblTop").hidden=dir!=="gora";
+function syncDir(anim){setSeg("dir",dir);setSeg("dir2",dir);$("tbl").hidden=dir!=="dol";$("tblTop").hidden=dir!=="gora";
   const el=$(dir==="dol"?"tbl":"tblTop");
   if(anim&&el.animate&&!(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches))el.animate([{opacity:0,transform:"translateX("+(dir==="dol"?"-":"")+"14px)"},{opacity:1,transform:"none"}],{duration:340,easing:"cubic-bezier(.2,.75,.25,1)"});}
 syncDir();
-$("dir").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;if(dir===b.dataset.v)return;dir=b.dataset.v;syncDir(true);render();try{localStorage.setItem("otwory-kierunek",dir);}catch(e){}});
+function setDir(v){if(dir===v)return;dir=v;syncDir(true);render();try{localStorage.setItem("otwory-kierunek",dir);}catch(e){}}
+["dir","dir2"].forEach(id=>$(id).addEventListener("click",e=>{const b=e.target.closest("button");if(b)setDir(b.dataset.v);}));
 $("k").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;state.k=+b.dataset.v;setSeg("k",b.dataset.v);render();});
 ["kon","mode"].forEach(id=>$(id).addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;state[id]=b.dataset.v;setSeg(id,b.dataset.v);render();}));
 function stepN(d){const v=Math.min(20,Math.max(1,(Math.round(state.n)||0)+d));$("n").value=v;fromForm();render();}
+$("sum").addEventListener("click",()=>{
+  const t=$("warn").hidden?document.querySelector('[data-key="tabela"]'):$("warn");t.scrollIntoView({behavior:"smooth",block:"start"});});
+$("bMinus").addEventListener("click",()=>stepN(-1));
+$("bPlus").addEventListener("click",()=>stepN(1));
+// pasek zmienia się w akcje, gdy wyniki są na ekranie
+(function(){const tgt=[document.querySelector('[data-key="tabela"]'),$("drawDet")],vis=new Set();
+  if(!("IntersectionObserver" in window))return;
+  const io=new IntersectionObserver(es=>{es.forEach(e=>e.isIntersecting?vis.add(e.target):vis.delete(e.target));
+    $("bar").classList.toggle("results",vis.size>0);},{rootMargin:"0px 0px -40% 0px"});
+  tgt.forEach(t=>t&&io.observe(t));})();
 $("nMinus").addEventListener("click",()=>stepN(-1));
 $("nPlus").addEventListener("click",()=>stepN(1));
 
@@ -616,7 +672,7 @@ function pdfPages(drawImg){
   const rows=[
     ["Wysokość boku",fmt(s.H)+" mm"],["Grubość wieńców",fmt(s.t)+" mm"],
     ["Wieńce",s.kon==="between"?"między bokami":"nakładane"],...(s.kon==="between"?[["Cokół",fmt(s.c)+" mm"]]:[]),
-    ["Ilość półek",String(s.n)],["Grubość półki",fmt(s.ts)+" mm"],
+    ["Liczba półek",String(s.n)],["Grubość półki",fmt(s.ts)+" mm"],
     ["Średnica otworu","Ø "+fmt(s.dia)+" mm"],["Oś otworu poniżej spodu półki",fmt(s.p)+" mm"],
     ["Rozmieszczenie",s.mode==="equal"?"równe prześwity":"system 32"],["Otworów na półkę",s.k?"3 (co 32 mm)":"1"]
   ];
