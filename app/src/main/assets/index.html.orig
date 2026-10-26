@@ -1,0 +1,751 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Półkownik</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: aplikacja mobilna — zielony pasek aplikacji, karty z tonalnym tłem, wyniki jako karty półek, historia w dolnym arkuszu */
+:root{
+  --bg:#C9D3C0; --surface:#FBFCF9; --surface-2:#DDE6D4; --ink:#1A2117; --muted:#525E4C; --line:#BCC8B2;
+  --accent:#465C3E; --accent-ink:#FFF8EA; --accent-soft:#C3D3B7; --accent-text:#34472D;
+  --bar1:#5F7556; --bar2:#41543A; --brass:#D6B06C; --brass-ink:#2A2412;
+  --hole:#7E5A17; --hole-soft:#E6CD98; --board:#EFE6D3; --board-edge:#A88E5E; --shelf:#465C3E;
+  --warn-bg:#FBEBCF; --warn:#6E4708;
+  --shadow:0 1px 2px rgba(30,37,27,.08),0 6px 20px rgba(30,37,27,.10);
+  --f-disp:"Barlow Condensed","Arial Narrow",sans-serif;
+  --f-body:"Plus Jakarta Sans",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#080B07; --surface:#141A12; --surface-2:#273022; --ink:#E9EEE5; --muted:#A3AE9C; --line:#3A4634;
+  --accent:#93AD83; --accent-ink:#10150E; --accent-soft:#34452E; --accent-text:#BDD4AE;
+  --bar1:#2E3B2A; --bar2:#1D251A; --brass:#D6B06C; --brass-ink:#2A2412;
+  --hole:#E3BC74; --hole-soft:#4A3F26; --board:#353025; --board-edge:#8E7A55; --shelf:#93AD83;
+  --warn-bg:#3A2C12; --warn:#F2C26B;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#080B07; --surface:#141A12; --surface-2:#273022; --ink:#E9EEE5; --muted:#A3AE9C; --line:#3A4634;
+  --accent:#93AD83; --accent-ink:#10150E; --accent-soft:#34452E; --accent-text:#BDD4AE;
+  --bar1:#2E3B2A; --bar2:#1D251A; --brass:#D6B06C; --brass-ink:#2A2412;
+  --hole:#E3BC74; --hole-soft:#4A3F26; --board:#353025; --board-edge:#8E7A55; --shelf:#93AD83;
+  --warn-bg:#3A2C12; --warn:#F2C26B;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25); color-scheme:dark}
+
+[hidden]{display:none!important}
+html,body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+input{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
+html{font-size:18px;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:1rem;line-height:1.45}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bar2)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
+
+/* pasek aplikacji */
+.appbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;transition:transform .28s cubic-bezier(.2,.7,.2,1);will-change:transform;background:var(--bg);color:var(--ink)}
+.appbar-in{max-width:640px;margin:0 auto;display:flex;align-items:center;justify-content:flex-start;gap:10px;padding-block:14px 8px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.iconbtn{flex:none;width:46px;height:46px;border-radius:50%;border:0;background:var(--surface);color:var(--accent-text);box-shadow:var(--shadow);display:grid;place-items:center;cursor:pointer;padding:0;transition:background .15s}
+.iconbtn:active{background:var(--surface-2)}
+.appname{flex:1;min-width:0;font:700 1.75rem/1 var(--f-disp);letter-spacing:.05em;color:var(--accent-text);margin:0}
+.iconbtn .i-sun{display:none}
+html.is-dark .iconbtn .i-sun{display:block}
+html.is-dark .iconbtn .i-moon{display:none}
+
+/* treść */
+.app{max-width:640px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr);gap:14px;padding-block:16px 20px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.card{background:var(--surface);border-radius:22px;box-shadow:var(--shadow);padding:6px 16px;min-width:0}
+.sec-h{display:flex;align-items:center;gap:12px;min-height:56px}
+.sec-ic{flex:none;width:36px;height:36px;border-radius:11px;background:var(--accent-soft);color:var(--accent-text);display:grid;place-items:center}
+.sec-t{flex:1;font-weight:700;font-size:1.02rem}
+.body{display:grid;gap:12px;padding-top:4px;padding-bottom:10px}
+
+/* pola */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:stretch}
+.grid2 .field{align-content:space-between}
+.field{display:grid;gap:2px;background:var(--surface-2);border-radius:16px;padding:10px 14px 8px;border:2px solid transparent;transition:border-color .15s;cursor:text;min-width:0}
+.field:focus-within{border-color:var(--accent)}
+.f-lab{font-size:.74rem;font-weight:600;color:var(--muted);letter-spacing:.01em}
+.f-row{display:flex;align-items:baseline;gap:6px;min-width:0}
+.field input{all:unset;flex:1 1 0;width:0;min-width:0;font:700 1.45rem var(--f-disp);letter-spacing:.02em;color:var(--ink);font-variant-numeric:tabular-nums}
+.f-unit{flex:none;font-size:1rem;color:var(--accent-text);font-weight:700}
+input::-webkit-inner-spin-button,input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+input[type=number]{-moz-appearance:textfield;appearance:textfield}
+
+.lbl{display:grid;gap:6px}
+.lbl>.f-lab{padding-left:4px}
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;background:var(--surface-2);border-radius:999px;padding:4px;gap:4px}
+.seg button{border:0;background:transparent;border-radius:999px;min-height:44px;padding:6px 10px;font-weight:600;font-size:.9rem;color:var(--muted);cursor:pointer;transition:background .15s,color .15s,box-shadow .15s}
+.seg button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink);box-shadow:0 2px 6px rgba(30,37,27,.2)}
+
+.stepper{display:grid;grid-template-columns:36px minmax(0,1fr) 36px;align-items:center;background:var(--surface-2);border-radius:18px;padding:6px}
+.stp{width:36px;height:38px;border:0;border-radius:11px;background:var(--surface);color:var(--accent-text);padding:0;line-height:0;display:grid;place-items:center;justify-self:center;cursor:pointer;box-shadow:var(--shadow);touch-action:manipulation}
+.stp:active{background:var(--accent);color:var(--accent-ink)}
+.stp:disabled{opacity:.35;cursor:default;box-shadow:none}
+.stepper input{all:unset;display:block;width:100%;box-sizing:border-box;text-align:center;font:700 1.8rem var(--f-disp);color:var(--ink);min-width:0}
+.stepper>div{min-width:0;text-align:center}
+.stepper .cap{display:block;text-align:center;font-size:.66rem;color:var(--muted);font-weight:600;margin-top:-4px}
+
+.switch{display:flex;align-items:center;gap:14px;min-height:48px;cursor:pointer;padding:4px 4px}
+.switch input{position:absolute;opacity:0;width:1px;height:1px}
+.track{flex:none;width:52px;height:32px;border-radius:999px;background:var(--line);position:relative;transition:background .2s}
+.thumb{position:absolute;top:4px;left:4px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .2s}
+.switch input:checked+.track{background:var(--accent)}
+.switch input:checked+.track .thumb{transform:translateX(20px)}
+.switch input:focus-visible+.track{outline:3px solid var(--brass);outline-offset:2px}
+.sw-t{font-weight:600;font-size:.95rem}
+
+/* wyniki */
+.sumbar{position:fixed;z-index:15;left:0;right:0;bottom:0;pointer-events:none;padding-bottom:max(8px,env(safe-area-inset-bottom,0px));padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px))}
+.sumbar .stats{pointer-events:auto;max-width:640px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;background:linear-gradient(140deg,var(--bar1),var(--bar2));color:#F3EEDD;border-radius:999px;box-shadow:0 6px 24px rgba(0,0,0,.3);padding:3px 10px}
+.stat{display:flex;align-items:baseline;justify-content:center;gap:7px;padding:5px 8px;border-radius:13px;min-width:0}
+.stat+.stat{border-left:1px solid rgba(243,238,221,.18);border-radius:0}
+.stat dt{font-size:.7rem;opacity:.8;font-weight:600}
+.stat dd{margin:0;font:700 1.2rem/1 var(--f-disp);color:var(--brass);font-variant-numeric:tabular-nums;white-space:nowrap}
+.stat dd small{font:600 .72rem var(--f-body);color:#F3EEDD;opacity:.7;margin-left:2px}
+body{padding-bottom:calc(58px + env(safe-area-inset-bottom,0px))}
+.warn{background:var(--warn-bg);color:var(--warn);border-radius:14px;padding:10px 14px;font-size:.88rem;font-weight:500;display:grid;gap:4px}
+
+.shelves{display:grid;gap:10px}
+.shelf{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 14px;align-items:center;background:var(--surface-2);border-radius:18px;padding:12px 14px}
+.badge{grid-row:span 4;align-self:center;width:52px;min-height:52px;border-radius:13px;background:var(--accent);color:var(--accent-ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:5px 3px;text-align:center}
+.badge small{font:700 .52rem/1 var(--f-body);letter-spacing:.02em;text-transform:uppercase;opacity:.85}
+.badge b{font:700 1.35rem/1 var(--f-disp)}
+.s-lab{font-size:.74rem;color:var(--muted);font-weight:600}
+.s-main{font:700 2.3rem/1 var(--f-disp);color:var(--hole);font-variant-numeric:tabular-nums}
+.s-main small{font:600 .8rem var(--f-body);color:var(--muted);margin-left:3px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.chip{display:inline-flex;align-items:center;justify-content:center;min-width:3.2em;font:700 1.22rem/1 var(--f-disp);letter-spacing:.02em;padding:.24em .6em .34em;border-radius:999px;text-align:center;background:var(--hole-soft);color:var(--ink);font-variant-numeric:tabular-nums}
+.chip.main{background:var(--hole);color:var(--surface)}
+.s-sub{grid-column:2;font-size:.82rem;color:var(--muted)}
+.empty{color:var(--muted);font-size:.92rem;margin:0}
+
+.textbtn{justify-self:center;border:0;background:transparent;color:var(--accent-text);font-weight:700;font-size:.95rem;padding:12px 18px;border-radius:999px;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.textbtn:active{background:var(--accent-soft)}
+
+.foot{max-width:640px;margin:0 auto;display:grid;justify-items:center;gap:10px;text-align:center;color:var(--muted);font-size:.85rem;font-weight:600;letter-spacing:.04em;padding-top:4px;padding-bottom:max(28px,env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.foot-line{width:48px;height:3px;border-radius:2px;background:var(--brass);opacity:.7}
+
+/* podgląd pdf */
+.pdfmodal{position:fixed;inset:0;z-index:50;background:rgba(6,9,5,.75);display:grid;place-items:center;padding:max(16px,env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px));animation:fade .2s}
+.pdf-box{width:min(560px,100%);max-height:100%;overflow:auto;background:var(--surface);border-radius:20px;padding:14px;display:grid;gap:10px}
+.pdf-h{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:1.05rem}
+.pdf-x{width:40px;height:40px;border-radius:50%;border:0;background:var(--surface-2);color:var(--ink);display:grid;place-items:center;cursor:pointer}
+.pdf-note{margin:0;font-size:.88rem;color:var(--muted)}
+.pdf-pages{display:grid;gap:10px}
+.pdf-pages img{width:100%;border-radius:6px;box-shadow:0 2px 10px rgba(0,0,0,.25);background:#fff}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 24px);transform:translateX(-50%);z-index:60;background:var(--ink);color:var(--surface);padding:12px 18px;border-radius:999px;font-weight:600;font-size:.92rem;box-shadow:0 6px 20px rgba(0,0,0,.3);animation:fade .2s;max-width:calc(100% - 32px);text-align:center}
+.appbar.hide{transform:translateY(calc(-100% - 12px))}
+input::placeholder{color:var(--muted);opacity:.55}
+.nrow{align-items:stretch}
+.nrow .stepper{padding:5px;height:100%}
+.drawcard>summary{list-style:none;cursor:pointer;user-select:none}
+.drawcard>summary::-webkit-details-marker{display:none}
+.sumhint{margin-left:auto;display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:.9rem;color:var(--accent-text)}
+.sumhint::after{content:"";width:8px;height:8px;border-right:2.4px solid currentColor;border-bottom:2.4px solid currentColor;transform:rotate(-135deg) translate(-2px,-1px);transition:transform .3s}
+.drawcard:not([open]) .sumhint::after{transform:rotate(45deg) translateY(-3px)}
+.dlegend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.78rem;color:var(--muted);font-weight:600}
+.dlegend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.svghost svg{display:block;width:100%;height:auto;max-height:75vh;margin-inline:auto}
+/* dolny arkusz historii */
+.scrim{position:fixed;inset:0;z-index:40;background:rgba(6,9,5,.72);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);animation:fade .25s}
+.sheet{position:fixed;left:0;right:0;top:0;z-index:41;max-height:88vh;overflow:auto;background:var(--bg);border-radius:0 0 26px 26px;box-shadow:0 10px 30px rgba(0,0,0,.3);padding-bottom:16px;animation:down .3s ease-out}
+.sheet-top{position:sticky;top:0;z-index:1;padding-top:calc(env(safe-area-inset-top,0px) + 14px);background:linear-gradient(135deg,var(--bar1),var(--bar2));color:#F3EEDD;padding-bottom:14px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.sheet-in{max-width:640px;margin:0 auto;display:grid;gap:10px;padding-top:14px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.handle{width:44px;height:5px;border-radius:3px;background:var(--line);margin:4px auto 0}
+.sheet-h{max-width:640px;margin:0 auto;display:flex;align-items:center;gap:10px}
+.sheet-ic{flex:none;width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.08);color:var(--brass);display:grid;place-items:center}
+.sheet-h h2{flex:1;margin:0;font:700 1.45rem/1 var(--f-disp);letter-spacing:.03em;color:var(--brass)}
+.smallbtn{border:0;background:rgba(255,255,255,.1);color:var(--brass);font-weight:700;font-size:.85rem;border-radius:999px;padding:10px 14px;cursor:pointer}
+.sheet-act{display:flex;gap:10px;position:sticky;bottom:0;padding-block:8px;background:var(--bg)}
+.sheet-act button{flex:1;min-height:52px;border-radius:999px;border:0;font-weight:700;font-size:1rem;cursor:pointer;box-shadow:var(--shadow)}
+.sheet-act .yes{background:var(--accent);color:var(--accent-ink)}
+.sheet-act .yes:disabled{opacity:.4;cursor:default;box-shadow:none}
+.sheet-act .no{background:var(--surface);color:var(--ink)}
+.sel-hint{text-align:center;font-size:.85rem;color:var(--muted);margin:2px 0 0}
+.histempty{display:grid;justify-items:center;gap:8px;text-align:center;background:var(--surface);border-radius:22px;padding:24px 18px;box-shadow:var(--shadow)}
+.he-ic{width:64px;height:64px;border-radius:50%;background:var(--accent-soft);color:var(--accent-text);display:grid;place-items:center;margin-bottom:4px}
+.he-t{font-weight:700;font-size:1.05rem}
+.he-s{font-size:.9rem;color:var(--muted);max-width:30ch}
+.histitem:active{background:var(--surface-2)}
+.histitem.sel{background:var(--accent-soft);border-color:var(--accent)}
+.histlist{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.histitem{width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;align-items:center;text-align:left;border:2px solid transparent;background:var(--surface);box-shadow:var(--shadow);border-radius:16px;padding:12px 14px;cursor:pointer;transition:background .2s,border-color .2s}
+.histitem.cur{border-color:var(--accent)}
+.h1l{font-weight:700}
+.htime{font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.h2l{grid-column:1/-1;font-size:.85rem;color:var(--muted);overflow-wrap:anywhere}
+.h3l{color:var(--ink);font-weight:600}
+.confirm{display:grid;gap:10px;margin-top:6px;padding:14px;border-radius:16px;background:var(--accent-soft);font-size:.92rem;font-weight:500}
+.cbtns{display:flex;gap:10px}
+.cbtns button{flex:1;min-height:46px;border-radius:999px;border:0;font-weight:700;cursor:pointer}
+.cbtns .yes{background:var(--accent);color:var(--accent-ink)}
+.cbtns .no{background:var(--surface);color:var(--ink)}
+@keyframes down{from{transform:translateY(-100%)}to{transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:360px){.grid2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="appbar">
+  <div class="appbar-in">
+    <h1 class="appname">PÓŁKOWNIK</h1>
+    <button type="button" class="iconbtn" id="shareBtn" aria-label="Udostępnij PDF"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="M8.3 10.8l7.4-4.3M8.3 13.2l7.4 4.3"/></svg></button>
+    <button type="button" class="iconbtn" id="themeBtn" aria-label="Przełącz tryb ciemny"><svg class="i-moon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="i-sun" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg></button>
+    <button type="button" class="iconbtn" id="histBtn" aria-label="Historia ustawień" aria-expanded="false" aria-controls="histPanel"><svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 3.5V8h4.5"/><path d="M12 7.5V12l3 2"/></svg></button>
+  </div>
+</header>
+
+
+<div class="pdfmodal" id="pdfModal" hidden role="dialog" aria-modal="true" aria-label="Podgląd PDF">
+  <div class="pdf-box">
+    <div class="pdf-h"><strong>Podgląd PDF</strong><button type="button" class="pdf-x" id="pdfClose" aria-label="Zamknij podgląd"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <p class="pdf-note" id="pdfNote"></p>
+    <div class="pdf-pages" id="pdfPages"></div>
+  </div>
+</div>
+
+<form class="app" id="f" autocomplete="off">
+
+  <section class="card" data-key="bok">
+    <div class="sec-h">
+      <span class="sec-ic"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M5 6h14M5 18h14"/></svg></span>
+      <span class="sec-t">Korpus</span>
+    </div>
+    <div class="body">
+      <div class="grid2">
+        <label class="field"><span class="f-lab">Wysokość boku</span><span class="f-row"><input type="number" inputmode="decimal" id="H" value="720" min="100" step="1"><span class="f-unit">mm</span></span></label>
+        <label class="field"><span class="f-lab">Grubość wieńców</span><span class="f-row"><input type="number" inputmode="decimal" id="t" value="18" min="0" step="0.5"><span class="f-unit">mm</span></span></label>
+      </div>
+      <div class="lbl"><span class="f-lab">Wieńce górny i dolny</span>
+        <div class="seg" id="kon" role="group" aria-label="Wieńce">
+          <button type="button" data-v="between" aria-pressed="true">Między bokami</button>
+          <button type="button" data-v="over" aria-pressed="false">Nakładane</button>
+        </div>
+      </div>
+      <label class="field" id="cokolWrap"><span class="f-lab">Wieniec dolny podniesiony o (cokół)</span><span class="f-row"><input type="number" inputmode="decimal" id="c" value="0" min="0" step="1"><span class="f-unit">mm</span></span></label>
+    </div>
+  </section>
+
+  <section class="card" data-key="polki">
+    <div class="sec-h">
+      <span class="sec-ic"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 8h16M4 15h16"/><circle cx="6" cy="11" r="1.2" fill="currentColor" stroke="none"/><circle cx="18" cy="11" r="1.2" fill="currentColor" stroke="none"/></svg></span>
+      <span class="sec-t">Półki</span>
+    </div>
+    <div class="body">
+      <div class="grid2 nrow">
+        <div class="stepper">
+          <button type="button" class="stp" id="nMinus" aria-label="Mniej półek"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg></button>
+          <div><input type="number" inputmode="numeric" id="n" value="2" min="1" max="20" step="1" aria-label="Ilość półek"><span class="cap">ilość półek</span></div>
+          <button type="button" class="stp" id="nPlus" aria-label="Więcej półek"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg></button>
+        </div>
+        <label class="field"><span class="f-lab">Grubość półki</span><span class="f-row"><input type="number" inputmode="decimal" id="ts" value="18" min="1" step="0.5"><span class="f-unit">mm</span></span></label>
+      </div>
+      <div class="grid2">
+        <label class="field"><span class="f-lab">Średnica otworu</span><span class="f-row"><input type="number" inputmode="decimal" id="dia" value="5" min="2" step="0.5"><span class="f-unit">mm</span></span></label>
+        <label class="field"><span class="f-lab">Oś otworu poniżej spodu półki</span><span class="f-row"><input type="number" inputmode="decimal" id="p" value="2.5" min="0" step="0.5"><span class="f-unit">mm</span></span></label>
+      </div>
+      <div class="lbl"><span class="f-lab">Rozmieszczenie</span>
+        <div class="seg" id="mode" role="group" aria-label="Rozmieszczenie">
+          <button type="button" data-v="equal" aria-pressed="true">Równe prześwity</button>
+          <button type="button" data-v="raster" aria-pressed="false">System 32</button>
+        </div>
+      </div>
+      <div class="lbl"><span class="f-lab">Otworów na półkę (co 32 mm)</span>
+        <div class="seg" id="k" role="group" aria-label="Otworów na półkę">
+          <button type="button" data-v="0" aria-pressed="false">1 otwór</button>
+          <button type="button" data-v="1" aria-pressed="true">3 otwory</button>
+        </div>
+      </div>
+      <label class="switch" id="fullWrap" hidden><input type="checkbox" id="full" role="switch"><span class="track"><span class="thumb"></span></span><span class="sw-t">Wierć pełny rząd rastra</span></label>
+      <label class="switch"><input type="checkbox" id="round" role="switch" checked><span class="track"><span class="thumb"></span></span><span class="sw-t">Zaokrąglaj do pełnych milimetrów</span></label>
+    </div>
+  </section>
+
+  <div id="warn" class="warn" hidden></div>
+
+  <section class="card" data-key="tabela">
+    <div class="sec-h">
+      <span class="sec-ic"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 20V5M4 9l4-4 4 4M16 4v15M12 15l4 4 4-4"/></svg></span>
+      <span class="sec-t">Wymiary</span>
+    </div>
+    <div class="body">
+      <div class="seg" id="dir" role="group" aria-label="Kierunek pomiaru">
+        <button type="button" data-v="dol" aria-pressed="true">Od dołu</button>
+        <button type="button" data-v="gora" aria-pressed="false">Od góry</button>
+      </div>
+      <div class="shelves" id="tbl"></div>
+      <div class="shelves" id="tblTop" hidden></div>
+    </div>
+  </section>
+
+  <details class="card drawcard" id="drawDet" open>
+    <summary class="sec-h">
+      <span class="sec-ic"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="6" y="3" width="12" height="18" rx="1.5"/><path d="M6 12h12"/><circle cx="8.5" cy="9" r="1" fill="currentColor" stroke="none"/><circle cx="15.5" cy="9" r="1" fill="currentColor" stroke="none"/></svg></span>
+      <span class="sec-t">Rysunek boku</span>
+      <span class="sumhint" id="drawHint">Ukryj</span>
+    </summary>
+    <div class="body">
+      <div class="dlegend"><span><i style="background:var(--hole)"></i>otwór pod półkę</span><span><i style="background:var(--hole-soft)"></i>otwór regulacyjny</span></div>
+      <div id="svgHost" class="svghost"></div>
+    </div>
+  </details>
+
+
+  <button type="button" class="textbtn" id="reset">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 3.5V8h4.5"/></svg>
+    Przywróć domyślne
+  </button>
+</form>
+
+<footer class="foot"><span class="foot-line" aria-hidden="true"></span><span>© <span id="year">2026</span> Pracownia Stolarska Maciej Łagun</span></footer>
+
+<section class="sumbar" aria-label="Podsumowanie" aria-live="polite">
+  <dl class="stats" id="sum"></dl>
+</section>
+
+<div class="scrim" id="scrim" hidden></div>
+<section class="sheet" id="histPanel" hidden aria-label="Historia ustawień" role="dialog" aria-modal="true">
+  <div class="sheet-top">
+    <div class="sheet-h">
+      <span class="sheet-ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 3.5V8h4.5"/><path d="M12 7.5V12l3 2"/></svg></span>
+      <h2>Historia</h2>
+      <button type="button" class="smallbtn" id="histClear">Wyczyść</button>
+    </div>
+  </div>
+  <div class="sheet-in">
+    <div class="confirm" id="histClearConfirm" hidden>
+      <span>Usunąć całą historię? Tej operacji nie można cofnąć.</span>
+      <div class="cbtns"><button type="button" class="yes" id="histClearYes">Usuń historię</button><button type="button" class="no" id="histClearNo">Anuluj</button></div>
+    </div>
+    <ol class="histlist" id="histList"></ol>
+    <p class="sel-hint" id="selHint">Stuknij wpis, który chcesz przywrócić.</p>
+    <div class="sheet-act">
+      <button type="button" class="yes" id="histRestore" disabled>Przywróć</button>
+      <button type="button" class="no" id="histCancel">Anuluj</button>
+    </div>
+    <div class="handle" aria-hidden="true"></div>
+  </div>
+</section>
+
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const DEF={H:720,t:18,c:0,n:2,ts:18,p:2.5,k:1,dia:5,full:false,round:true,kon:"between",mode:"equal"};
+const numIds=["H","t","c","n","ts","p","dia"];
+let state={...DEF};
+try{const s=JSON.parse(localStorage.getItem("otwory-polki-v5")||"null");if(s)state={...DEF,...s};}catch(e){}
+
+function setSeg(id,v){document.querySelectorAll("#"+id+" button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.v===v));}
+function toForm(){numIds.forEach(id=>$(id).value=state[id]);state.k=state.k>=1?1:0;$("full").checked=state.full;$("round").checked=state.round;
+  setSeg("kon",state.kon);setSeg("mode",state.mode);setSeg("k",String(state.k));}
+function fromForm(){numIds.forEach(id=>{const el=$(id);const raw=el.value===""&&el.dataset.prev!==undefined?el.dataset.prev:el.value;const v=parseFloat(raw);state[id]=isFinite(v)?v:0;});
+  state.n=Math.max(0,Math.round(state.n));state.full=$("full").checked;state.round=$("round").checked;}
+const r1=x=>Math.round(x*10)/10;
+const fmt=x=>{const v=state.round?Math.round(x):r1(x);return (Number.isInteger(v)?v.toString():v.toFixed(1)).replace(".",",");};
+
+function compute(s){
+  const warn=[];
+  const between=s.kon==="between";
+  const inB=between? s.c+s.t : 0;
+  const inT=between? s.H-s.t : s.H;
+  const inner=inT-inB;
+  let shelves=[], raster=[];
+  if(inner<=0){warn.push("Wnętrze ma zerową lub ujemną wysokość. Sprawdź wysokość boku, grubość wieńców i cokół.");return {inB,inT,inner,shelves,raster,warn};}
+  const gap=(inner-s.n*s.ts)/(s.n+1);
+  if(gap<=0){warn.push("Półki nie mieszczą się we wnętrzu. Zmniejsz ich liczbę lub grubość.");return {inB,inT,inner,shelves,raster,warn};}
+  if(s.mode==="raster"){
+    const m=Math.min(40,inner/4);
+    const lo=inB+m, hi=inT-m;
+    const cnt=Math.max(1,Math.floor((hi-lo)/32)+1);
+    const y0=(lo+hi)/2-(cnt-1)*16;
+    for(let i=0;i<cnt;i++)raster.push(y0+i*32);
+  }
+  for(let i=1;i<=s.n;i++){
+    const bottom=inB+i*gap+(i-1)*s.ts;
+    let hole=bottom-s.p;
+    if(raster.length){hole=raster.reduce((a,b)=>Math.abs(b-hole)<Math.abs(a-hole)?b:a);}
+    if(s.round)hole=Math.round(hole);
+    shelves.push({i,hole,bottom:hole+s.p});
+  }
+  if(raster.length){
+    for(let i=1;i<shelves.length;i++)if(Math.abs(shelves[i].hole-shelves[i-1].hole)<1){warn.push("Dwie półki trafiły na ten sam otwór rastra. Zmniejsz liczbę półek.");break;}
+  }
+  let prev=inB;
+  shelves.forEach(sh=>{sh.gapBelow=sh.bottom-prev;prev=sh.bottom+s.ts;});
+  const gapTop=inT-prev;
+  shelves.forEach(sh=>{sh.adj=[];for(let j=1;j<=s.k;j++){[sh.hole-32*j,sh.hole+32*j].forEach(y=>sh.adj.push(y));}sh.adj.sort((a,b)=>a-b);
+    if(sh.adj.some(y=>y<inB+s.dia||y>inT-s.ts-s.p))warn.push("Przy półce "+sh.i+" skrajny otwór wypada przy wieńcu lub w nim. Zmniejsz liczbę otworów albo przesuń półkę.");});
+  shelves.forEach(sh=>{if(sh.hole<inB||sh.bottom+s.ts>inT)warn.push("Półka "+sh.i+" wychodzi poza wnętrze szafki.");});
+  return {inB,inT,inner,shelves,raster,gapTop,warn};
+}
+
+function svgEl(s,R,fromTop){
+  const H=s.H,D=560, big=Math.max(H,D);
+  const fs=Math.max(16,big/26), padL=fs*3.2, padR=fs*6.5, padT=fs*2.6, padB=fs*2.4;
+  const vbW=D+padL+padR, vbH=H+padT+padB;
+  const Y=y=>padT+H-y, X=x=>padL+x;
+  const hr=Math.max(s.dia/2,big/220);
+  let o=`<svg viewBox="0 0 ${r1(vbW)} ${r1(vbH)}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bok szafki z otworami" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="600" font-size="${r1(fs)}">`;
+  o+=`<defs><pattern id="hat" width="${r1(fs*.6)}" height="${r1(fs*.6)}" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="${r1(fs*.6)}" stroke="var(--board-edge)" stroke-width="${r1(fs*.08)}"/></pattern></defs>`;
+  // bok
+  o+=`<rect x="${X(0)}" y="${Y(H)}" width="${D}" height="${H}" fill="var(--board)" stroke="var(--board-edge)" stroke-width="${r1(fs*.12)}"/>`;
+  // wieńce
+  if(s.kon==="between"){
+    o+=`<rect x="${X(0)}" y="${Y(R.inB)}" width="${D}" height="${s.t}" fill="url(#hat)" stroke="var(--board-edge)" stroke-width="${r1(fs*.06)}" stroke-dasharray="${r1(fs*.4)} ${r1(fs*.25)}"/>`;
+    o+=`<rect x="${X(0)}" y="${Y(H)}" width="${D}" height="${s.t}" fill="url(#hat)" stroke="var(--board-edge)" stroke-width="${r1(fs*.06)}" stroke-dasharray="${r1(fs*.4)} ${r1(fs*.25)}"/>`;
+  }
+  // półki
+  R.shelves.forEach(sh=>{o+=`<rect x="${X(D*0.03)}" y="${Y(sh.bottom+s.ts)}" width="${r1(D*0.94)}" height="${s.ts}" fill="var(--shelf)" opacity=".28" stroke="var(--shelf)" stroke-width="${r1(fs*.08)}"/>`;});
+  R.shelves.forEach(sh=>{const bw=fs*1.9,bh=fs*1.45,cx=X(D/2),cy=Y(sh.bottom+s.ts)-bh/2-fs*.25;
+    o+=`<rect x="${r1(cx-bw/2)}" y="${r1(cy-bh/2)}" width="${r1(bw)}" height="${r1(bh)}" rx="${r1(bh/2)}" fill="var(--shelf)"/>`;
+    o+=`<text x="${r1(cx)}" y="${r1(cy+fs*.36)}" text-anchor="middle" fill="var(--surface)" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="700" font-size="${r1(fs*1.05)}">${sh.i}</text>`;});
+  const xs=[37,D-37];
+  // raster pełny
+  if(s.mode==="raster"&&s.full){R.raster.forEach(y=>xs.forEach(x=>{o+=`<circle cx="${r1(X(x))}" cy="${r1(Y(y))}" r="${r1(hr*.8)}" fill="none" stroke="var(--board-edge)" stroke-width="${r1(fs*.07)}"/>`;}));}
+  // otwory
+  const labels=new Map();
+  R.shelves.forEach(sh=>{
+    sh.adj.forEach(y=>{xs.forEach(x=>{o+=`<circle cx="${r1(X(x))}" cy="${r1(Y(y))}" r="${r1(hr)}" fill="var(--hole-soft)"/>`;});if(!labels.has(r1(y)))labels.set(r1(y),false);});
+    xs.forEach(x=>{o+=`<circle cx="${r1(X(x))}" cy="${r1(Y(sh.hole))}" r="${r1(hr*1.15)}" fill="var(--hole)"/>`;});
+    labels.set(r1(sh.hole),true);
+  });
+  // linie wymiarowe przy wszystkich otworach, rozsunięte gdy napisy by się nakładały
+  const ys=[...labels.keys()].sort((a,b)=>a-b), gapMin=fs*1.08, sw=r1(fs*.07), dash=`${r1(fs*.3)} ${r1(fs*.2)}`;
+  let prevT=Infinity;
+  ys.forEach(y=>{
+    const hy=Y(y); let ty=Math.min(hy,prevT-gapMin); prevT=ty;
+    const main=labels.get(y), xa=X(D)+fs*.5, xb=X(D)+fs*.9;
+    o+=`<line x1="${r1(X(D-37)+hr*1.6)}" y1="${r1(hy)}" x2="${r1(xa)}" y2="${r1(hy)}" stroke="var(--hole)" stroke-width="${sw}" stroke-dasharray="${dash}"/>`;
+    o+=`<line x1="${r1(xa)}" y1="${r1(hy)}" x2="${r1(xb)}" y2="${r1(ty)}" stroke="var(--hole)" stroke-width="${sw}"/>`;
+    o+=`<text x="${r1(xb+fs*.15)}" y="${r1(ty+fs*.35)}" fill="var(--hole)" font-weight="${main?700:500}">${fmt(fromTop?H-y:y)}</text>`;
+  });
+  // wymiar H po lewej
+  const lx=r1(padL-fs*1.4);
+  o+=`<line x1="${lx}" y1="${Y(0)}" x2="${lx}" y2="${Y(H)}" stroke="var(--muted)" stroke-width="${r1(fs*.07)}"/>`;
+  [0,H].forEach(y=>{o+=`<line x1="${r1(lx-fs*.4)}" y1="${Y(y)}" x2="${r1(lx+fs*.4)}" y2="${Y(y)}" stroke="var(--muted)" stroke-width="${r1(fs*.07)}"/>`;});
+  o+=`<text transform="translate(${r1(lx-fs*.45)} ${r1(Y(H/2))}) rotate(-90)" text-anchor="middle" fill="var(--muted)">${fmt(H)}</text>`;
+  // podpisy
+  {const ly=fromTop?padT-fs*.8:padT+H+fs*1.35, ey=fromTop?Y(H):Y(0);
+    o+=`<line x1="${r1(X(D))}" y1="${r1(ey)}" x2="${r1(X(D)+fs*.7)}" y2="${r1(ey)}" stroke="var(--hole)" stroke-width="${r1(fs*.1)}"/>`;
+    o+=`<text x="${r1(X(D)+fs*.9)}" y="${r1(ly)}" fill="var(--hole)" font-family="Plus Jakarta Sans, Arial, sans-serif" font-weight="700" font-size="${r1(fs*.8)}">${fromTop?"od góry":"od dołu"}</text>`;}
+  o+="</svg>";
+  return o;
+}
+function shelfCard(i,main,mainLab,holes,sub){
+  return `<article class="shelf">
+    <div class="badge"><small>Półka</small><b>${i}</b></div>
+    <div class="s-lab">${mainLab}</div>
+    <div class="s-main">${main}<small>mm</small></div>
+    <div class="chips">${holes}</div>
+    ${sub?`<div class="s-sub">${sub}</div>`:""}
+  </article>`;
+}
+
+function render(){
+  const s=state, R=compute(s);
+  $("cokolWrap").hidden=s.kon!=="between";
+  $("fullWrap").hidden=s.mode!=="raster";
+  $("nMinus").disabled=s.n<=1;$("nPlus").disabled=s.n>=20;
+  const w=$("warn"); w.hidden=!R.warn.length; w.innerHTML=R.warn.map(x=>"<div>"+x+"</div>").join("");
+  const gaps=R.shelves.map(x=>x.gapBelow).concat(R.shelves.length?[R.gapTop]:[]);
+  $("sum").innerHTML=[
+    ["Wnętrze",R.inner>0?fmt(R.inner):"—"],
+    ["Prześwit",gaps.length?(s.mode==="equal"?fmt(gaps[0]):fmt(Math.min(...gaps))+"–"+fmt(Math.max(...gaps))):"—"],
+  ].map(([a,b])=>`<div class="stat"><dt>${a}</dt><dd>${b}${b!=="—"?"<small>mm</small>":""}</dd></div>`).join("");
+  const none='<p class="empty">Brak półek do wyznaczenia.</p>';
+  $("tbl").innerHTML=R.shelves.length?R.shelves.map(sh=>{
+    const all=sh.adj.concat([sh.hole]).sort((a,b)=>a-b);
+    const chips=all.length>1?all.map(y=>`<span class="chip${y===sh.hole?" main":""}">${fmt(y)}</span>`).join(""):"";
+    return shelfCard(sh.i,fmt(sh.hole),"Oś otworu od dołu",chips,"Spód półki: "+fmt(sh.bottom)+" mm");
+  }).join(""):none;
+  $("tblTop").innerHTML=R.shelves.length?R.shelves.map(sh=>{
+    const top=y=>s.H-y;
+    const all=sh.adj.concat([sh.hole]).sort((a,b)=>b-a);
+    const chips=all.length>1?all.map(y=>`<span class="chip${y===sh.hole?" main":""}">${fmt(top(y))}</span>`).join(""):"";
+    return shelfCard(sh.i,fmt(top(sh.hole)),"Oś otworu od góry",chips,"Wierzch półki od góry: "+fmt(top(sh.bottom+s.ts))+" mm");
+  }).join(""):none;
+  $("svgHost").innerHTML=R.inner>0&&R.shelves.length?svgEl(s,R,dir==="gora"):'<p class="empty">Brak półek do narysowania.</p>';
+  try{localStorage.setItem("otwory-polki-v5",JSON.stringify(state));}catch(e){}
+  if(histReady)histSchedule();
+}
+
+$("f").addEventListener("input",()=>{fromForm();render();});
+$("f").addEventListener("change",()=>{fromForm();render();});
+$("f").addEventListener("submit",e=>e.preventDefault());
+let dir="dol";try{if(localStorage.getItem("otwory-kierunek")==="gora")dir="gora";}catch(e){}
+function syncDir(anim){setSeg("dir",dir);$("tbl").hidden=dir!=="dol";$("tblTop").hidden=dir!=="gora";
+  const el=$(dir==="dol"?"tbl":"tblTop");
+  if(anim&&el.animate&&!(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches))el.animate([{opacity:0,transform:"translateX("+(dir==="dol"?"-":"")+"14px)"},{opacity:1,transform:"none"}],{duration:340,easing:"cubic-bezier(.2,.75,.25,1)"});}
+syncDir();
+$("dir").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;if(dir===b.dataset.v)return;dir=b.dataset.v;syncDir(true);render();try{localStorage.setItem("otwory-kierunek",dir);}catch(e){}});
+$("k").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;state.k=+b.dataset.v;setSeg("k",b.dataset.v);render();});
+["kon","mode"].forEach(id=>$(id).addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;state[id]=b.dataset.v;setSeg(id,b.dataset.v);render();}));
+function stepN(d){const v=Math.min(20,Math.max(1,(Math.round(state.n)||0)+d));$("n").value=v;fromForm();render();}
+$("nMinus").addEventListener("click",()=>stepN(-1));
+$("nPlus").addEventListener("click",()=>stepN(1));
+
+// motyw
+const root=document.documentElement;
+function sysDark(){return !!(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches);}
+function isDark(){const t=root.getAttribute("data-theme");if(t)return t==="dark";return sysDark();}
+function syncTheme(){const d=isDark();root.classList.toggle("is-dark",d);$("themeBtn").setAttribute("aria-pressed",d);}
+try{const th=localStorage.getItem("otwory-motyw");if(th==="dark"||th==="light")root.setAttribute("data-theme",th);}catch(e){}
+syncTheme();
+try{matchMedia("(prefers-color-scheme: dark)").addEventListener("change",syncTheme);}catch(e){}
+$("themeBtn").addEventListener("click",()=>{const next=isDark()?"light":"dark";
+  if((next==="dark")===sysDark()){root.removeAttribute("data-theme");try{localStorage.removeItem("otwory-motyw");}catch(e){}}
+  else{root.setAttribute("data-theme",next);try{localStorage.setItem("otwory-motyw",next);}catch(e){}}
+  syncTheme();});
+
+
+
+// historia
+const HKEY="otwory-historia", HKEYS=["H","t","c","n","ts","p","k","dia","full","round","kon","mode"];
+let histReady=false, histTimer=null, hist=[], histPending=null;
+try{hist=JSON.parse(localStorage.getItem(HKEY)||"[]");if(!Array.isArray(hist))hist=[];}catch(e){hist=[];}
+const snap=()=>{const o={};HKEYS.forEach(k=>o[k]=state[k]);return o;};
+const same=(a,b)=>HKEYS.every(k=>a[k]===b[k]);
+function histSave(){
+  histTimer=null;
+  const sn=snap();
+  const onlyN=(x,y)=>HKEYS.every(k=>k==="n"||x[k]===y[k]);
+  if(hist.length&&onlyN(hist[0].s,sn)){
+    // zmieniła się tylko liczba półek: aktualizuj ostatni wpis zamiast dodawać nowy
+    hist[0]={t:Date.now(),s:sn};
+    hist=[hist[0],...hist.slice(1).filter(h=>!same(h.s,sn))];
+  }else{
+    hist=hist.filter(h=>!same(h.s,sn));
+    hist.unshift({t:Date.now(),s:sn});
+  }
+  hist=hist.slice(0,5);
+  try{localStorage.setItem(HKEY,JSON.stringify(hist));}catch(e){}
+  histRender();
+}
+function histSchedule(){clearTimeout(histTimer);histTimer=setTimeout(histSave,1500);}
+function plPolki(n){const a=n%10,b=n%100;return n===1?"półka":(a>=2&&a<=4&&!(b>=12&&b<=14))?"półki":"półek";}
+function histTime(t){const d=new Date(t),n=new Date(),p=x=>String(x).padStart(2,"0");
+  const hm=p(d.getHours())+":"+p(d.getMinutes());
+  return d.toDateString()===n.toDateString()?hm:p(d.getDate())+"."+p(d.getMonth()+1)+" "+hm;}
+function histRender(){
+  const L=$("histList");
+  if(!hist.length){L.innerHTML='<li class="histempty"><span class="he-ic"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 3.5V8h4.5"/><path d="M12 7.5V12l3 2"/></svg></span><span class="he-t">Historia jest pusta</span><span class="he-s">Zapisane ustawienia pojawią się tutaj, gdy zmienisz wymiary.</span></li>';$("histClear").hidden=true;histPending=null;syncRestore();return;}
+  $("histClear").hidden=false;
+  const cur=snap();
+  L.innerHTML=hist.map((h,i)=>{
+    const s=h.s, R=compute(s), f=x=>{const v=s.round?Math.round(x):Math.round(x*10)/10;return String(v).replace(".",",");};
+    const holes=R.shelves.map(sh=>f(sh.hole)).join(", ")||"—";
+    const isCur=same(s,cur);
+    return `<li><button type="button" class="histitem${isCur?" cur":""}${histPending===i?" sel":""}" data-i="${i}" aria-pressed="${histPending===i}">
+      <span class="h1l">${f(s.H)} mm · ${s.n} ${plPolki(s.n)}</span><span class="htime">${histTime(h.t)}</span>
+      <span class="h2l">${s.kon==="between"?"Wieńce między bokami":"Wieńce nakładane"}</span>
+      <span class="h2l h3l">Osie: ${holes}</span>
+    </button></li>`;}).join("");
+  syncRestore();
+}
+function syncRestore(){const ok=histPending!==null&&!!hist[histPending];$("histRestore").disabled=!ok;
+  $("selHint").hidden=!hist.length||ok;}
+function openSheet(){if(histTimer){clearTimeout(histTimer);histSave();}histPending=null;$("histClearConfirm").hidden=true;histRender();
+  $("scrim").hidden=false;$("histPanel").hidden=false;$("histBtn").setAttribute("aria-expanded","true");$("histCancel").focus({preventScroll:true});}
+let sheetClosing=false;
+function closeSheet(){
+  const sh=$("histPanel"), sc=$("scrim");
+  if(sh.hidden||sheetClosing)return;
+  $("histBtn").setAttribute("aria-expanded","false");
+  const done=()=>{sc.hidden=true;sh.hidden=true;sheetClosing=false;
+    try{sh.getAnimations().forEach(a=>a.cancel());sc.getAnimations().forEach(a=>a.cancel());}catch(e){}};
+  const reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if(reduce||!sh.animate){done();return;}
+  sheetClosing=true;
+  sc.animate([{opacity:1},{opacity:0}],{duration:300,easing:"ease-in",fill:"forwards"});
+  sh.animate([{transform:"none"},{transform:"translateY(-100%)"}],{duration:300,easing:"cubic-bezier(.4,0,.7,.2)",fill:"forwards"}).onfinish=done;
+}
+$("histBtn").addEventListener("click",()=>{$("histPanel").hidden?openSheet():closeSheet();});
+$("histCancel").addEventListener("click",closeSheet);
+$("scrim").addEventListener("click",closeSheet);
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("histPanel").hidden)closeSheet();});
+$("histList").addEventListener("click",e=>{
+  const it=e.target.closest(".histitem");if(!it)return;
+  $("histClearConfirm").hidden=true;
+  if(it.classList.contains("cur"))return;
+  const i=+it.dataset.i;histPending=histPending===i?null:i;histRender();});
+$("histRestore").addEventListener("click",()=>{
+  const h=hist[histPending];if(!h)return;histPending=null;
+  state={...DEF,...h.s};toForm();render();clearTimeout(histTimer);histTimer=null;histRender();
+  closeSheet();window.scrollTo({top:0,behavior:"smooth"});});
+$("histClear").addEventListener("click",()=>{histPending=null;histRender();const c=$("histClearConfirm");c.hidden=!c.hidden;if(!c.hidden)$("histClearNo").focus();});
+$("histClearNo").addEventListener("click",()=>{$("histClearConfirm").hidden=true;});
+$("histClearYes").addEventListener("click",()=>{hist=[];try{localStorage.removeItem(HKEY);}catch(e){}$("histClearConfirm").hidden=true;closeSheet();histRender();});
+
+$("reset").addEventListener("click",()=>{state={...DEF};toForm();render();window.scrollTo({top:0,behavior:"smooth"});});
+document.addEventListener("contextmenu",e=>{if(!e.target.closest("input"))e.preventDefault();});
+
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("pdfModal").hidden=true;});
+
+function toast(msg){const t=document.createElement("div");t.className="toast";t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2600);}
+
+// ---- PDF ----
+const PW=1240, PH=1754, M=80; // A4 ok. 150 dpi
+function pdfPages(drawImg){
+  const s=state, R=compute(s), pages=[];
+  let cv, g, y;
+  const C={bar:"#41543A",brass:"#B8913F",ink:"#1A2117",muted:"#5E6958",line:"#D3DACB",soft:"#EEF2EA",hole:"#7E5A17"};
+  const F=(w,sz,fam)=>`${w} ${sz}px ${fam==="d"?'"Barlow Condensed","Arial Narrow",sans-serif':'"Plus Jakarta Sans",Arial,sans-serif'}`;
+  function newPage(first){
+    cv=document.createElement("canvas");cv.width=PW;cv.height=PH;g=cv.getContext("2d");
+    g.fillStyle="#fff";g.fillRect(0,0,PW,PH);
+    if(first){
+      g.fillStyle=C.bar;g.fillRect(0,0,PW,210);
+      g.fillStyle="#D6B06C";g.font=F(700,84,"d");g.fillText("PÓŁKOWNIK",M,112);
+      g.fillStyle="#F3EEDD";g.font=F(600,26,"b");g.fillText("OTWORY NA PÓŁKI · Pracownia Stolarska Maciej Łagun",M,160);
+      const d=new Date(),p=x=>String(x).padStart(2,"0");
+      g.textAlign="right";g.font=F(600,24,"b");g.fillText(p(d.getDate())+"."+p(d.getMonth()+1)+"."+d.getFullYear(),PW-M,112);g.textAlign="left";
+      y=270;
+    }else{y=M;}
+    pages.push(cv);
+  }
+  function need(h){if(y+h>PH-110){footer();newPage(false);}}
+  function footer(){g.fillStyle=C.muted;g.font=F(600,20,"b");g.textAlign="center";g.fillText("© "+Math.max(2026,new Date().getFullYear())+" Pracownia Stolarska Maciej Łagun · strona "+pages.length,PW/2,PH-50);g.textAlign="left";}
+  function h2(t){need(80);g.fillStyle=C.bar;g.font=F(700,40,"d");g.fillText(t,M,y+34);g.fillStyle=C.brass;g.fillRect(M,y+48,70,5);y+=78;}
+  newPage(true);
+  // parametry
+  h2("PARAMETRY");
+  const rows=[
+    ["Wysokość boku",fmt(s.H)+" mm"],["Grubość wieńców",fmt(s.t)+" mm"],
+    ["Wieńce",s.kon==="between"?"między bokami":"nakładane"],...(s.kon==="between"?[["Cokół",fmt(s.c)+" mm"]]:[]),
+    ["Ilość półek",String(s.n)],["Grubość półki",fmt(s.ts)+" mm"],
+    ["Średnica otworu","Ø "+fmt(s.dia)+" mm"],["Oś otworu poniżej spodu półki",fmt(s.p)+" mm"],
+    ["Rozmieszczenie",s.mode==="equal"?"równe prześwity":"system 32"],["Otworów na półkę",s.k?"3 (co 32 mm)":"1"]
+  ];
+  const colW=(PW-2*M-40)/2;
+  rows.forEach((r,i)=>{const col=i%2, x=M+col*(colW+40); if(col===0)need(62);
+    g.fillStyle=C.soft;roundRect(g,x,y,colW,52,10);g.fill();
+    g.fillStyle=C.muted;g.font=F(600,22,"b");g.fillText(r[0],x+18,y+33);
+    g.fillStyle=C.ink;g.font=F(700,30,"d");g.textAlign="right";g.fillText(r[1],x+colW-18,y+36);g.textAlign="left";
+    if(col===1||i===rows.length-1)y+=62;});
+  y+=14;
+  // podsumowanie
+  const gaps=R.shelves.map(x=>x.gapBelow).concat(R.shelves.length?[R.gapTop]:[]);
+  need(120);
+  g.fillStyle=C.bar;roundRect(g,M,y,PW-2*M,100,16);g.fill();
+  const sum=[["Wnętrze",R.inner>0?fmt(R.inner)+" mm":"—"],["Prześwit",gaps.length?(s.mode==="equal"?fmt(gaps[0]):fmt(Math.min(...gaps))+"–"+fmt(Math.max(...gaps)))+" mm":"—"]];
+  sum.forEach((v,i)=>{const cx=M+(PW-2*M)*(i*2+1)/4;g.textAlign="center";g.fillStyle="#E9E4D3";g.font=F(600,22,"b");g.fillText(v[0],cx,y+36);g.fillStyle="#D6B06C";g.font=F(700,44,"d");g.fillText(v[1],cx,y+82);g.textAlign="left";});
+  y+=130;
+  if(R.warn.length){R.warn.forEach(w=>{need(46);g.fillStyle="#7A4E0A";g.font=F(600,22,"b");g.fillText("⚠ "+w,M,y+28);y+=40;});y+=10;}
+  // tabele
+  function table(title,cols,data){
+    h2(title);
+    const xs=[M,M+150,M+420,M+800], head=()=>{need(56);g.fillStyle=C.muted;g.font=F(700,20,"b");cols.forEach((c,i)=>g.fillText(c.toUpperCase(),xs[i]+(i===0?18:0),y+26));g.fillStyle=C.line;g.fillRect(M,y+40,PW-2*M,2);y+=50;};
+    head();
+    data.forEach((r,ri)=>{if(y+64>PH-110){footer();newPage(false);head();}
+      if(ri%2===0){g.fillStyle=C.soft;g.fillRect(M,y,PW-2*M,60);}
+      g.fillStyle=C.bar;roundRect(g,xs[0]+10,y+10,86,40,10);g.fill();
+      g.fillStyle="#FFF8EA";g.font=F(700,28,"d");g.textAlign="center";g.fillText(String(r[0]),xs[0]+53,y+40);g.textAlign="left";
+      g.fillStyle=C.hole;g.font=F(700,40,"d");g.fillText(r[1],xs[1],y+44);
+      g.fillStyle=C.ink;g.font=F(600,28,"d");g.fillText(r[2],xs[2],y+42);
+      g.fillStyle=C.muted;g.font=F(600,28,"d");g.fillText(r[3],xs[3],y+42);
+      y+=60;});
+    y+=26;
+  }
+  const allB=sh=>sh.adj.concat([sh.hole]).sort((a,b)=>a-b).map(fmt).join(" · ");
+  const allT=sh=>sh.adj.concat([sh.hole]).sort((a,b)=>b-a).map(v=>fmt(s.H-v)).join(" · ");
+  if(R.shelves.length){
+    table("WYMIARY OD DOŁU",["Półka","Oś otworu","Wszystkie otwory","Spód półki"],R.shelves.map(sh=>[sh.i,fmt(sh.hole)+" mm",allB(sh),fmt(sh.bottom)+" mm"]));
+    table("WYMIARY OD GÓRY",["Półka","Oś otworu","Wszystkie otwory","Wierzch półki"],R.shelves.map(sh=>[sh.i,fmt(s.H-sh.hole)+" mm",allT(sh),fmt(s.H-sh.bottom-s.ts)+" mm"]));
+  }
+  footer();
+  if(drawImg){
+    newPage(false);
+    h2("RYSUNEK BOKU · WYMIARY "+(dir==="gora"?"OD GÓRY":"OD DOŁU"));
+    const maxW=PW-2*M, maxH=PH-y-130, k=Math.min(maxW/drawImg.width,maxH/drawImg.height);
+    const w=drawImg.width*k, h=drawImg.height*k;
+    g.drawImage(drawImg,(PW-w)/2,y,w,h);
+    footer();
+  }
+  return pages;
+}
+function roundRect(g,x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath();}
+function dataUrlBytes(u){const b=atob(u.split(",")[1]);const a=new Uint8Array(b.length);for(let i=0;i<b.length;i++)a[i]=b.charCodeAt(i);return a;}
+function buildPdf(jpegs){
+  const enc=new TextEncoder(), parts=[], offs=[];let len=0;
+  const push=x=>{const b=typeof x==="string"?enc.encode(x):x;parts.push(b);len+=b.length;};
+  const obj=(n,body)=>{offs[n]=len;push(n+" 0 obj\n");body();push("\nendobj\n");};
+  push("%PDF-1.4\n%\xE2\xE3\xCF\xD3\n");
+  const n=jpegs.length, W=595.28, H=841.89;
+  // 1 catalog, 2 pages, then per page: page, content, image
+  obj(1,()=>push("<< /Type /Catalog /Pages 2 0 R >>"));
+  const kids=jpegs.map((_,i)=>(3+i*3)+" 0 R").join(" ");
+  obj(2,()=>push("<< /Type /Pages /Kids ["+kids+"] /Count "+n+" >>"));
+  jpegs.forEach((j,i)=>{
+    const p=3+i*3, c=p+1, im=p+2;
+    obj(p,()=>push("<< /Type /Page /Parent 2 0 R /MediaBox [0 0 "+W+" "+H+"] /Resources << /XObject << /Im0 "+im+" 0 R >> >> /Contents "+c+" 0 R >>"));
+    const cs="q "+W+" 0 0 "+H+" 0 0 cm /Im0 Do Q";
+    obj(c,()=>{push("<< /Length "+cs.length+" >>\nstream\n");push(cs);push("\nendstream");});
+    obj(im,()=>{push("<< /Type /XObject /Subtype /Image /Width "+j.w+" /Height "+j.h+" /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length "+j.data.length+" >>\nstream\n");push(j.data);push("\nendstream");});
+  });
+  const total=2+n*3, xref=len;
+  let x="xref\n0 "+(total+1)+"\n0000000000 65535 f \n";
+  for(let i=1;i<=total;i++)x+=String(offs[i]).padStart(10,"0")+" 00000 n \n";
+  push(x+"trailer\n<< /Size "+(total+1)+" /Root 1 0 R >>\nstartxref\n"+xref+"\n%%EOF");
+  const out=new Uint8Array(len);let o=0;parts.forEach(b=>{out.set(b,o);o+=b.length;});return out;
+}
+function b64(bytes){let s="";const ch=0x8000;for(let i=0;i<bytes.length;i+=ch)s+=String.fromCharCode.apply(null,bytes.subarray(i,i+ch));return btoa(s);}
+function drawingImage(){
+  const R=compute(state);
+  if(!(R.inner>0&&R.shelves.length))return Promise.resolve(null);
+  const pal={"--board":"#EFE6D3","--board-edge":"#A88E5E","--shelf":"#465C3E","--hole":"#7E5A17","--hole-soft":"#E6CD98","--muted":"#525E4C","--surface":"#FFFFFF"};
+  let svg=svgEl(state,R,dir==="gora").replace(/var\((--[a-z-]+)\)/g,(m,k)=>pal[k]||"#000");
+  const vb=svg.match(/viewBox="0 0 ([\d.]+) ([\d.]+)"/);const sc=1800/parseFloat(vb[2]);
+  svg=svg.replace("<svg ",`<svg width="${Math.round(parseFloat(vb[1])*sc)}" height="1800" `);
+  return new Promise((res,rej)=>{const im=new Image();const url=URL.createObjectURL(new Blob([svg],{type:"image/svg+xml"}));
+    im.onload=()=>{URL.revokeObjectURL(url);res(im);};im.onerror=e=>{URL.revokeObjectURL(url);rej(e);};im.src=url;});
+}
+async function sharePdf(){
+  try{await (document.fonts?document.fonts.ready:Promise.resolve());}catch(e){}
+  let img=null;try{img=await drawingImage();}catch(e){img=null;}
+  const pages=pdfPages(img);
+  const jpegs=pages.map(c=>({w:c.width,h:c.height,data:dataUrlBytes(c.toDataURL("image/jpeg",.9))}));
+  const pdf=buildPdf(jpegs);
+  const d=new Date(),p=x=>String(x).padStart(2,"0");
+  const name="Polkownik_"+fmt(state.H)+"mm_"+state.n+"polek_"+d.getFullYear()+p(d.getMonth()+1)+p(d.getDate())+".pdf";
+  // 1) aplikacja na Androida
+  if(window.AndroidShare&&AndroidShare.sharePdf){try{AndroidShare.sharePdf(b64(pdf),name);return;}catch(e){}}
+  // 2) przeglądarka z udostępnianiem plików
+  try{const f=new File([pdf],name,{type:"application/pdf"});
+    if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:"Półkownik – otwory na półki"});return;}}catch(e){if(e&&e.name==="AbortError")return;}
+  // 3) podgląd
+  $("pdfNote").textContent="Tutaj nie da się udostępnić pliku. W aplikacji na telefonie otworzy się okno Udostępnij z gotowym PDF-em. Poniżej podgląd jego zawartości.";
+  $("pdfPages").innerHTML="";pages.forEach(c=>{const im=new Image();im.src=c.toDataURL("image/jpeg",.8);im.alt="Strona PDF";$("pdfPages").appendChild(im);});
+  $("pdfModal").hidden=false;
+}
+$("shareBtn").addEventListener("click",()=>{sharePdf().catch(()=>toast("Nie udało się przygotować PDF-a."));});
+$("pdfClose").addEventListener("click",()=>{$("pdfModal").hidden=true;});
+$("pdfModal").addEventListener("click",e=>{if(e.target===$("pdfModal"))$("pdfModal").hidden=true;});
+// chowanie nagłówka przy przewijaniu
+(function(){const bar=document.querySelector(".appbar");let last=window.scrollY,ticking=false;
+  window.addEventListener("scroll",()=>{if(ticking)return;ticking=true;requestAnimationFrame(()=>{
+    const y=window.scrollY,d=y-last;
+    if(y<60)bar.classList.remove("hide");
+    else if(d>6){bar.classList.add("hide");}
+    else if(d<-6)bar.classList.remove("hide");
+    if(Math.abs(d)>6)last=y;ticking=false;});},{passive:true});})();
+try{$("year").textContent=Math.max(2026,new Date().getFullYear());}catch(e){}
+// po dotknięciu pola stara wartość staje się podpowiedzią, a pole jest puste do wpisania nowej
+(function(){
+  document.addEventListener("focusin",e=>{const el=e.target;if(!(el instanceof HTMLInputElement)||el.type!=="number")return;
+    el.dataset.prev=el.value;el.placeholder=el.value;el.value="";});
+  document.addEventListener("focusout",e=>{const el=e.target;if(!(el instanceof HTMLInputElement)||el.type!=="number"||el.dataset.prev===undefined)return;
+    if(el.value==="")el.value=el.dataset.prev;
+    delete el.dataset.prev;el.placeholder="";fromForm();render();});
+})();
+(function(){const d=$("drawDet");try{if(localStorage.getItem("otwory-rysunek2")==="0")d.open=false;}catch(e){}
+  const sync=()=>{$("drawHint").textContent=d.open?"Ukryj":"Pokaż";};sync();
+  d.addEventListener("toggle",()=>{sync();try{localStorage.setItem("otwory-rysunek2",d.open?"1":"0");}catch(e){}});})();
+toForm();render();histReady=true;histRender();
+})();
+</script>
+</body>
+</html>
