@@ -502,7 +502,19 @@ function syncRestore(){const ok=histPending!==null&&!!hist[histPending];$("histR
   $("selHint").hidden=!hist.length||ok;}
 function openSheet(){if(histTimer){clearTimeout(histTimer);histSave();}histPending=null;$("histClearConfirm").hidden=true;histRender();
   $("scrim").hidden=false;$("histPanel").hidden=false;$("histBtn").setAttribute("aria-expanded","true");$("histCancel").focus({preventScroll:true});}
-function closeSheet(){$("scrim").hidden=true;$("histPanel").hidden=true;$("histBtn").setAttribute("aria-expanded","false");}
+let sheetClosing=false;
+function closeSheet(){
+  const sh=$("histPanel"), sc=$("scrim");
+  if(sh.hidden||sheetClosing)return;
+  $("histBtn").setAttribute("aria-expanded","false");
+  const done=()=>{sc.hidden=true;sh.hidden=true;sheetClosing=false;
+    try{sh.getAnimations().forEach(a=>a.cancel());sc.getAnimations().forEach(a=>a.cancel());}catch(e){}};
+  const reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if(reduce||!sh.animate){done();return;}
+  sheetClosing=true;
+  sc.animate([{opacity:1},{opacity:0}],{duration:300,easing:"ease-in",fill:"forwards"});
+  sh.animate([{transform:"none"},{transform:"translateY(-100%)"}],{duration:300,easing:"cubic-bezier(.4,0,.7,.2)",fill:"forwards"}).onfinish=done;
+}
 $("histBtn").addEventListener("click",()=>{$("histPanel").hidden?openSheet():closeSheet();});
 $("histCancel").addEventListener("click",closeSheet);
 $("scrim").addEventListener("click",closeSheet);
