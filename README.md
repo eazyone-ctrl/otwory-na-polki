@@ -1,4 +1,4 @@
-# Pułkownik
+# Półkownik
 
 Kalkulator osi otworów pod podpórki półek w boku szafki, jako aplikacja na Androida.
 

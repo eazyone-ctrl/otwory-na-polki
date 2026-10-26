@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Pułkownik</title>
+<title>Półkownik</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
@@ -49,6 +49,7 @@ button{font:inherit;color:inherit}
 .brand{flex:1;min-width:0}
 .brand h1{margin:0;font:700 1.55rem/1 var(--f-disp);letter-spacing:.03em;color:var(--brass)}
 .brand small{display:block;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;opacity:.75;margin-top:3px}
+.brand .maker{display:block;font-size:.72rem;font-weight:600;opacity:.6;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .iconbtn{flex:none;width:46px;height:46px;border-radius:50%;border:0;background:rgba(255,255,255,.08);color:var(--brass);display:grid;place-items:center;cursor:pointer;padding:0;transition:background .15s}
 .iconbtn:active{background:rgba(255,255,255,.18)}
 .iconbtn .i-sun{display:none}
@@ -183,7 +184,7 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
     <div class="logo" aria-hidden="true">
       <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><rect x="4" y="3" width="2.4" height="18" rx=".8"/><rect x="17.6" y="3" width="2.4" height="18" rx=".8"/><rect x="4" y="3" width="16" height="2.2" rx=".8"/><rect x="4" y="18.8" width="16" height="2.2" rx=".8"/><rect x="6.4" y="13.2" width="11.2" height="1.6" rx=".5"/><rect x="6.4" y="15.9" width="11.2" height="1.6" rx=".5"/><path d="M12 6.2l.6 1.3 1.4.1-1.1.9.4 1.4-1.3-.8-1.3.8.4-1.4-1.1-.9 1.4-.1z"/><path d="M12 9.4l.6 1.3 1.4.1-1.1.9.4 1.4-1.3-.8-1.3.8.4-1.4-1.1-.9 1.4-.1z"/></svg>
     </div>
-    <div class="brand"><h1>Pułkownik</h1><small>otwory na półki</small></div>
+    <div class="brand"><h1>Półkownik</h1><small>otwory na półki</small><span class="maker">Pracownia Stolarska Maciej Łagun</span></div>
     <button type="button" class="iconbtn" id="themeBtn" aria-label="Przełącz tryb ciemny">
       <svg class="i-moon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
       <svg class="i-sun" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>

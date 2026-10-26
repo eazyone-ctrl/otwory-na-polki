@@ -27,18 +27,18 @@ jobs:
         run: gradle assembleRelease --no-daemon
 
       - name: Zmiana nazwy pliku
-        run: cp app/build/outputs/apk/release/app-release.apk pulkownik.apk
+        run: cp app/build/outputs/apk/release/app-release.apk polkownik.apk
 
       - uses: actions/upload-artifact@v4
         with:
-          name: pulkownik-apk
-          path: pulkownik.apk
+          name: polkownik-apk
+          path: polkownik.apk
 
       - name: Publikacja w Releases
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release delete najnowsza --yes --cleanup-tag || true
-          gh release create najnowsza pulkownik.apk \
-            --title "Pułkownik – najnowsza wersja" \
-            --notes "Pobierz plik pulkownik.apk na telefonie i zainstaluj."
+          gh release create najnowsza polkownik.apk \
+            --title "Półkownik – najnowsza wersja" \
+            --notes "Pobierz plik polkownik.apk na telefonie i zainstaluj."
