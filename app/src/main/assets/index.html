@@ -431,6 +431,15 @@ function svgEl(s,R,fromTop){
   if(s.kon==="between"){
     o+=`<rect x="${X(0)}" y="${Y(R.inB)}" width="${D}" height="${s.t}" fill="url(#hat)"/>`;
     o+=`<rect x="${X(0)}" y="${Y(H)}" width="${D}" height="${s.t}" fill="url(#hat)"/>`;
+    // cokół pod wieńcem dolnym
+    if(s.c>0){
+      o+=`<rect x="${X(0)}" y="${r1(Y(s.c))}" width="${D}" height="${r1(s.c)}" fill="var(--board-edge)" opacity=".16"/>`;
+      const cx=X(D*.72), my=Y(s.c/2), roomy=s.c>fs*2.2, z=roomy?fs*1.2:Math.max(fs*.6,Math.min(fs*1.2,s.c*.75));
+      if(roomy)o+=`<line x1="${r1(cx)}" y1="${r1(Y(0)-2)}" x2="${r1(cx)}" y2="${r1(Y(s.c)+2)}" stroke="var(--shelf)" stroke-width="${r1(fs*.08)}" opacity=".55" marker-start="url(#gapAr)" marker-end="url(#gapAr)"/>`;
+      const lb=`x="${r1(cx-z*1.3)}" y="${r1(my-z*.62)}" width="${r1(z*2.6)}" height="${r1(z*1.2)}" rx="${r1(z*.3)}"`;
+      o+=`<rect ${lb} fill="var(--board)"/><rect ${lb} fill="var(--board-edge)" opacity=".16"/>`;
+      o+=`<text x="${r1(cx)}" y="${r1(my+z*.36)}" text-anchor="middle" fill="var(--shelf)" font-weight="700" font-size="${r1(z)}">${fmt(s.c)}</text>`;
+    }
   }
   // pełny raster
   if(s.mode==="raster"&&s.full){R.raster.forEach(y=>xs.forEach(x=>{o+=`<circle cx="${r1(X(x))}" cy="${r1(Y(y))}" r="${r1(hr*.8)}" fill="none" stroke="var(--board-edge)" stroke-width="${sw}"/>`;}));}
