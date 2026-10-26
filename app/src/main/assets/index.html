@@ -135,6 +135,27 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
 
 .foot{max-width:640px;margin:0 auto;display:grid;justify-items:center;gap:10px;text-align:center;color:var(--muted);font-size:.85rem;font-weight:600;letter-spacing:.04em;padding-top:4px;padding-bottom:max(28px,env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .foot-line{width:48px;height:3px;border-radius:2px;background:var(--brass);opacity:.7}
+
+/* menu */
+.menu-scrim{position:fixed;inset:0;z-index:35}
+.menu{position:fixed;z-index:36;top:calc(env(safe-area-inset-top,0px) + 70px);right:max(12px,env(safe-area-inset-right,0px));min-width:230px;background:var(--surface);border-radius:20px;box-shadow:0 12px 36px rgba(0,0,0,.28);padding:8px;display:grid;gap:2px;transform-origin:top right;animation:pop .2s ease-out}
+.mitem{display:flex;align-items:center;gap:14px;width:100%;border:0;background:transparent;border-radius:14px;padding:12px 14px;font-weight:600;font-size:1rem;color:var(--ink);cursor:pointer;text-align:left}
+.mitem:active{background:var(--surface-2)}
+.m-ic{flex:none;width:38px;height:38px;border-radius:12px;background:var(--accent-soft);color:var(--accent-text);display:grid;place-items:center}
+.mitem .i-sun{display:none}
+html.is-dark .mitem .i-sun{display:block}
+html.is-dark .mitem .i-moon{display:none}
+@keyframes pop{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:none}}
+#menuBtn[aria-expanded=true]{background:rgba(255,255,255,.2)}
+/* podgląd pdf */
+.pdfmodal{position:fixed;inset:0;z-index:50;background:rgba(6,9,5,.75);display:grid;place-items:center;padding:max(16px,env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px));animation:fade .2s}
+.pdf-box{width:min(560px,100%);max-height:100%;overflow:auto;background:var(--surface);border-radius:20px;padding:14px;display:grid;gap:10px}
+.pdf-h{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:1.05rem}
+.pdf-x{width:40px;height:40px;border-radius:50%;border:0;background:var(--surface-2);color:var(--ink);display:grid;place-items:center;cursor:pointer}
+.pdf-note{margin:0;font-size:.88rem;color:var(--muted)}
+.pdf-pages{display:grid;gap:10px}
+.pdf-pages img{width:100%;border-radius:6px;box-shadow:0 2px 10px rgba(0,0,0,.25);background:#fff}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 24px);transform:translateX(-50%);z-index:60;background:var(--ink);color:var(--surface);padding:12px 18px;border-radius:999px;font-weight:600;font-size:.92rem;box-shadow:0 6px 20px rgba(0,0,0,.3);animation:fade .2s;max-width:calc(100% - 32px);text-align:center}
 /* dolny arkusz historii */
 .scrim{position:fixed;inset:0;z-index:40;background:rgba(6,9,5,.72);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);animation:fade .25s}
 .sheet{position:fixed;left:0;right:0;top:0;z-index:41;max-height:88vh;overflow:auto;background:var(--bg);border-radius:0 0 26px 26px;box-shadow:0 10px 30px rgba(0,0,0,.3);padding-bottom:16px;animation:down .3s ease-out}
@@ -188,15 +209,35 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
       <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><rect x="4" y="3" width="2.4" height="18" rx=".8"/><rect x="17.6" y="3" width="2.4" height="18" rx=".8"/><rect x="4" y="3" width="16" height="2.2" rx=".8"/><rect x="4" y="18.8" width="16" height="2.2" rx=".8"/><rect x="6.4" y="13.2" width="11.2" height="1.6" rx=".5"/><rect x="6.4" y="15.9" width="11.2" height="1.6" rx=".5"/><path d="M12 6.2l.6 1.3 1.4.1-1.1.9.4 1.4-1.3-.8-1.3.8.4-1.4-1.1-.9 1.4-.1z"/><path d="M12 9.4l.6 1.3 1.4.1-1.1.9.4 1.4-1.3-.8-1.3.8.4-1.4-1.1-.9 1.4-.1z"/></svg>
     </div>
     <div class="brand"><h1 id="brandT">PÓŁKOWNIK</h1><small id="brandS">otwory na półki</small><span class="maker">Pracownia Stolarska Maciej Łagun</span></div>
-    <button type="button" class="iconbtn" id="themeBtn" aria-label="Przełącz tryb ciemny">
-      <svg class="i-moon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
-      <svg class="i-sun" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>
-    </button>
-    <button type="button" class="iconbtn" id="histBtn" aria-label="Historia ustawień" aria-expanded="false" aria-controls="histPanel">
-      <svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 3.5V8h4.5"/><path d="M12 7.5V12l3 2"/></svg>
+    <button type="button" class="iconbtn" id="menuBtn" aria-label="Menu" aria-haspopup="true" aria-expanded="false" aria-controls="menu">
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
   </div>
 </header>
+
+<div class="menu-scrim" id="menuScrim" hidden></div>
+<nav class="menu" id="menu" hidden aria-label="Menu">
+  <button type="button" class="mitem" id="themeBtn">
+    <span class="m-ic"><svg class="i-moon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="i-sun" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg></span>
+    <span id="themeLbl">Tryb ciemny</span>
+  </button>
+  <button type="button" class="mitem" id="histBtn" aria-expanded="false" aria-controls="histPanel">
+    <span class="m-ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 3.5V8h4.5"/><path d="M12 7.5V12l3 2"/></svg></span>
+    <span>Historia</span>
+  </button>
+  <button type="button" class="mitem" id="shareBtn">
+    <span class="m-ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="M8.3 10.8l7.4-4.3M8.3 13.2l7.4 4.3"/></svg></span>
+    <span>Udostępnij PDF</span>
+  </button>
+</nav>
+
+<div class="pdfmodal" id="pdfModal" hidden role="dialog" aria-modal="true" aria-label="Podgląd PDF">
+  <div class="pdf-box">
+    <div class="pdf-h"><strong>Podgląd PDF</strong><button type="button" class="pdf-x" id="pdfClose" aria-label="Zamknij podgląd"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <p class="pdf-note" id="pdfNote"></p>
+    <div class="pdf-pages" id="pdfPages"></div>
+  </div>
+</div>
 
 <form class="app" id="f" autocomplete="off">
 
@@ -419,11 +460,11 @@ $("nPlus").addEventListener("click",()=>stepN(1));
 const root=document.documentElement;
 function sysDark(){return !!(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches);}
 function isDark(){const t=root.getAttribute("data-theme");if(t)return t==="dark";return sysDark();}
-function syncTheme(){const d=isDark();root.classList.toggle("is-dark",d);$("themeBtn").setAttribute("aria-pressed",d);}
+function syncTheme(){const d=isDark();root.classList.toggle("is-dark",d);$("themeBtn").setAttribute("aria-pressed",d);$("themeLbl").textContent=d?"Tryb jasny":"Tryb ciemny";}
 try{const th=localStorage.getItem("otwory-motyw");if(th==="dark"||th==="light")root.setAttribute("data-theme",th);}catch(e){}
 syncTheme();
 try{matchMedia("(prefers-color-scheme: dark)").addEventListener("change",syncTheme);}catch(e){}
-$("themeBtn").addEventListener("click",()=>{const next=isDark()?"light":"dark";
+$("themeBtn").addEventListener("click",()=>{closeMenu();const next=isDark()?"light":"dark";
   if((next==="dark")===sysDark()){root.removeAttribute("data-theme");try{localStorage.removeItem("otwory-motyw");}catch(e){}}
   else{root.setAttribute("data-theme",next);try{localStorage.setItem("otwory-motyw",next);}catch(e){}}
   syncTheme();});
@@ -519,7 +560,7 @@ function closeSheet(){
   sc.animate([{opacity:1},{opacity:0}],{duration:300,easing:"ease-in",fill:"forwards"});
   sh.animate([{transform:"none"},{transform:"translateY(-100%)"}],{duration:300,easing:"cubic-bezier(.4,0,.7,.2)",fill:"forwards"}).onfinish=done;
 }
-$("histBtn").addEventListener("click",()=>{$("histPanel").hidden?openSheet():closeSheet();});
+$("histBtn").addEventListener("click",()=>{closeMenu();$("histPanel").hidden?openSheet():closeSheet();});
 $("histCancel").addEventListener("click",closeSheet);
 $("scrim").addEventListener("click",closeSheet);
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("histPanel").hidden)closeSheet();});
@@ -538,6 +579,135 @@ $("histClearYes").addEventListener("click",()=>{hist=[];try{localStorage.removeI
 
 $("reset").addEventListener("click",()=>{state={...DEF};toForm();render();window.scrollTo({top:0,behavior:"smooth"});});
 document.addEventListener("contextmenu",e=>{if(!e.target.closest("input"))e.preventDefault();});
+
+// ---- menu ----
+function openMenu(){$("menu").hidden=false;$("menuScrim").hidden=false;$("menuBtn").setAttribute("aria-expanded","true");}
+function closeMenu(){$("menu").hidden=true;$("menuScrim").hidden=true;$("menuBtn").setAttribute("aria-expanded","false");}
+$("menuBtn").addEventListener("click",()=>{$("menu").hidden?openMenu():closeMenu();});
+$("menuScrim").addEventListener("click",closeMenu);
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeMenu();$("pdfModal").hidden=true;}});
+
+function toast(msg){const t=document.createElement("div");t.className="toast";t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2600);}
+
+// ---- PDF ----
+const PW=1240, PH=1754, M=80; // A4 ok. 150 dpi
+function pdfPages(){
+  const s=state, R=compute(s), pages=[];
+  let cv, g, y;
+  const C={bar:"#41543A",brass:"#B8913F",ink:"#1A2117",muted:"#5E6958",line:"#D3DACB",soft:"#EEF2EA",hole:"#7E5A17"};
+  const F=(w,sz,fam)=>`${w} ${sz}px ${fam==="d"?'"Barlow Condensed","Arial Narrow",sans-serif':'"Plus Jakarta Sans",Arial,sans-serif'}`;
+  function newPage(first){
+    cv=document.createElement("canvas");cv.width=PW;cv.height=PH;g=cv.getContext("2d");
+    g.fillStyle="#fff";g.fillRect(0,0,PW,PH);
+    if(first){
+      g.fillStyle=C.bar;g.fillRect(0,0,PW,210);
+      g.fillStyle="#D6B06C";g.font=F(700,84,"d");g.fillText("PÓŁKOWNIK",M,112);
+      g.fillStyle="#F3EEDD";g.font=F(600,26,"b");g.fillText("OTWORY NA PÓŁKI · Pracownia Stolarska Maciej Łagun",M,160);
+      const d=new Date(),p=x=>String(x).padStart(2,"0");
+      g.textAlign="right";g.font=F(600,24,"b");g.fillText(p(d.getDate())+"."+p(d.getMonth()+1)+"."+d.getFullYear(),PW-M,112);g.textAlign="left";
+      y=270;
+    }else{y=M;}
+    pages.push(cv);
+  }
+  function need(h){if(y+h>PH-110){footer();newPage(false);}}
+  function footer(){g.fillStyle=C.muted;g.font=F(600,20,"b");g.textAlign="center";g.fillText("© "+Math.max(2026,new Date().getFullYear())+" Pracownia Stolarska Maciej Łagun · strona "+pages.length,PW/2,PH-50);g.textAlign="left";}
+  function h2(t){need(80);g.fillStyle=C.bar;g.font=F(700,40,"d");g.fillText(t,M,y+34);g.fillStyle=C.brass;g.fillRect(M,y+48,70,5);y+=78;}
+  newPage(true);
+  // parametry
+  h2("PARAMETRY");
+  const rows=[
+    ["Wysokość boku",fmt(s.H)+" mm"],["Grubość wieńców",fmt(s.t)+" mm"],
+    ["Wieńce",s.kon==="between"?"między bokami":"nakładane"],...(s.kon==="between"?[["Cokół",fmt(s.c)+" mm"]]:[]),
+    ["Liczba półek",String(s.n)],["Grubość półki",fmt(s.ts)+" mm"],
+    ["Średnica otworu","Ø "+fmt(s.dia)+" mm"],["Oś otworu poniżej spodu półki",fmt(s.p)+" mm"],
+    ["Rozmieszczenie",s.mode==="equal"?"równe prześwity":"system 32"],["Otworów na półkę",s.k?"3 (co 32 mm)":"1"]
+  ];
+  const colW=(PW-2*M-40)/2;
+  rows.forEach((r,i)=>{const col=i%2, x=M+col*(colW+40); if(col===0)need(62);
+    g.fillStyle=C.soft;roundRect(g,x,y,colW,52,10);g.fill();
+    g.fillStyle=C.muted;g.font=F(600,22,"b");g.fillText(r[0],x+18,y+33);
+    g.fillStyle=C.ink;g.font=F(700,30,"d");g.textAlign="right";g.fillText(r[1],x+colW-18,y+36);g.textAlign="left";
+    if(col===1||i===rows.length-1)y+=62;});
+  y+=14;
+  // podsumowanie
+  const gaps=R.shelves.map(x=>x.gapBelow).concat(R.shelves.length?[R.gapTop]:[]);
+  need(120);
+  g.fillStyle=C.bar;roundRect(g,M,y,PW-2*M,100,16);g.fill();
+  const sum=[["Wnętrze",R.inner>0?fmt(R.inner)+" mm":"—"],["Prześwit",gaps.length?(s.mode==="equal"?fmt(gaps[0]):fmt(Math.min(...gaps))+"–"+fmt(Math.max(...gaps)))+" mm":"—"]];
+  sum.forEach((v,i)=>{const cx=M+(PW-2*M)*(i*2+1)/4;g.textAlign="center";g.fillStyle="#E9E4D3";g.font=F(600,22,"b");g.fillText(v[0],cx,y+36);g.fillStyle="#D6B06C";g.font=F(700,44,"d");g.fillText(v[1],cx,y+82);g.textAlign="left";});
+  y+=130;
+  if(R.warn.length){R.warn.forEach(w=>{need(46);g.fillStyle="#7A4E0A";g.font=F(600,22,"b");g.fillText("⚠ "+w,M,y+28);y+=40;});y+=10;}
+  // tabele
+  function table(title,cols,data){
+    h2(title);
+    const xs=[M,M+150,M+420,M+800], head=()=>{need(56);g.fillStyle=C.muted;g.font=F(700,20,"b");cols.forEach((c,i)=>g.fillText(c.toUpperCase(),xs[i]+(i===0?18:0),y+26));g.fillStyle=C.line;g.fillRect(M,y+40,PW-2*M,2);y+=50;};
+    head();
+    data.forEach((r,ri)=>{if(y+64>PH-110){footer();newPage(false);head();}
+      if(ri%2===0){g.fillStyle=C.soft;g.fillRect(M,y,PW-2*M,60);}
+      g.fillStyle=C.bar;roundRect(g,xs[0]+10,y+10,86,40,10);g.fill();
+      g.fillStyle="#FFF8EA";g.font=F(700,28,"d");g.textAlign="center";g.fillText(String(r[0]),xs[0]+53,y+40);g.textAlign="left";
+      g.fillStyle=C.hole;g.font=F(700,40,"d");g.fillText(r[1],xs[1],y+44);
+      g.fillStyle=C.ink;g.font=F(600,28,"d");g.fillText(r[2],xs[2],y+42);
+      g.fillStyle=C.muted;g.font=F(600,28,"d");g.fillText(r[3],xs[3],y+42);
+      y+=60;});
+    y+=26;
+  }
+  const allB=sh=>sh.adj.concat([sh.hole]).sort((a,b)=>a-b).map(fmt).join(" · ");
+  const allT=sh=>sh.adj.concat([sh.hole]).sort((a,b)=>b-a).map(v=>fmt(s.H-v)).join(" · ");
+  if(R.shelves.length){
+    table("WYMIARY OD DOŁU",["Półka","Oś otworu","Wszystkie otwory","Spód półki"],R.shelves.map(sh=>[sh.i,fmt(sh.hole)+" mm",allB(sh),fmt(sh.bottom)+" mm"]));
+    table("WYMIARY OD GÓRY",["Półka","Oś otworu","Wszystkie otwory","Wierzch półki"],R.shelves.map(sh=>[sh.i,fmt(s.H-sh.hole)+" mm",allT(sh),fmt(s.H-sh.bottom-s.ts)+" mm"]));
+  }
+  footer();
+  return pages;
+}
+function roundRect(g,x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath();}
+function dataUrlBytes(u){const b=atob(u.split(",")[1]);const a=new Uint8Array(b.length);for(let i=0;i<b.length;i++)a[i]=b.charCodeAt(i);return a;}
+function buildPdf(jpegs){
+  const enc=new TextEncoder(), parts=[], offs=[];let len=0;
+  const push=x=>{const b=typeof x==="string"?enc.encode(x):x;parts.push(b);len+=b.length;};
+  const obj=(n,body)=>{offs[n]=len;push(n+" 0 obj\n");body();push("\nendobj\n");};
+  push("%PDF-1.4\n%\xE2\xE3\xCF\xD3\n");
+  const n=jpegs.length, W=595.28, H=841.89;
+  // 1 catalog, 2 pages, then per page: page, content, image
+  obj(1,()=>push("<< /Type /Catalog /Pages 2 0 R >>"));
+  const kids=jpegs.map((_,i)=>(3+i*3)+" 0 R").join(" ");
+  obj(2,()=>push("<< /Type /Pages /Kids ["+kids+"] /Count "+n+" >>"));
+  jpegs.forEach((j,i)=>{
+    const p=3+i*3, c=p+1, im=p+2;
+    obj(p,()=>push("<< /Type /Page /Parent 2 0 R /MediaBox [0 0 "+W+" "+H+"] /Resources << /XObject << /Im0 "+im+" 0 R >> >> /Contents "+c+" 0 R >>"));
+    const cs="q "+W+" 0 0 "+H+" 0 0 cm /Im0 Do Q";
+    obj(c,()=>{push("<< /Length "+cs.length+" >>\nstream\n");push(cs);push("\nendstream");});
+    obj(im,()=>{push("<< /Type /XObject /Subtype /Image /Width "+j.w+" /Height "+j.h+" /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length "+j.data.length+" >>\nstream\n");push(j.data);push("\nendstream");});
+  });
+  const total=2+n*3, xref=len;
+  let x="xref\n0 "+(total+1)+"\n0000000000 65535 f \n";
+  for(let i=1;i<=total;i++)x+=String(offs[i]).padStart(10,"0")+" 00000 n \n";
+  push(x+"trailer\n<< /Size "+(total+1)+" /Root 1 0 R >>\nstartxref\n"+xref+"\n%%EOF");
+  const out=new Uint8Array(len);let o=0;parts.forEach(b=>{out.set(b,o);o+=b.length;});return out;
+}
+function b64(bytes){let s="";const ch=0x8000;for(let i=0;i<bytes.length;i+=ch)s+=String.fromCharCode.apply(null,bytes.subarray(i,i+ch));return btoa(s);}
+async function sharePdf(){
+  closeMenu();
+  try{await (document.fonts?document.fonts.ready:Promise.resolve());}catch(e){}
+  const pages=pdfPages();
+  const jpegs=pages.map(c=>({w:c.width,h:c.height,data:dataUrlBytes(c.toDataURL("image/jpeg",.9))}));
+  const pdf=buildPdf(jpegs);
+  const d=new Date(),p=x=>String(x).padStart(2,"0");
+  const name="Polkownik_"+fmt(state.H)+"mm_"+state.n+"polek_"+d.getFullYear()+p(d.getMonth()+1)+p(d.getDate())+".pdf";
+  // 1) aplikacja na Androida
+  if(window.AndroidShare&&AndroidShare.sharePdf){try{AndroidShare.sharePdf(b64(pdf),name);return;}catch(e){}}
+  // 2) przeglądarka z udostępnianiem plików
+  try{const f=new File([pdf],name,{type:"application/pdf"});
+    if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:"Półkownik – otwory na półki"});return;}}catch(e){if(e&&e.name==="AbortError")return;}
+  // 3) podgląd
+  $("pdfNote").textContent="Tutaj nie da się udostępnić pliku. W aplikacji na telefonie otworzy się okno Udostępnij z gotowym PDF-em. Poniżej podgląd jego zawartości.";
+  $("pdfPages").innerHTML="";pages.forEach(c=>{const im=new Image();im.src=c.toDataURL("image/jpeg",.8);im.alt="Strona PDF";$("pdfPages").appendChild(im);});
+  $("pdfModal").hidden=false;
+}
+$("shareBtn").addEventListener("click",()=>{sharePdf().catch(()=>toast("Nie udało się przygotować PDF-a."));});
+$("pdfClose").addEventListener("click",()=>{$("pdfModal").hidden=true;});
+$("pdfModal").addEventListener("click",e=>{if(e.target===$("pdfModal"))$("pdfModal").hidden=true;});
 // podtytuł tej samej szerokości co nazwa
 function fitSub(){try{const t=$("brandT"),u=$("brandS");u.style.fontSize="";
   const tw=t.getBoundingClientRect().width,uw=u.getBoundingClientRect().width;
