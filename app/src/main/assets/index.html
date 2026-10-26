@@ -162,7 +162,8 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
 .histitem.cur{border-color:var(--accent)}
 .h1l{font-weight:700}
 .htime{font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums}
-.h2l{font-size:.85rem;color:var(--muted);overflow-wrap:anywhere}
+.h2l{grid-column:1/-1;font-size:.85rem;color:var(--muted);overflow-wrap:anywhere}
+.h3l{color:var(--ink);font-weight:600}
 .hgo{font-size:.85rem;font-weight:700;color:var(--accent-text)}
 .histitem.cur .hgo{color:var(--muted);font-weight:500}
 .confirm{display:grid;gap:10px;margin-top:6px;padding:14px;border-radius:16px;background:var(--accent-soft);font-size:.92rem;font-weight:500}
@@ -492,7 +493,8 @@ function histRender(){
     const isCur=same(s,cur);
     return `<li><button type="button" class="histitem${isCur?" cur":""}${histPending===i?" sel":""}" data-i="${i}" aria-pressed="${histPending===i}">
       <span class="h1l">${f(s.H)} mm · ${s.n} ${plPolki(s.n)}</span><span class="htime">${histTime(h.t)}</span>
-      <span class="h2l">${s.kon==="between"?"wieńce między bokami":"wieńce nakładane"} · osie: ${holes}</span><span class="hgo">${isCur?"obecne":"Przywróć"}</span>
+      <span class="h2l">${s.kon==="between"?"Wieńce między bokami":"Wieńce nakładane"}</span>
+      <span class="h2l h3l">Osie: ${holes}</span>
     </button></li>`;}).join("");
   syncRestore();
 }
