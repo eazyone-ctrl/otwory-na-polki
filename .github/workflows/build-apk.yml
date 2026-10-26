@@ -27,18 +27,18 @@ jobs:
         run: gradle assembleRelease --no-daemon
 
       - name: Zmiana nazwy pliku
-        run: cp app/build/outputs/apk/release/app-release.apk otwory-na-polki.apk
+        run: cp app/build/outputs/apk/release/app-release.apk pulkownik.apk
 
       - uses: actions/upload-artifact@v4
         with:
-          name: otwory-na-polki-apk
-          path: otwory-na-polki.apk
+          name: pulkownik-apk
+          path: pulkownik.apk
 
       - name: Publikacja w Releases
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release delete najnowsza --yes --cleanup-tag || true
-          gh release create najnowsza otwory-na-polki.apk \
-            --title "Otwory na półki – najnowsza wersja" \
-            --notes "Pobierz plik otwory-na-polki.apk na telefonie i zainstaluj."
+          gh release create najnowsza pulkownik.apk \
+            --title "Pułkownik – najnowsza wersja" \
+            --notes "Pobierz plik pulkownik.apk na telefonie i zainstaluj."
