@@ -49,7 +49,7 @@ button{font:inherit;color:inherit}
 .brand{flex:1;min-width:0}
 .brand h1{margin:0;font:700 1.55rem/1 var(--f-disp);letter-spacing:.03em;color:var(--brass)}
 .brand small{display:block;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;opacity:.75;margin-top:3px}
-.brand .maker{display:block;font-size:.72rem;font-weight:600;opacity:.6;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand .maker{display:block;font-size:.6rem;font-weight:600;opacity:.65;margin-top:3px;line-height:1.25;overflow-wrap:anywhere}
 .iconbtn{flex:none;width:46px;height:46px;border-radius:50%;border:0;background:rgba(255,255,255,.08);color:var(--brass);display:grid;place-items:center;cursor:pointer;padding:0;transition:background .15s}
 .iconbtn:active{background:rgba(255,255,255,.18)}
 .iconbtn .i-sun{display:none}
@@ -282,7 +282,7 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
   </button>
 </form>
 
-<footer class="foot"><span class="foot-line" aria-hidden="true"></span><span>Pracownia Stolarska Maciej Łagun</span></footer>
+<footer class="foot"><span class="foot-line" aria-hidden="true"></span><span>© <span id="year">2026</span> Pracownia Stolarska Maciej Łagun</span></footer>
 
 <div class="scrim" id="scrim" hidden></div>
 <section class="sheet" id="histPanel" hidden aria-label="Historia ustawień" role="dialog" aria-modal="true">
@@ -534,6 +534,7 @@ $("histClearNo").addEventListener("click",()=>{$("histClearConfirm").hidden=true
 $("histClearYes").addEventListener("click",()=>{hist=[];try{localStorage.removeItem(HKEY);}catch(e){}$("histClearConfirm").hidden=true;closeSheet();histRender();});
 
 $("reset").addEventListener("click",()=>{state={...DEF};toForm();render();window.scrollTo({top:0,behavior:"smooth"});});
+try{$("year").textContent=Math.max(2026,new Date().getFullYear());}catch(e){}
 toForm();render();histReady=true;histRender();
 })();
 </script>
