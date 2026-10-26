@@ -286,6 +286,14 @@ th{font-size:.9rem}
       </div>
       </details>
 
+      <details class="card fold" data-key="gora" data-default="0">
+        <summary class="fold-h"><h2>Wymiary od góry</h2><span class="sumhint"></span></summary>
+        <div class="fold-b">
+        <p class="hint">Mierzone od górnej krawędzi boku w dół.</p>
+        <div class="tablewrap"><table id="tblTop"></table></div>
+      </div>
+      </details>
+
     </div>
   </div>
 </div>
@@ -415,6 +423,13 @@ function render(){
   });
   t+="</tbody>";
   $("tbl").innerHTML=R.shelves.length?t:"<tbody><tr><td>Brak półek do wyznaczenia.</td></tr></tbody>";
+  let tt=`<thead><tr><th>Półka</th><th>Oś otworu od góry</th><th>Wierzch półki od góry</th><th>Wszystkie otwory półki</th></tr></thead><tbody>`;
+  R.shelves.forEach(sh=>{
+    const top=y=>s.H-y;
+    tt+=`<tr><td class="sh"><span class="m">Półka </span>${sh.i}</td><td class="key" data-l="Oś otworu od góry">${fmt(top(sh.hole))}</td><td data-l="Wierzch półki od góry">${fmt(top(sh.bottom+s.ts))}</td><td class="adj" data-l="Otwory">${sh.adj.concat([sh.hole]).sort((a,b)=>b-a).map(y=>y===sh.hole?"<b>"+fmt(top(y))+"</b>":fmt(top(y))).join(" · ")}</td></tr>`;
+  });
+  tt+="</tbody>";
+  $("tblTop").innerHTML=R.shelves.length?tt:"<tbody><tr><td>Brak półek do wyznaczenia.</td></tr></tbody>";
   // tekst do kopiowania
   const L=[`Bok wys. ${fmt(s.H)} mm, otwory Ø${fmt(s.dia)}`];
   if(s.mode==="raster"&&s.full&&R.raster.length)L.push(`Pełny raster 32 mm: od ${fmt(R.raster[0])} do ${fmt(R.raster[R.raster.length-1])} mm od dołu (${R.raster.length} otworów w rzędzie)`);
