@@ -71,9 +71,9 @@ details[open]>summary .chev{transform:rotate(180deg)}
 .field{display:grid;gap:2px;background:var(--surface-2);border-radius:16px;padding:10px 14px 8px;border:2px solid transparent;transition:border-color .15s;cursor:text;min-width:0}
 .field:focus-within{border-color:var(--accent)}
 .f-lab{font-size:.74rem;font-weight:600;color:var(--muted);letter-spacing:.01em}
-.f-row{display:flex;align-items:baseline;gap:6px}
-.field input{all:unset;flex:1;min-width:0;font:700 1.45rem var(--f-disp);letter-spacing:.02em;color:var(--ink);font-variant-numeric:tabular-nums}
-.f-unit{font-size:.8rem;color:var(--muted);font-weight:600}
+.f-row{display:flex;align-items:baseline;gap:6px;min-width:0}
+.field input{all:unset;flex:1 1 0;width:0;min-width:0;font:700 1.45rem var(--f-disp);letter-spacing:.02em;color:var(--ink);font-variant-numeric:tabular-nums}
+.f-unit{flex:none;font-size:1rem;color:var(--accent-text);font-weight:700}
 input::-webkit-inner-spin-button,input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
 input[type=number]{-moz-appearance:textfield;appearance:textfield}
 

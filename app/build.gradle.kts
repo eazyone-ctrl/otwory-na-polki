@@ -10,8 +10,8 @@ android {
         applicationId = "pl.otwory.polki"
         minSdk = 24
         targetSdk = 34
-        versionCode = 28
-        versionName = "4.1"
+        versionCode = 29
+        versionName = "4.2"
     }
 
     signingConfigs {
