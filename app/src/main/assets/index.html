@@ -56,7 +56,7 @@ html.is-dark .iconbtn .i-sun{display:block}
 html.is-dark .iconbtn .i-moon{display:none}
 
 /* treść */
-.app{max-width:640px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr);gap:14px;padding-block:16px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.app{max-width:640px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr);gap:14px;padding-block:16px 20px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .card{background:var(--surface);border-radius:22px;box-shadow:var(--shadow);padding:6px 16px;min-width:0}
 details.card>summary{list-style:none;display:flex;align-items:center;gap:12px;min-height:56px;cursor:pointer;user-select:none}
 details.card>summary::-webkit-details-marker{display:none}
@@ -129,6 +129,8 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
 .textbtn{justify-self:center;border:0;background:transparent;color:var(--accent-text);font-weight:700;font-size:.95rem;padding:12px 18px;border-radius:999px;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
 .textbtn:active{background:var(--accent-soft)}
 
+.foot{max-width:640px;margin:0 auto;display:grid;justify-items:center;gap:10px;text-align:center;color:var(--muted);font-size:.85rem;font-weight:600;letter-spacing:.04em;padding-top:4px;padding-bottom:max(28px,env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.foot-line{width:48px;height:3px;border-radius:2px;background:var(--brass);opacity:.7}
 /* dolny arkusz historii */
 .scrim{position:fixed;inset:0;z-index:40;background:rgba(10,14,9,.45);animation:fade .2s}
 .sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;max-height:82vh;overflow:auto;background:var(--bg);border-radius:26px 26px 0 0;box-shadow:0 -8px 30px rgba(0,0,0,.3);padding-bottom:max(20px,env(safe-area-inset-bottom,0px));animation:up .25s ease-out}
@@ -267,6 +269,8 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
     Przywróć domyślne
   </button>
 </form>
+
+<footer class="foot"><span class="foot-line" aria-hidden="true"></span><span>Pracownia Stolarska Maciej Łagun</span></footer>
 
 <div class="scrim" id="scrim" hidden></div>
 <section class="sheet" id="histPanel" hidden aria-label="Historia ustawień" role="dialog" aria-modal="true">
