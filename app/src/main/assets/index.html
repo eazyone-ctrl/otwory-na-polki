@@ -6,7 +6,7 @@
 <title>Półkownik</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@600;700&display=swap">
 <style>
 /* Layout: aplikacja mobilna — zielony pasek aplikacji, karty z tonalnym tłem, wyniki jako karty półek, historia w dolnym arkuszu */
 :root{
@@ -46,8 +46,8 @@ button{font:inherit;color:inherit}
 
 /* pasek aplikacji */
 .appbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;transition:transform .28s cubic-bezier(.2,.7,.2,1);will-change:transform;background:var(--bg);color:var(--ink)}
-.appbar-in{max-width:640px;margin:0 auto;display:flex;align-items:center;justify-content:flex-start;gap:10px;padding-block:14px 8px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-.iconbtn{flex:none;width:46px;height:46px;border-radius:50%;border:0;background:var(--surface);color:var(--accent-text);box-shadow:var(--shadow);display:grid;place-items:center;cursor:pointer;padding:0;transition:background .15s}
+.appbar-in{max-width:640px;margin:0 auto;display:flex;align-items:center;justify-content:flex-start;gap:8px;padding-block:14px 8px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.iconbtn{flex:none;width:42px;height:42px;border-radius:50%;border:0;background:var(--surface);color:var(--accent-text);box-shadow:var(--shadow);display:grid;place-items:center;cursor:pointer;padding:0;transition:background .15s}
 .iconbtn:active{background:var(--surface-2)}
 .appname{flex:1;min-width:0;font:700 clamp(1.3rem,7.2vw,1.75rem)/1.1 var(--f-disp);letter-spacing:.05em;color:var(--accent-text);margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .iconbtn .i-sun{display:none}
@@ -140,6 +140,7 @@ body{padding-bottom:calc(80px + env(safe-area-inset-bottom,0px))}
 .textbtn:active{background:var(--accent-soft)}
 
 .foot{max-width:640px;margin:0 auto;display:grid;justify-items:center;gap:10px;text-align:center;color:var(--muted);font-size:.85rem;font-weight:600;letter-spacing:.04em;padding-top:4px;padding-bottom:max(28px,env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.foot-ver{margin-top:-6px;font-size:.74rem;font-weight:600;letter-spacing:.06em;opacity:.75;font-variant-numeric:tabular-nums}
 .foot-line{width:48px;height:3px;border-radius:2px;background:var(--brass);opacity:.7}
 
 /* podgląd pdf */
@@ -203,6 +204,7 @@ input::placeholder{color:var(--muted);opacity:.55}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 @media (max-width:360px){.grid2{grid-template-columns:1fr}}
 /* pasek: mniejsze pigułki osi, numer półki nad pigułką */
+
 .bstp{width:38px}.bcount{min-width:2.3em}.bar-a{gap:5px}
 .sum-btn{gap:5px;padding:0 0 0 1px}
 .sum-lab{width:24px}.sum-lab svg{width:24px;height:28px}
@@ -210,6 +212,70 @@ input::placeholder{color:var(--muted);opacity:.55}
 .ax{position:relative;gap:0}
 .ax i{position:absolute;top:-10px;left:0;right:0;text-align:center;font-size:.5rem;line-height:1}
 .ax b{min-width:0;font-size:.92rem;padding:.26em .42em .32em;letter-spacing:0}
+/* ===== styl „Rysunek techniczny” (przełącznik w nagłówku) ===== */
+:root[data-style="tech"]{
+  --bg:#E6EAEE; --surface:#FFFFFF; --surface-2:#F6F8FA; --ink:#111827; --muted:#59636E; --line:#C9D1DA;
+  --accent:#1F2A37; --accent-ink:#FFFFFF; --accent-soft:#E3E8EE; --accent-text:#1F2A37;
+  --bar1:#1F2A37; --bar2:#111827; --brass:#E4572E; --brass-ink:#FFFFFF;
+  --hole:#E4572E; --hole-soft:#F8D3C6; --board:#FFFFFF; --board-edge:#1F2A37; --shelf:#1F2A37;
+  --warn-bg:#FDE7DF; --warn:#9A2F12;
+  --tech-frame:#111827; --tech-dash:#9AA6B2; --tech-field:#FFFFFF; --tech-drop:rgba(17,24,39,.12); --tech-switch:#1F2A37;
+  --shadow:none; --f-disp:"JetBrains Mono","DejaVu Sans Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){:root[data-style="tech"]:not([data-theme="light"]){
+  --bg:#0E1319; --surface:#161D25; --surface-2:#1C252F; --ink:#E8EDF2; --muted:#9AA6B2; --line:#2E3A47;
+  --accent:#E8EDF2; --accent-ink:#0E1319; --accent-soft:#25303C; --accent-text:#E8EDF2;
+  --bar1:#1F2833; --bar2:#0A0F14; --brass:#FF7A50; --brass-ink:#0E1319;
+  --hole:#FF7A50; --hole-soft:#4A2A20; --board:#161D25; --board-edge:#9AA6B2; --shelf:#E8EDF2;
+  --warn-bg:#3A2018; --warn:#FFB59A;
+  --tech-frame:#3A4756; --tech-dash:#4A5868; --tech-field:#121820; --tech-drop:rgba(0,0,0,.45); --tech-switch:#FF7A50; color-scheme:dark}}
+:root[data-style="tech"][data-theme="dark"]{
+  --bg:#0E1319; --surface:#161D25; --surface-2:#1C252F; --ink:#E8EDF2; --muted:#9AA6B2; --line:#2E3A47;
+  --accent:#E8EDF2; --accent-ink:#0E1319; --accent-soft:#25303C; --accent-text:#E8EDF2;
+  --bar1:#1F2833; --bar2:#0A0F14; --brass:#FF7A50; --brass-ink:#0E1319;
+  --hole:#FF7A50; --hole-soft:#4A2A20; --board:#161D25; --board-edge:#9AA6B2; --shelf:#E8EDF2;
+  --warn-bg:#3A2018; --warn:#FFB59A;
+  --tech-frame:#3A4756; --tech-dash:#4A5868; --tech-field:#121820; --tech-drop:rgba(0,0,0,.45); --tech-switch:#FF7A50; color-scheme:dark}
+html[data-style="tech"] .appname{letter-spacing:.1em;font-size:clamp(1.05rem,5.4vw,1.3rem);color:var(--ink)}
+html[data-style="tech"] .card,html[data-style="tech"] .iconbtn{border-radius:4px;border:1.5px solid var(--tech-frame);box-shadow:4px 4px 0 var(--tech-drop)}
+html[data-style="tech"] .field,html[data-style="tech"] .stepper{border-radius:2px;background:var(--tech-field);border:1px dashed var(--tech-dash)}
+html[data-style="tech"] .field:focus-within{border:1px solid var(--accent)}
+html[data-style="tech"] .seg,html[data-style="tech"] .bseg,html[data-style="tech"] .bstep{border-radius:4px}
+html[data-style="tech"] .seg button,html[data-style="tech"] .bseg button{border-radius:2px}
+html[data-style="tech"] .seg button[aria-pressed=true]{box-shadow:none}
+html[data-style="tech"] .sec-ic,html[data-style="tech"] .badge,html[data-style="tech"] .stp{border-radius:3px}
+html[data-style="tech"] .stp{box-shadow:none;border:1px solid var(--tech-dash)}
+html[data-style="tech"] .chip,html[data-style="tech"] .ax b{border-radius:3px}
+html[data-style="tech"] .ax b{font-family:var(--f-body);font-weight:800}
+html[data-style="tech"] .sumbar .stats{border-radius:6px}
+html[data-style="tech"] .f-lab,html[data-style="tech"] .s-lab{text-transform:uppercase;letter-spacing:.06em;font-size:.72rem}
+html[data-style="tech"] .switch input:checked+.track{background:var(--tech-switch)}
+html[data-style="tech"] .track{border-radius:3px}html[data-style="tech"] .thumb{border-radius:2px}
+html[data-style="tech"] .warn{border-radius:4px;border:1px solid currentColor}
+html[data-style="tech"] .histitem,html[data-style="tech"] .histempty{border-radius:4px;border:1.5px solid var(--tech-frame);box-shadow:none}
+html[data-style="tech"] .sheet{border-radius:0 0 8px 8px}
+html[data-style="tech"] .sheet-act button,html[data-style="tech"] .cbtns button{border-radius:4px}
+
+/* toast z akcją */
+.toast.act{display:flex;align-items:center;gap:10px;padding-right:8px;width:max-content;white-space:nowrap}
+.toast{bottom:calc(env(safe-area-inset-bottom,0px) + 84px)}
+.toast-btn{border:0;background:transparent;color:inherit;font:800 .92rem var(--f-body);text-decoration:underline;text-underline-offset:3px;padding:8px 10px;min-height:40px;cursor:pointer}
+/* podpórka */
+details.sub{background:var(--surface-2);border-radius:16px;padding:0 14px}
+details.sub>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;min-height:52px}
+details.sub>summary::-webkit-details-marker{display:none}
+.sub-t{font-weight:700;font-size:.92rem}
+.sub-val{margin-left:auto;font-size:.82rem;font-weight:600;color:var(--muted);font-variant-numeric:tabular-nums;text-align:right}
+.sub-h::after{content:"";flex:none;width:8px;height:8px;border-right:2.4px solid var(--accent-text);border-bottom:2.4px solid var(--accent-text);transform:rotate(45deg) translateY(-3px);transition:transform .3s}
+details.sub[open]>.sub-h::after{transform:rotate(-135deg) translate(-2px,-1px)}
+.sub-body{display:grid;gap:10px;padding-bottom:12px}
+.sub-body .field{background:var(--surface)}
+/* podświetlenie karty po stuknięciu w pigułkę */
+.shelf.flash{animation:flash 1.2s ease-out}
+@keyframes flash{0%,35%{box-shadow:0 0 0 3px var(--hole)}100%{box-shadow:0 0 0 3px transparent}}
+html[data-style="tech"] details.sub{border-radius:2px;background:transparent;border:1px dashed var(--tech-dash)}
+html[data-style="tech"] .sub-t{text-transform:uppercase;letter-spacing:.06em;font-size:.78rem}
+html[data-style="tech"] .toast{border-radius:4px}
 </style>
 </head>
 <body>
@@ -217,6 +283,7 @@ input::placeholder{color:var(--muted);opacity:.55}
   <div class="appbar-in">
     <h1 class="appname">PÓŁKOWNIK</h1>
     <button type="button" class="iconbtn" id="shareBtn" aria-label="Udostępnij PDF"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="M8.3 10.8l7.4-4.3M8.3 13.2l7.4 4.3"/></svg></button>
+    <button type="button" class="iconbtn" id="styleBtn" aria-label="Zmień styl: klasyczny / rysunek techniczny" aria-pressed="false"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.8-.9 1.8-1.9 0-.5-.2-.9-.5-1.3-.3-.4-.5-.8-.5-1.3 0-1 .8-1.8 1.8-1.8H16a5 5 0 0 0 5-5c0-3.9-4-6.7-9-6.7z"/><circle cx="7.5" cy="11" r="1.2" fill="currentColor" stroke="none"/><circle cx="10.5" cy="7.2" r="1.2" fill="currentColor" stroke="none"/><circle cx="15" cy="7.4" r="1.2" fill="currentColor" stroke="none"/></svg></button>
     <button type="button" class="iconbtn" id="themeBtn" aria-label="Przełącz tryb ciemny"><svg class="i-moon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="i-sun" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg></button>
     <button type="button" class="iconbtn" id="histBtn" aria-label="Historia ustawień" aria-expanded="false" aria-controls="histPanel"><svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 3.5V8h4.5"/><path d="M12 7.5V12l3 2"/></svg></button>
   </div>
@@ -240,8 +307,8 @@ input::placeholder{color:var(--muted);opacity:.55}
     </div>
     <div class="body">
       <div class="grid2">
-        <label class="field"><span class="f-lab">Wysokość boku</span><span class="f-row"><input type="number" inputmode="decimal" id="H" value="720" min="100" step="1"><span class="f-unit">mm</span></span></label>
-        <label class="field"><span class="f-lab">Grubość wieńców</span><span class="f-row"><input type="number" inputmode="decimal" id="t" value="18" min="0" step="0.5"><span class="f-unit">mm</span></span></label>
+        <label class="field"><span class="f-lab">Wysokość boku</span><span class="f-row"><input type="text" inputmode="decimal" autocomplete="off" enterkeyhint="done" id="H" value="720" min="100" step="1"><span class="f-unit">mm</span></span></label>
+        <label class="field"><span class="f-lab">Grubość wieńców</span><span class="f-row"><input type="text" inputmode="decimal" autocomplete="off" enterkeyhint="done" id="t" value="18" min="0" step="0.5"><span class="f-unit">mm</span></span></label>
       </div>
       <div class="lbl"><span class="f-lab">Wieńce górny i dolny</span>
         <div class="seg" id="kon" role="group" aria-label="Wieńce">
@@ -249,7 +316,12 @@ input::placeholder{color:var(--muted);opacity:.55}
           <button type="button" data-v="over" aria-pressed="false">Nakładane</button>
         </div>
       </div>
-      <label class="field" id="cokolWrap"><span class="f-lab">Wieniec dolny podniesiony o (cokół)</span><span class="f-row"><input type="number" inputmode="decimal" id="c" value="0" min="0" step="1"><span class="f-unit">mm</span></span></label>
+      <details class="sub" id="cokolWrap">
+        <summary class="sub-h"><span class="sub-t">Cokół</span><span class="sub-val" id="cokSum"></span></summary>
+        <div class="sub-body">
+          <label class="field"><span class="f-lab">Wieniec dolny podniesiony o</span><span class="f-row"><input type="text" inputmode="decimal" autocomplete="off" enterkeyhint="done" id="c" value="0"><span class="f-unit">mm</span></span></label>
+        </div>
+      </details>
     </div>
   </section>
 
@@ -266,12 +338,17 @@ input::placeholder{color:var(--muted);opacity:.55}
           <div><input type="number" inputmode="numeric" id="n" value="2" min="1" max="20" step="1" aria-label="Liczba półek"></div>
           <button type="button" class="stp" id="nPlus" aria-label="Więcej półek"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg></button>
         </div>
-        <label class="field"><span class="f-lab">Grubość półki</span><span class="f-row"><input type="number" inputmode="decimal" id="ts" value="18" min="1" step="0.5"><span class="f-unit">mm</span></span></label>
+        <label class="field"><span class="f-lab">Grubość półki</span><span class="f-row"><input type="text" inputmode="decimal" autocomplete="off" enterkeyhint="done" id="ts" value="18" min="1" step="0.5"><span class="f-unit">mm</span></span></label>
       </div>
-      <div class="grid2">
-        <label class="field"><span class="f-lab">Średnica otworu</span><span class="f-row"><input type="number" inputmode="decimal" id="dia" value="5" min="2" step="0.5"><span class="f-unit">mm</span></span></label>
-        <label class="field"><span class="f-lab">Oś otworu poniżej spodu półki</span><span class="f-row"><input type="number" inputmode="decimal" id="p" value="2.5" min="0" step="0.5"><span class="f-unit">mm</span></span></label>
-      </div>
+      <details class="sub" id="podpDet">
+        <summary class="sub-h"><span class="sub-t">Podpórka</span><span class="sub-val" id="podpSum"></span></summary>
+        <div class="sub-body">
+          <div class="grid2">
+            <label class="field"><span class="f-lab">Średnica otworu</span><span class="f-row"><input type="text" inputmode="decimal" autocomplete="off" enterkeyhint="done" id="dia" value="5"><span class="f-unit">mm</span></span></label>
+            <label class="field"><span class="f-lab">Oś pod półką</span><span class="f-row"><input type="text" inputmode="decimal" autocomplete="off" enterkeyhint="done" id="p" value="2,5"><span class="f-unit">mm</span></span></label>
+          </div>
+        </div>
+      </details>
       <div class="lbl"><span class="f-lab">Otworów na półkę (co 32 mm)</span>
         <div class="seg" id="k" role="group" aria-label="Otworów na półkę">
           <button type="button" data-v="0" aria-pressed="false">1 otwór</button>
@@ -319,7 +396,7 @@ input::placeholder{color:var(--muted);opacity:.55}
   </button>
 </form>
 
-<footer class="foot"><span class="foot-line" aria-hidden="true"></span><span>© <span id="year">2026</span> Pracownia Stolarska Maciej Łagun</span></footer>
+<footer class="foot"><span class="foot-line" aria-hidden="true"></span><span>© <span id="year">2026</span> Pracownia Stolarska Maciej Łagun</span><span class="foot-ver">wersja <span id="ver">8.5</span></span></footer>
 
 <section class="sumbar" aria-label="Szybki pasek">
   <div class="stats" id="bar">
@@ -373,9 +450,10 @@ let state={...DEF};
 try{const s=JSON.parse(localStorage.getItem("otwory-polki-v5")||"null");if(s)state={...DEF,...s};}catch(e){}
 
 function setSeg(id,v){document.querySelectorAll("#"+id+" button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.v===v));}
-function toForm(){numIds.forEach(id=>$(id).value=state[id]);state.k=state.k>=1?1:0;state.mode="equal";state.full=false;$("round").checked=state.round;
+const numTxt=v=>String(v).replace(".",",");
+function toForm(){numIds.forEach(id=>$(id).value=id==="n"?state[id]:numTxt(state[id]));state.k=state.k>=1?1:0;state.mode="equal";state.full=false;$("round").checked=state.round;
   setSeg("kon",state.kon);setSeg("k",String(state.k));}
-function fromForm(){numIds.forEach(id=>{const el=$(id);const raw=el.value===""&&el.dataset.prev!==undefined?el.dataset.prev:el.value;const v=parseFloat(raw);state[id]=isFinite(v)?v:0;});
+function fromForm(){numIds.forEach(id=>{const el=$(id);const raw=el.value===""&&el.dataset.prev!==undefined?el.dataset.prev:el.value;const v=parseFloat(String(raw).replace(/\s/g,"").replace(",","."));state[id]=isFinite(v)?v:0;});
   state.n=Math.max(0,Math.round(state.n));state.full=false;state.round=$("round").checked;}
 const r1=x=>Math.round(x*10)/10;
 const fmt=x=>{const v=state.round?Math.round(x):r1(x);return (Number.isInteger(v)?v.toString():v.toFixed(1)).replace(".",",");};
@@ -497,7 +575,7 @@ function axisIcon(top,k){
     ${side}<circle cx="21" cy="16" r="3.8" fill="var(--hole)" stroke="#F3EEDD" stroke-width="1.3"/></g></svg>`;
 }
 function shelfCard(i,main,mainLab,holes,sub){
-  return `<article class="shelf">
+  return `<article class="shelf" data-shelf="${i}">
     <div class="badge"><small>Półka</small><b>${i}</b></div>
     <div class="s-lab">${mainLab}</div>
     <div class="s-main">${main}<small>mm</small></div>
@@ -509,13 +587,15 @@ function shelfCard(i,main,mainLab,holes,sub){
 function render(){
   const s=state, R=compute(s);
   $("cokolWrap").hidden=s.kon!=="between";
+  $("cokSum").textContent=s.c>0?numTxt(s.c)+" mm":"brak";
+  $("podpSum").textContent="Ø "+numTxt(s.dia)+" · oś "+numTxt(s.p)+" mm";
   $("nMinus").disabled=s.n<=1;$("nPlus").disabled=s.n>=20;
   const w=$("warn"); w.hidden=!R.warn.length; w.innerHTML=R.warn.map(x=>"<div>"+x+"</div>").join("");
   const gaps=R.shelves.map(x=>x.gapBelow).concat(R.shelves.length?[R.gapTop]:[]);
   const gapTxt=gaps.length?(s.mode==="equal"?fmt(gaps[0]):fmt(Math.min(...gaps))+"–"+fmt(Math.max(...gaps))):"—";
   $("dims").innerHTML=`Wnętrze <b>${R.inner>0?fmt(R.inner)+" mm":"—"}</b> · prześwit <b>${gapTxt}${gapTxt!=="—"?" mm":""}</b>`;
   const top=dir==="gora";
-  const axes=R.shelves.length?R.shelves.map(sh=>`<span class="ax"><i>${sh.i}</i><b>${fmt(top?s.H-sh.hole:sh.hole)}</b></span>`).join(""):'<span class="ax-empty">Brak półek</span>';
+  const axes=R.shelves.length?R.shelves.map(sh=>`<span class="ax" data-i="${sh.i}"><i>${sh.i}</i><b>${fmt(top?s.H-sh.hole:sh.hole)}</b></span>`).join(""):'<span class="ax-empty">Brak półek</span>';
   $("bN").textContent=s.n;$("bNl").textContent=plPolki(s.n);$("bMinus").disabled=s.n<=1;$("bPlus").disabled=s.n>=20;
   $("sum").innerHTML=`<span class="sum-lab" aria-hidden="true">${axisIcon(top,s.k)}</span><span class="sum-axes">${axes}</span>${R.warn.length?'<span class="sum-warn" aria-label="Są ostrzeżenia">!</span>':""}`;
   $("sum").setAttribute("aria-label",(s.k?"Osie środkowych otworów ":"Osie otworów ")+(top?"od góry":"od dołu")+": "+(R.shelves.map(sh=>"półka "+sh.i+" "+fmt(top?s.H-sh.hole:sh.hole)+" mm").join(", ")||"brak półek")+(R.warn.length?". Są ostrzeżenia.":"")+" Stuknij, aby przejść do wymiarów.");
@@ -549,7 +629,10 @@ function setDir(v){if(dir===v)return;dir=v;syncDir(true);render();try{localStora
 $("k").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;state.k=+b.dataset.v;setSeg("k",b.dataset.v);render();});
 ["kon"].forEach(id=>$(id).addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;state[id]=b.dataset.v;setSeg(id,b.dataset.v);render();}));
 function stepN(d){const v=Math.min(20,Math.max(1,(Math.round(state.n)||0)+d));$("n").value=v;fromForm();render();}
-$("sum").addEventListener("click",()=>{
+$("sum").addEventListener("click",e=>{
+  const ax=e.target.closest(".ax");
+  if(ax){const card=document.querySelector("#"+(dir==="gora"?"tblTop":"tbl")+' [data-shelf="'+ax.dataset.i+'"]');
+    if(card){card.scrollIntoView({behavior:"smooth",block:"center"});card.classList.remove("flash");void card.offsetWidth;card.classList.add("flash");return;}}
   const t=$("warn").hidden?document.querySelector('[data-key="tabela"]'):$("warn");t.scrollIntoView({behavior:"smooth",block:"start"});});
 $("bMinus").addEventListener("click",()=>stepN(-1));
 $("bPlus").addEventListener("click",()=>stepN(1));
@@ -563,6 +646,14 @@ $("nPlus").addEventListener("click",()=>stepN(1));
 
 // motyw
 const root=document.documentElement;
+// styl: klasyczny / rysunek techniczny
+function syncStyle(){const t=root.getAttribute("data-style")==="tech";$("styleBtn").setAttribute("aria-pressed",t);}
+try{if(localStorage.getItem("otwory-styl")==="tech")root.setAttribute("data-style","tech");}catch(e){}
+syncStyle();
+$("styleBtn").addEventListener("click",()=>{const t=root.getAttribute("data-style")!=="tech";
+  if(t)root.setAttribute("data-style","tech");else root.removeAttribute("data-style");
+  try{t?localStorage.setItem("otwory-styl","tech"):localStorage.removeItem("otwory-styl");}catch(e){}
+  syncStyle();render();toast(t?"Styl: rysunek techniczny":"Styl: klasyczny");});
 function sysDark(){return !!(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches);}
 function isDark(){const t=root.getAttribute("data-theme");if(t)return t==="dark";return sysDark();}
 function syncTheme(){const d=isDark();root.classList.toggle("is-dark",d);$("themeBtn").setAttribute("aria-pressed",d);}
@@ -654,73 +745,89 @@ $("histClear").addEventListener("click",()=>{histPending=null;histRender();const
 $("histClearNo").addEventListener("click",()=>{$("histClearConfirm").hidden=true;});
 $("histClearYes").addEventListener("click",()=>{hist=[];try{localStorage.removeItem(HKEY);}catch(e){}$("histClearConfirm").hidden=true;closeSheet();histRender();});
 
-$("reset").addEventListener("click",()=>{state={...DEF};toForm();render();window.scrollTo({top:0,behavior:"smooth"});});
+$("reset").addEventListener("click",()=>{const prev={...state};state={...DEF};toForm();render();window.scrollTo({top:0,behavior:"smooth"});
+  toast("Przywrócono domyślne","Cofnij",()=>{state={...DEF,...prev};toForm();render();});});
 document.addEventListener("contextmenu",e=>{if(!e.target.closest("input"))e.preventDefault();});
 
 document.addEventListener("keydown",e=>{if(e.key==="Escape")$("pdfModal").hidden=true;});
 
-function toast(msg){const t=document.createElement("div");t.className="toast";t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2600);}
+function toast(msg,act,fn){document.querySelectorAll(".toast").forEach(x=>x.remove());
+  const t=document.createElement("div");t.className="toast"+(act?" act":"");t.setAttribute("role","status");
+  const m=document.createElement("span");m.textContent=msg;t.appendChild(m);
+  if(act){const b=document.createElement("button");b.type="button";b.className="toast-btn";b.textContent=act;b.addEventListener("click",()=>{t.remove();fn&&fn();});t.appendChild(b);}
+  document.body.appendChild(t);setTimeout(()=>t.remove(),act?5000:2600);}
 
 // ---- PDF ----
 const PW=1240, PH=1754, M=80; // A4 ok. 150 dpi
+// PDF: kolory do druku w skali szarości
+const PDF_MODE="gray";
+const PDF_COL={
+  gray:{c:{ink:"#111111",navy:"#3A3A3A",muted:"#5C5C5C",line:"#C4C4C4",dash:"#8A8A8A",soft:"#EFEFEF",hole:"#000000"},
+      pal:{"--board":"#FFFFFF","--board-edge":"#3A3A3A","--shelf":"#6B6B6B","--hole":"#000000","--hole-soft":"#C8C8C8","--muted":"#5C5C5C","--surface":"#FFFFFF","--ink":"#111111"}}
+};
 function pdfPages(drawImg){
+  // PDF zawsze w stylu „Rysunek techniczny”: biały arkusz, czarne linie, wymiary w kolorze czerwonego ołówka
   const s=state, R=compute(s), pages=[];
   let cv, g, y;
-  const C={bar:"#41543A",brass:"#B8913F",ink:"#1A2117",muted:"#5E6958",line:"#D3DACB",soft:"#EEF2EA",hole:"#7E5A17"};
-  const F=(w,sz,fam)=>`${w} ${sz}px ${fam==="d"?'"Barlow Condensed","Arial Narrow",sans-serif':'"Plus Jakarta Sans",Arial,sans-serif'}`;
+  const C=PDF_COL[PDF_MODE].c;
+  const F=(w,sz,fam)=>`${w} ${sz}px ${fam==="d"?'"JetBrains Mono","DejaVu Sans Mono",ui-monospace,monospace':'"Plus Jakarta Sans",Arial,sans-serif'}`;
+  const spaced=(t,x,yy,sp)=>{let cx=x;for(const ch of t){g.fillText(ch,cx,yy);cx+=g.measureText(ch).width+sp;}};
+  function frame(){g.strokeStyle=C.ink;g.lineWidth=3;g.setLineDash([]);g.strokeRect(40,40,PW-80,PH-80);}
   function newPage(first){
     cv=document.createElement("canvas");cv.width=PW;cv.height=PH;g=cv.getContext("2d");
-    g.fillStyle="#fff";g.fillRect(0,0,PW,PH);
+    g.fillStyle="#fff";g.fillRect(0,0,PW,PH);frame();
     if(first){
-      g.fillStyle=C.bar;g.fillRect(0,0,PW,210);
-      g.fillStyle="#D6B06C";g.font=F(700,84,"d");g.fillText("PÓŁKOWNIK",M,112);
-      g.fillStyle="#F3EEDD";g.font=F(600,26,"b");g.fillText("OTWORY NA PÓŁKI · Pracownia Stolarska Maciej Łagun",M,160);
+      g.fillStyle=C.ink;g.font=F(700,66,"d");spaced("PÓŁKOWNIK",M,138,10);
+      g.fillStyle=C.muted;g.font=F(600,22,"b");spaced("OTWORY NA PÓŁKI · PRACOWNIA STOLARSKA MACIEJ ŁAGUN",M,182,2);
       const d=new Date(),p=x=>String(x).padStart(2,"0");
-      g.textAlign="right";g.font=F(600,24,"b");g.fillText(p(d.getDate())+"."+p(d.getMonth()+1)+"."+d.getFullYear(),PW-M,112);g.textAlign="left";
-      y=270;
-    }else{y=M;}
+      g.textAlign="right";g.fillStyle=C.ink;g.font=F(700,26,"d");g.fillText(p(d.getDate())+"."+p(d.getMonth()+1)+"."+d.getFullYear(),PW-M,138);g.textAlign="left";
+      g.fillStyle=C.ink;g.fillRect(M,212,PW-2*M,4);g.fillStyle=C.hole;g.fillRect(M,212,120,4);
+      y=262;
+    }else{y=M+20;}
     pages.push(cv);
   }
-  function need(h){if(y+h>PH-110){footer();newPage(false);}}
-  function footer(){g.fillStyle=C.muted;g.font=F(600,20,"b");g.textAlign="center";g.fillText("© "+Math.max(2026,new Date().getFullYear())+" Pracownia Stolarska Maciej Łagun · strona "+pages.length,PW/2,PH-50);g.textAlign="left";}
-  function h2(t){need(80);g.fillStyle=C.bar;g.font=F(700,40,"d");g.fillText(t,M,y+34);g.fillStyle=C.brass;g.fillRect(M,y+48,70,5);y+=78;}
+  function need(h){if(y+h>PH-120){footer();newPage(false);}}
+  function footer(){g.fillStyle=C.muted;g.font=F(600,18,"b");g.textAlign="center";g.fillText("© "+Math.max(2026,new Date().getFullYear())+" Pracownia Stolarska Maciej Łagun · arkusz "+pages.length,PW/2,PH-62);g.textAlign="left";}
+  function h2(t){need(84);g.fillStyle=C.ink;g.font=F(700,32,"d");spaced(t,M,y+34,4);g.fillStyle=C.hole;g.fillRect(M,y+50,70,4);y+=80;}
+  function box(x,yy,w,h,dashed){g.strokeStyle=dashed?C.dash:C.ink;g.lineWidth=dashed?2:3;g.setLineDash(dashed?[8,6]:[]);g.strokeRect(x,yy,w,h);g.setLineDash([]);}
   newPage(true);
   // parametry
   h2("PARAMETRY");
   const rows=[
     ["Wysokość boku",fmt(s.H)+" mm"],["Grubość wieńców",fmt(s.t)+" mm"],
-    ["Wieńce",s.kon==="between"?"między bokami":"nakładane"],...(s.kon==="between"?[["Cokół",fmt(s.c)+" mm"]]:[]),
+    ["Wieńce",s.kon==="between"?"między bokami":"nakładane"],...(s.kon==="between"?[["Cokół",s.c>0?fmt(s.c)+" mm":"brak"]]:[]),
     ["Liczba półek",String(s.n)],["Grubość półki",fmt(s.ts)+" mm"],
-    ["Średnica otworu","Ø "+fmt(s.dia)+" mm"],["Oś otworu poniżej spodu półki",fmt(s.p)+" mm"],
+    ["Średnica otworu","Ø "+fmt(s.dia)+" mm"],["Oś pod półką",String(s.p).replace(".",",")+" mm"],
     ["Otworów na półkę",s.k?"3 (co 32 mm)":"1"]
   ];
-  const colW=(PW-2*M-40)/2;
-  rows.forEach((r,i)=>{const col=i%2, x=M+col*(colW+40); if(col===0)need(62);
-    g.fillStyle=C.soft;roundRect(g,x,y,colW,52,10);g.fill();
-    g.fillStyle=C.muted;g.font=F(600,22,"b");g.fillText(r[0],x+18,y+33);
-    g.fillStyle=C.ink;g.font=F(700,30,"d");g.textAlign="right";g.fillText(r[1],x+colW-18,y+36);g.textAlign="left";
-    if(col===1||i===rows.length-1)y+=62;});
-  y+=14;
+  const colW=(PW-2*M-30)/2;
+  rows.forEach((r,i)=>{const col=i%2, x=M+col*(colW+30); if(col===0)need(70);
+    box(x,y,colW,58,true);
+    g.fillStyle=C.muted;g.font=F(700,18,"b");spaced(r[0].toUpperCase(),x+18,y+36,1.5);
+    g.fillStyle=C.ink;g.font=F(700,28,"d");g.textAlign="right";g.fillText(r[1],x+colW-18,y+39);g.textAlign="left";
+    if(col===1||i===rows.length-1)y+=70;});
+  y+=10;
   // podsumowanie
   const gaps=R.shelves.map(x=>x.gapBelow).concat(R.shelves.length?[R.gapTop]:[]);
-  need(120);
-  g.fillStyle=C.bar;roundRect(g,M,y,PW-2*M,100,16);g.fill();
-  const sum=[["Wnętrze",R.inner>0?fmt(R.inner)+" mm":"—"],["Prześwit",gaps.length?(s.mode==="equal"?fmt(gaps[0]):fmt(Math.min(...gaps))+"–"+fmt(Math.max(...gaps)))+" mm":"—"]];
-  sum.forEach((v,i)=>{const cx=M+(PW-2*M)*(i*2+1)/4;g.textAlign="center";g.fillStyle="#E9E4D3";g.font=F(600,22,"b");g.fillText(v[0],cx,y+36);g.fillStyle="#D6B06C";g.font=F(700,44,"d");g.fillText(v[1],cx,y+82);g.textAlign="left";});
-  y+=130;
-  if(R.warn.length){R.warn.forEach(w=>{need(46);g.fillStyle="#7A4E0A";g.font=F(600,22,"b");g.fillText("⚠ "+w,M,y+28);y+=40;});y+=10;}
+  need(124);
+  box(M,y,PW-2*M,104,false);g.fillStyle=C.ink;g.fillRect(PW/2-1.5,y,3,104);
+  const sum=[["WNĘTRZE",R.inner>0?fmt(R.inner)+" mm":"—"],["PRZEŚWIT",gaps.length?fmt(gaps[0])+" mm":"—"]];
+  sum.forEach((v,i)=>{const cx=M+(PW-2*M)*(i*2+1)/4;g.textAlign="center";g.fillStyle=C.muted;g.font=F(700,18,"b");g.fillText(v[0],cx,y+36);g.fillStyle=C.ink;g.font=F(700,42,"d");g.fillText(v[1],cx,y+84);g.textAlign="left";});
+  y+=134;
+  if(R.warn.length){R.warn.forEach(w=>{need(46);g.fillStyle=C.ink;g.font=F(700,22,"b");g.fillText("⚠ "+w,M,y+28);y+=40;});y+=10;}
   // tabele
   function table(title,cols,data){
     h2(title);
-    const xs=[M,M+150,M+420,M+800], head=()=>{need(56);g.fillStyle=C.muted;g.font=F(700,20,"b");cols.forEach((c,i)=>g.fillText(c.toUpperCase(),xs[i]+(i===0?18:0),y+26));g.fillStyle=C.line;g.fillRect(M,y+40,PW-2*M,2);y+=50;};
+    const xs=[M,M+150,M+420,M+800], head=()=>{need(56);g.fillStyle=C.muted;g.font=F(700,18,"b");cols.forEach((c,i)=>spaced(c.toUpperCase(),xs[i]+(i===0?18:0),y+26,1.5));g.fillStyle=C.ink;g.fillRect(M,y+40,PW-2*M,3);y+=52;};
     head();
-    data.forEach((r,ri)=>{if(y+64>PH-110){footer();newPage(false);head();}
+    data.forEach((r,ri)=>{if(y+64>PH-120){footer();newPage(false);head();}
       if(ri%2===0){g.fillStyle=C.soft;g.fillRect(M,y,PW-2*M,60);}
-      g.fillStyle=C.bar;roundRect(g,xs[0]+10,y+10,86,40,10);g.fill();
-      g.fillStyle="#FFF8EA";g.font=F(700,28,"d");g.textAlign="center";g.fillText(String(r[0]),xs[0]+53,y+40);g.textAlign="left";
-      g.fillStyle=C.hole;g.font=F(700,40,"d");g.fillText(r[1],xs[1],y+44);
-      g.fillStyle=C.ink;g.font=F(600,28,"d");g.fillText(r[2],xs[2],y+42);
-      g.fillStyle=C.muted;g.font=F(600,28,"d");g.fillText(r[3],xs[3],y+42);
+      g.fillStyle=C.navy;g.fillRect(xs[0]+10,y+10,86,40);
+      g.fillStyle="#FFFFFF";g.font=F(700,26,"d");g.textAlign="center";g.fillText(String(r[0]),xs[0]+53,y+39);g.textAlign="left";
+      g.fillStyle=C.hole;g.font=F(700,36,"d");g.fillText(r[1],xs[1],y+43);
+      g.fillStyle=C.ink;g.font=F(600,24,"d");g.fillText(r[2],xs[2],y+41);
+      g.fillStyle=C.muted;g.font=F(600,24,"d");g.fillText(r[3],xs[3],y+41);
+      g.fillStyle=C.line;g.fillRect(M,y+59,PW-2*M,1);
       y+=60;});
     y+=26;
   }
@@ -734,7 +841,7 @@ function pdfPages(drawImg){
   if(drawImg){
     newPage(false);
     h2("RYSUNEK BOKU · WYMIARY "+(dir==="gora"?"OD GÓRY":"OD DOŁU"));
-    const maxW=PW-2*M, maxH=PH-y-130, k=Math.min(maxW/drawImg.width,maxH/drawImg.height);
+    const maxW=PW-2*M, maxH=PH-y-140, k=Math.min(maxW/drawImg.width,maxH/drawImg.height);
     const w=drawImg.width*k, h=drawImg.height*k;
     g.drawImage(drawImg,(PW-w)/2,y,w,h);
     footer();
@@ -770,7 +877,7 @@ function b64(bytes){let s="";const ch=0x8000;for(let i=0;i<bytes.length;i+=ch)s+
 function drawingImage(){
   const R=compute(state);
   if(!(R.inner>0&&R.shelves.length))return Promise.resolve(null);
-  const pal={"--board":"#EFE6D3","--board-edge":"#A88E5E","--shelf":"#465C3E","--hole":"#7E5A17","--hole-soft":"#E6CD98","--muted":"#525E4C","--surface":"#FFFFFF"};
+  const pal=PDF_COL[PDF_MODE].pal;
   let svg=svgEl(state,R,dir==="gora").replace(/var\((--[a-z-]+)\)/g,(m,k)=>pal[k]||"#000");
   const vb=svg.match(/viewBox="0 0 ([\d.]+) ([\d.]+)"/);const sc=1800/parseFloat(vb[2]);
   svg=svg.replace("<svg ",`<svg width="${Math.round(parseFloat(vb[1])*sc)}" height="1800" `);
@@ -809,11 +916,14 @@ $("pdfModal").addEventListener("click",e=>{if(e.target===$("pdfModal"))$("pdfMod
 try{$("year").textContent=Math.max(2026,new Date().getFullYear());}catch(e){}
 // po dotknięciu pola stara wartość staje się podpowiedzią, a pole jest puste do wpisania nowej
 (function(){
-  document.addEventListener("focusin",e=>{const el=e.target;if(!(el instanceof HTMLInputElement)||el.type!=="number")return;
+  const isNum=el=>el instanceof HTMLInputElement&&(el.type==="number"||el.inputMode==="decimal");
+  document.addEventListener("input",e=>{const el=e.target;if(!isNum(el)||el.type==="number")return;
+    const c=el.value.replace(/[^0-9.,]/g,"").replace(".",",");const i=c.indexOf(",");const v=i<0?c:c.slice(0,i+1)+c.slice(i+1).replace(/,/g,"");if(v!==el.value)el.value=v;},true);
+  document.addEventListener("focusin",e=>{const el=e.target;if(!isNum(el))return;
     el.dataset.prev=el.value;el.placeholder=el.value;el.value="";});
-  document.addEventListener("focusout",e=>{const el=e.target;if(!(el instanceof HTMLInputElement)||el.type!=="number"||el.dataset.prev===undefined)return;
-    if(el.value==="")el.value=el.dataset.prev;
-    delete el.dataset.prev;el.placeholder="";fromForm();render();});
+  document.addEventListener("focusout",e=>{const el=e.target;if(!isNum(el)||el.dataset.prev===undefined)return;
+    if(el.value===""||el.value===",")el.value=el.dataset.prev;
+    delete el.dataset.prev;el.placeholder="";fromForm();render();toForm();});
 })();
 (function(){const d=$("drawDet");try{if(localStorage.getItem("otwory-rysunek2")==="0")d.open=false;}catch(e){}
   const sync=()=>{$("drawHint").textContent=d.open?"Ukryj":"Pokaż";};sync();
