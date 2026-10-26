@@ -58,6 +58,7 @@ header{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 16px;margin-bott
 .hc-btns .btn{flex:1 1 120px;min-height:44px}
 .resetcard{display:flex;justify-content:center}
 .resetcard .btn{min-height:44px;flex:0 1 320px}
+td.sh{background:var(--accent);color:var(--accent-ink);font-weight:600}
 .histempty{color:var(--muted);font-size:.92rem;margin:0}
 .themebtn .i-sun{display:none}
 html.is-dark .themebtn .i-sun{display:block}
@@ -146,11 +147,11 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
   table,tbody,tr,td{display:block;width:auto}
   thead{display:none}
   tbody{display:grid;gap:10px}
-  tr{border:1px solid var(--line);border-radius:8px;padding:6px 12px}
+  tr{border:1px solid var(--line);border-radius:8px;padding:0 12px 6px;overflow:hidden}
   td{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:7px 0;border-bottom:1px dashed var(--line);white-space:normal;text-align:right}
   td:last-child{border-bottom:0}
   td[data-l]::before{content:attr(data-l);font:400 .92rem var(--f-body);color:var(--muted);text-align:left}
-  td.sh{font:600 1.3rem var(--f-disp);letter-spacing:.02em;border-bottom:1px solid var(--line)}
+  td.sh{font:600 1.3rem var(--f-disp);letter-spacing:.02em;border-bottom:0;margin:0 -12px 4px;padding:8px 12px;border-radius:0;justify-content:flex-start;gap:.3em}
   .m{display:inline}
   td.e{display:none}
   tr.gaprow{border-style:dashed;padding:4px 12px}
