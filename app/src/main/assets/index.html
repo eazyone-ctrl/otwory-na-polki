@@ -463,8 +463,15 @@ const same=(a,b)=>HKEYS.every(k=>a[k]===b[k]);
 function histSave(){
   histTimer=null;
   const sn=snap();
-  hist=hist.filter(h=>!same(h.s,sn));
-  hist.unshift({t:Date.now(),s:sn});
+  const onlyN=(x,y)=>HKEYS.every(k=>k==="n"||x[k]===y[k]);
+  if(hist.length&&onlyN(hist[0].s,sn)){
+    // zmieniła się tylko liczba półek: aktualizuj ostatni wpis zamiast dodawać nowy
+    hist[0]={t:Date.now(),s:sn};
+    hist=[hist[0],...hist.slice(1).filter(h=>!same(h.s,sn))];
+  }else{
+    hist=hist.filter(h=>!same(h.s,sn));
+    hist.unshift({t:Date.now(),s:sn});
+  }
   hist=hist.slice(0,5);
   try{localStorage.setItem(HKEY,JSON.stringify(hist));}catch(e){}
   histRender();
