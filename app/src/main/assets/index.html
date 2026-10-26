@@ -467,7 +467,7 @@ $("histList").addEventListener("click",e=>{
   closeSheet();window.scrollTo({top:0,behavior:"smooth"});});
 $("histClear").addEventListener("click",()=>{histPending=null;histRender();const c=$("histClearConfirm");c.hidden=!c.hidden;if(!c.hidden)$("histClearNo").focus();});
 $("histClearNo").addEventListener("click",()=>{$("histClearConfirm").hidden=true;});
-$("histClearYes").addEventListener("click",()=>{hist=[];try{localStorage.removeItem(HKEY);}catch(e){}$("histClearConfirm").hidden=true;histRender();});
+$("histClearYes").addEventListener("click",()=>{hist=[];try{localStorage.removeItem(HKEY);}catch(e){}$("histClearConfirm").hidden=true;closeSheet();histRender();});
 
 $("reset").addEventListener("click",()=>{state={...DEF};toForm();render();window.scrollTo({top:0,behavior:"smooth"});});
 toForm();render();histReady=true;histRender();
