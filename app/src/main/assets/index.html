@@ -147,6 +147,10 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
 .he-t{font-weight:700;font-size:1.05rem}
 .he-s{font-size:.9rem;color:var(--muted);max-width:30ch}
 .histitem{background:var(--surface)!important;box-shadow:var(--shadow)}
+.histitem{transition:background .2s,border-color .2s}
+.histitem:active{background:var(--surface-2)!important}
+.histitem.sel{background:var(--accent-soft)!important;border-color:var(--accent)}
+.histitem.sel+.confirm{margin-top:-2px}
 .histlist{list-style:none;margin:0;padding:0;display:grid;gap:8px}
 .histitem{width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;align-items:center;text-align:left;border:2px solid transparent;background:var(--surface-2);border-radius:16px;padding:12px 14px;cursor:pointer}
 .histitem.cur{border-color:var(--accent)}
@@ -469,7 +473,7 @@ function histRender(){
     const s=h.s, R=compute(s), f=x=>{const v=s.round?Math.round(x):Math.round(x*10)/10;return String(v).replace(".",",");};
     const holes=R.shelves.map(sh=>f(sh.hole)).join(", ")||"—";
     const isCur=same(s,cur);
-    return `<li><button type="button" class="histitem${isCur?" cur":""}" data-i="${i}">
+    return `<li><button type="button" class="histitem${isCur?" cur":""}${histPending===i?" sel":""}" data-i="${i}" aria-expanded="${histPending===i}">
       <span class="h1l">${f(s.H)} mm · ${s.n} ${plPolki(s.n)}</span><span class="htime">${histTime(h.t)}</span>
       <span class="h2l">${s.kon==="between"?"wieńce między bokami":"wieńce nakładane"} · osie: ${holes}</span><span class="hgo">${isCur?"obecne":"Przywróć"}</span>
     </button>${histPending===i?`<div class="confirm">
