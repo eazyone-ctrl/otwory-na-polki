@@ -27,6 +27,9 @@ public class MainActivity extends Activity {
         s.setDomStorageEnabled(true);
         s.setAllowFileAccess(true);
         s.setTextZoom(100);
+        s.setSupportZoom(false);
+        s.setBuiltInZoomControls(false);
+        s.setDisplayZoomControls(false);
         web.setWebViewClient(new WebViewClient());
         web.addJavascriptInterface(new ShareBridge(), "AndroidShare");
         setContentView(web);

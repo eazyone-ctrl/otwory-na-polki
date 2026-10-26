@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Półkownik</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -35,7 +35,7 @@
   --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25); color-scheme:dark}
 
 [hidden]{display:none!important}
-html,body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+html,body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:pan-x pan-y}
 input{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
 html{font-size:18px;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -818,6 +818,8 @@ try{$("year").textContent=Math.max(2026,new Date().getFullYear());}catch(e){}
 (function(){const d=$("drawDet");try{if(localStorage.getItem("otwory-rysunek2")==="0")d.open=false;}catch(e){}
   const sync=()=>{$("drawHint").textContent=d.open?"Ukryj":"Pokaż";};sync();
   d.addEventListener("toggle",()=>{sync();try{localStorage.setItem("otwory-rysunek2",d.open?"1":"0");}catch(e){}});})();
+["gesturestart","gesturechange"].forEach(t=>document.addEventListener(t,e=>e.preventDefault(),{passive:false}));
+document.addEventListener("touchmove",e=>{if(e.touches&&e.touches.length>1)e.preventDefault();},{passive:false});
 toForm();render();histReady=true;histRender();
 })();
 </script>
