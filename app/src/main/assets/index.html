@@ -266,6 +266,9 @@ function svgEl(s,R){
   }
   // półki
   R.shelves.forEach(sh=>{o+=`<rect x="${X(D*0.03)}" y="${Y(sh.bottom+s.ts)}" width="${r1(D*0.94)}" height="${s.ts}" fill="var(--shelf)" opacity=".28" stroke="var(--shelf)" stroke-width="${r1(fs*.08)}"/>`;});
+  R.shelves.forEach(sh=>{const bw=fs*1.9,bh=fs*1.45,cx=X(D/2),cy=Y(sh.bottom+s.ts)-bh/2-fs*.25;
+    o+=`<rect x="${r1(cx-bw/2)}" y="${r1(cy-bh/2)}" width="${r1(bw)}" height="${r1(bh)}" rx="${r1(bh/2)}" fill="var(--shelf)"/>`;
+    o+=`<text x="${r1(cx)}" y="${r1(cy+fs*.36)}" text-anchor="middle" fill="var(--panel)" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="700" font-size="${r1(fs*1.05)}">${sh.i}</text>`;});
   const xs=[37,D-37];
   // raster pełny
   if(s.mode==="raster"&&s.full){R.raster.forEach(y=>xs.forEach(x=>{o+=`<circle cx="${r1(X(x))}" cy="${r1(Y(y))}" r="${r1(hr*.8)}" fill="none" stroke="var(--board-edge)" stroke-width="${r1(fs*.07)}"/>`;}));}
