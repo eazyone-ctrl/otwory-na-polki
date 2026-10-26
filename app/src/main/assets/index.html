@@ -133,15 +133,21 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
 .foot-line{width:48px;height:3px;border-radius:2px;background:var(--brass);opacity:.7}
 /* dolny arkusz historii */
 .scrim{position:fixed;inset:0;z-index:40;background:rgba(10,14,9,.45);animation:fade .2s}
-.sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;max-height:82vh;overflow:auto;background:var(--bg);border-radius:26px 26px 0 0;box-shadow:0 -8px 30px rgba(0,0,0,.3);padding-bottom:max(20px,env(safe-area-inset-bottom,0px));animation:up .25s ease-out}
-.sheet-top{position:sticky;top:0;z-index:1;background:linear-gradient(135deg,var(--bar1),var(--bar2));color:#F3EEDD;padding-top:8px;padding-bottom:14px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.sheet{position:fixed;left:0;right:0;top:0;z-index:41;max-height:88vh;overflow:auto;background:var(--bg);border-radius:0 0 26px 26px;box-shadow:0 10px 30px rgba(0,0,0,.3);padding-bottom:16px;animation:down .3s ease-out}
+.sheet-top{position:sticky;top:0;z-index:1;padding-top:calc(env(safe-area-inset-top,0px) + 14px)!important;background:linear-gradient(135deg,var(--bar1),var(--bar2));color:#F3EEDD;padding-top:8px;padding-bottom:14px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .sheet-in{max-width:640px;margin:0 auto;display:grid;gap:10px;padding-top:14px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-.handle{width:44px;height:5px;border-radius:3px;background:rgba(243,238,221,.4);margin:2px auto 10px}
+.handle{width:44px;height:5px;border-radius:3px;background:var(--line);margin:4px auto 0}
 .sheet-h{max-width:640px;margin:0 auto;display:flex;align-items:center;gap:10px}
 .sheet-ic{flex:none;width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.08);color:var(--brass);display:grid;place-items:center}
 .sheet-h h2{flex:1;margin:0;font:700 1.45rem/1 var(--f-disp);letter-spacing:.03em;color:var(--brass)}
 .smallbtn{border:0;background:rgba(255,255,255,.1);color:var(--brass);font-weight:700;font-size:.85rem;border-radius:999px;padding:10px 14px;cursor:pointer}
 .closebtn{width:42px;height:42px;border-radius:50%;border:0;background:rgba(255,255,255,.1);color:var(--brass);display:grid;place-items:center;cursor:pointer}
+.sheet-act{display:flex;gap:10px;position:sticky;bottom:0;padding-block:8px;background:var(--bg)}
+.sheet-act button{flex:1;min-height:52px;border-radius:999px;border:0;font-weight:700;font-size:1rem;cursor:pointer;box-shadow:var(--shadow)}
+.sheet-act .yes{background:var(--accent);color:var(--accent-ink)}
+.sheet-act .yes:disabled{opacity:.4;cursor:default;box-shadow:none}
+.sheet-act .no{background:var(--surface);color:var(--ink)}
+.sel-hint{text-align:center;font-size:.85rem;color:var(--muted);margin:2px 0 0}
 .histempty{display:grid;justify-items:center;gap:8px;text-align:center;background:var(--surface);border-radius:22px;padding:24px 18px;box-shadow:var(--shadow)}
 .he-ic{width:64px;height:64px;border-radius:50%;background:var(--accent-soft);color:var(--accent-text);display:grid;place-items:center;margin-bottom:4px}
 .he-t{font-weight:700;font-size:1.05rem}
@@ -164,7 +170,7 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
 .cbtns button{flex:1;min-height:46px;border-radius:999px;border:0;font-weight:700;cursor:pointer}
 .cbtns .yes{background:var(--accent);color:var(--accent-ink)}
 .cbtns .no{background:var(--surface);color:var(--ink)}
-@keyframes up{from{transform:translateY(100%)}to{transform:none}}
+@keyframes down{from{transform:translateY(-100%)}to{transform:none}}
 @keyframes fade{from{opacity:0}to{opacity:1}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 @media (max-width:360px){.grid2{grid-template-columns:1fr}}
@@ -279,12 +285,10 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
 <div class="scrim" id="scrim" hidden></div>
 <section class="sheet" id="histPanel" hidden aria-label="Historia ustawień" role="dialog" aria-modal="true">
   <div class="sheet-top">
-    <div class="handle" aria-hidden="true"></div>
     <div class="sheet-h">
       <span class="sheet-ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 3.5V8h4.5"/><path d="M12 7.5V12l3 2"/></svg></span>
       <h2>Historia</h2>
       <button type="button" class="smallbtn" id="histClear">Wyczyść</button>
-      <button type="button" class="closebtn" id="histClose" aria-label="Zamknij historię"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     </div>
   </div>
   <div class="sheet-in">
@@ -293,6 +297,12 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
       <div class="cbtns"><button type="button" class="yes" id="histClearYes">Usuń historię</button><button type="button" class="no" id="histClearNo">Anuluj</button></div>
     </div>
     <ol class="histlist" id="histList"></ol>
+    <p class="sel-hint" id="selHint">Stuknij wpis, który chcesz przywrócić.</p>
+    <div class="sheet-act">
+      <button type="button" class="yes" id="histRestore" disabled>Przywróć</button>
+      <button type="button" class="no" id="histCancel">Anuluj</button>
+    </div>
+    <div class="handle" aria-hidden="true"></div>
   </div>
 </section>
 
@@ -466,36 +476,35 @@ function histTime(t){const d=new Date(t),n=new Date(),p=x=>String(x).padStart(2,
   return d.toDateString()===n.toDateString()?hm:p(d.getDate())+"."+p(d.getMonth()+1)+" "+hm;}
 function histRender(){
   const L=$("histList");
-  if(!hist.length){L.innerHTML='<li class="histempty"><span class="he-ic"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 3.5V8h4.5"/><path d="M12 7.5V12l3 2"/></svg></span><span class="he-t">Historia jest pusta</span><span class="he-s">Zapisane ustawienia pojawią się tutaj, gdy zmienisz wymiary.</span></li>';$("histClear").hidden=true;return;}
+  if(!hist.length){L.innerHTML='<li class="histempty"><span class="he-ic"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 3.5V8h4.5"/><path d="M12 7.5V12l3 2"/></svg></span><span class="he-t">Historia jest pusta</span><span class="he-s">Zapisane ustawienia pojawią się tutaj, gdy zmienisz wymiary.</span></li>';$("histClear").hidden=true;histPending=null;syncRestore();return;}
   $("histClear").hidden=false;
   const cur=snap();
   L.innerHTML=hist.map((h,i)=>{
     const s=h.s, R=compute(s), f=x=>{const v=s.round?Math.round(x):Math.round(x*10)/10;return String(v).replace(".",",");};
     const holes=R.shelves.map(sh=>f(sh.hole)).join(", ")||"—";
     const isCur=same(s,cur);
-    return `<li><button type="button" class="histitem${isCur?" cur":""}${histPending===i?" sel":""}" data-i="${i}" aria-expanded="${histPending===i}">
+    return `<li><button type="button" class="histitem${isCur?" cur":""}${histPending===i?" sel":""}" data-i="${i}" aria-pressed="${histPending===i}">
       <span class="h1l">${f(s.H)} mm · ${s.n} ${plPolki(s.n)}</span><span class="htime">${histTime(h.t)}</span>
       <span class="h2l">${s.kon==="between"?"wieńce między bokami":"wieńce nakładane"} · osie: ${holes}</span><span class="hgo">${isCur?"obecne":"Przywróć"}</span>
-    </button>${histPending===i?`<div class="confirm">
-      <span>Przywrócić te ustawienia? Obecne zostaną zastąpione.</span>
-      <div class="cbtns"><button type="button" class="yes hc-yes" data-i="${i}">Przywróć</button><button type="button" class="no hc-no">Anuluj</button></div>
-    </div>`:""}</li>`;}).join("");
+    </button></li>`;}).join("");
+  syncRestore();
 }
+function syncRestore(){const ok=histPending!==null&&!!hist[histPending];$("histRestore").disabled=!ok;
+  $("selHint").hidden=!hist.length||ok;}
 function openSheet(){if(histTimer){clearTimeout(histTimer);histSave();}histPending=null;$("histClearConfirm").hidden=true;histRender();
-  $("scrim").hidden=false;$("histPanel").hidden=false;$("histBtn").setAttribute("aria-expanded","true");$("histClose").focus();}
+  $("scrim").hidden=false;$("histPanel").hidden=false;$("histBtn").setAttribute("aria-expanded","true");$("histCancel").focus({preventScroll:true});}
 function closeSheet(){$("scrim").hidden=true;$("histPanel").hidden=true;$("histBtn").setAttribute("aria-expanded","false");}
 $("histBtn").addEventListener("click",()=>{$("histPanel").hidden?openSheet():closeSheet();});
-$("histClose").addEventListener("click",closeSheet);
+$("histCancel").addEventListener("click",closeSheet);
 $("scrim").addEventListener("click",closeSheet);
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("histPanel").hidden)closeSheet();});
 $("histList").addEventListener("click",e=>{
-  if(e.target.closest(".hc-no")){histPending=null;histRender();return;}
-  const it=e.target.closest(".histitem");
-  if(it){$("histClearConfirm").hidden=true;const i=+it.dataset.i;if(it.classList.contains("cur"))return;histPending=histPending===i?null:i;histRender();
-    const y=$("histList").querySelector(".hc-yes");if(y)y.focus();return;}
-  const b=e.target.closest(".hc-yes");if(!b)return;
-  histPending=null;
-  const h=hist[+b.dataset.i];if(!h)return;
+  const it=e.target.closest(".histitem");if(!it)return;
+  $("histClearConfirm").hidden=true;
+  if(it.classList.contains("cur"))return;
+  const i=+it.dataset.i;histPending=histPending===i?null:i;histRender();});
+$("histRestore").addEventListener("click",()=>{
+  const h=hist[histPending];if(!h)return;histPending=null;
   state={...DEF,...h.s};toForm();render();clearTimeout(histTimer);histTimer=null;histRender();
   closeSheet();window.scrollTo({top:0,behavior:"smooth"});});
 $("histClear").addEventListener("click",()=>{histPending=null;histRender();const c=$("histClearConfirm");c.hidden=!c.hidden;if(!c.hidden)$("histClearNo").focus();});
