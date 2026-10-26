@@ -194,6 +194,10 @@ th{font-size:.9rem}
     </div>
     <section class="histpanel card" id="histPanel" hidden aria-label="Historia ustawień">
       <div class="hist-head"><h2>Ostatnie ustawienia</h2><button type="button" class="linkbtn" id="histClear">Wyczyść</button></div>
+      <div class="histconfirm" id="histClearConfirm" hidden role="group" aria-label="Potwierdź czyszczenie historii">
+        <span>Usunąć całą historię? Tej operacji nie można cofnąć.</span>
+        <div class="hc-btns"><button type="button" class="btn" id="histClearYes">Usuń historię</button><button type="button" class="btn ghost" id="histClearNo">Anuluj</button></div>
+      </div>
       <ol class="histlist" id="histList"></ol>
     </section>
     <p>Podaj wymiary boku i liczbę półek. Kalkulator wyznacza osie otworów pod podpórki, mierzone od dolnej krawędzi boku.</p>
@@ -487,7 +491,7 @@ function histRender(){
 $("histList").addEventListener("click",e=>{
   if(e.target.closest(".hc-no")){histPending=null;histRender();return;}
   const it=e.target.closest(".histitem");
-  if(it){const i=+it.dataset.i;if(it.classList.contains("cur"))return;histPending=histPending===i?null:i;histRender();
+  if(it){$("histClearConfirm").hidden=true;const i=+it.dataset.i;if(it.classList.contains("cur"))return;histPending=histPending===i?null:i;histRender();
     const y=$("histList").querySelector(".hc-yes");if(y)y.focus();return;}
   const b=e.target.closest(".hc-yes");if(!b)return;
   histPending=null;
@@ -497,8 +501,10 @@ $("histList").addEventListener("click",e=>{
   $("histPanel").hidden=true;$("histBtn").setAttribute("aria-expanded","false");
   window.scrollTo({top:0,behavior:"smooth"});});
 $("histBtn").addEventListener("click",()=>{if(histTimer){clearTimeout(histTimer);histTimer=null;histSave();}
-  histPending=null;const p=$("histPanel");p.hidden=!p.hidden;$("histBtn").setAttribute("aria-expanded",String(!p.hidden));histRender();});
-$("histClear").addEventListener("click",()=>{hist=[];try{localStorage.removeItem(HKEY);}catch(e){}histRender();});
+  histPending=null;$("histClearConfirm").hidden=true;const p=$("histPanel");p.hidden=!p.hidden;$("histBtn").setAttribute("aria-expanded",String(!p.hidden));histRender();});
+$("histClear").addEventListener("click",()=>{histPending=null;histRender();const c=$("histClearConfirm");c.hidden=!c.hidden;if(!c.hidden)$("histClearNo").focus();});
+$("histClearNo").addEventListener("click",()=>{$("histClearConfirm").hidden=true;});
+$("histClearYes").addEventListener("click",()=>{hist=[];try{localStorage.removeItem(HKEY);}catch(e){}$("histClearConfirm").hidden=true;histRender();});
 $("reset").addEventListener("click",()=>{state={...DEF};toForm();render();});
 toForm();render();histReady=true;histRender();
 })();
