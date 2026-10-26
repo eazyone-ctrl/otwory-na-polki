@@ -47,12 +47,6 @@ button{font:inherit;color:inherit}
 /* pasek aplikacji */
 .appbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;transition:transform .28s cubic-bezier(.2,.7,.2,1);will-change:transform;background:var(--bg);color:var(--ink)}
 .appbar-in{max-width:640px;margin:0 auto;display:flex;align-items:center;justify-content:flex-start;gap:10px;padding-block:14px 8px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-.logo{flex:none;width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.08);display:grid;place-items:center;color:var(--brass)}
-.brand{flex:1;min-width:0}
-.brand h1{margin:0;font:700 1.55rem/1 var(--f-disp);letter-spacing:.03em;color:var(--brass)}
-.brand h1{display:inline-block}
-.brand small{display:table;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;opacity:.75;margin-top:-3px;line-height:1.1;white-space:nowrap}
-.brand .maker{display:block;font-size:.6rem;font-weight:600;opacity:.65;margin-top:3px;line-height:1.25;overflow-wrap:anywhere}
 .iconbtn{flex:none;width:46px;height:46px;border-radius:50%;border:0;background:var(--surface);color:var(--accent-text);box-shadow:var(--shadow);display:grid;place-items:center;cursor:pointer;padding:0;transition:background .15s}
 .iconbtn:active{background:var(--surface-2)}
 .appname{flex:1;min-width:0;font:700 1.75rem/1 var(--f-disp);letter-spacing:.05em;color:var(--accent-text);margin:0}
@@ -63,13 +57,9 @@ html.is-dark .iconbtn .i-moon{display:none}
 /* treść */
 .app{max-width:640px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr);gap:14px;padding-block:16px 20px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .card{background:var(--surface);border-radius:22px;box-shadow:var(--shadow);padding:6px 16px;min-width:0}
-details.card>summary{list-style:none;display:flex;align-items:center;gap:12px;min-height:56px;cursor:pointer;user-select:none}
-details.card>summary::-webkit-details-marker{display:none}
+.sec-h{display:flex;align-items:center;gap:12px;min-height:56px}
 .sec-ic{flex:none;width:36px;height:36px;border-radius:11px;background:var(--accent-soft);color:var(--accent-text);display:grid;place-items:center}
 .sec-t{flex:1;font-weight:700;font-size:1.02rem}
-.chev{flex:none;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;color:var(--muted);transition:transform .32s}
-details[open]>summary .chev{transform:rotate(180deg)}
-details.closing>summary .chev{transform:none}
 .body{display:grid;gap:12px;padding-top:4px;padding-bottom:10px}
 
 /* pola */
@@ -138,17 +128,6 @@ body{padding-bottom:calc(58px + env(safe-area-inset-bottom,0px))}
 .foot{max-width:640px;margin:0 auto;display:grid;justify-items:center;gap:10px;text-align:center;color:var(--muted);font-size:.85rem;font-weight:600;letter-spacing:.04em;padding-top:4px;padding-bottom:max(28px,env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .foot-line{width:48px;height:3px;border-radius:2px;background:var(--brass);opacity:.7}
 
-/* menu */
-.menu-scrim{position:fixed;inset:0;z-index:35}
-.menu{position:fixed;z-index:36;top:calc(env(safe-area-inset-top,0px) + 70px);right:max(12px,env(safe-area-inset-right,0px));min-width:230px;background:var(--surface);border-radius:20px;box-shadow:0 12px 36px rgba(0,0,0,.28);padding:8px;display:grid;gap:2px;transform-origin:top right;animation:pop .2s ease-out}
-.mitem{display:flex;align-items:center;gap:14px;width:100%;border:0;background:transparent;border-radius:14px;padding:12px 14px;font-weight:600;font-size:1rem;color:var(--ink);cursor:pointer;text-align:left}
-.mitem:active{background:var(--surface-2)}
-.m-ic{flex:none;width:38px;height:38px;border-radius:12px;background:var(--accent-soft);color:var(--accent-text);display:grid;place-items:center}
-.mitem .i-sun{display:none}
-html.is-dark .mitem .i-sun{display:block}
-html.is-dark .mitem .i-moon{display:none}
-@keyframes pop{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:none}}
-#menuBtn[aria-expanded=true]{background:rgba(255,255,255,.2)}
 /* podgląd pdf */
 .pdfmodal{position:fixed;inset:0;z-index:50;background:rgba(6,9,5,.75);display:grid;place-items:center;padding:max(16px,env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px));animation:fade .2s}
 .pdf-box{width:min(560px,100%);max-height:100%;overflow:auto;background:var(--surface);border-radius:20px;padding:14px;display:grid;gap:10px}
@@ -159,17 +138,17 @@ html.is-dark .mitem .i-moon{display:none}
 .pdf-pages img{width:100%;border-radius:6px;box-shadow:0 2px 10px rgba(0,0,0,.25);background:#fff}
 .toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 24px);transform:translateX(-50%);z-index:60;background:var(--ink);color:var(--surface);padding:12px 18px;border-radius:999px;font-weight:600;font-size:.92rem;box-shadow:0 6px 20px rgba(0,0,0,.3);animation:fade .2s;max-width:calc(100% - 32px);text-align:center}
 .appbar.hide{transform:translateY(calc(-100% - 12px))}
+input::placeholder{color:var(--muted);opacity:.55}
 /* dolny arkusz historii */
 .scrim{position:fixed;inset:0;z-index:40;background:rgba(6,9,5,.72);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);animation:fade .25s}
 .sheet{position:fixed;left:0;right:0;top:0;z-index:41;max-height:88vh;overflow:auto;background:var(--bg);border-radius:0 0 26px 26px;box-shadow:0 10px 30px rgba(0,0,0,.3);padding-bottom:16px;animation:down .3s ease-out}
-.sheet-top{position:sticky;top:0;z-index:1;padding-top:calc(env(safe-area-inset-top,0px) + 14px)!important;background:linear-gradient(135deg,var(--bar1),var(--bar2));color:#F3EEDD;padding-top:8px;padding-bottom:14px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.sheet-top{position:sticky;top:0;z-index:1;padding-top:calc(env(safe-area-inset-top,0px) + 14px);background:linear-gradient(135deg,var(--bar1),var(--bar2));color:#F3EEDD;padding-bottom:14px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .sheet-in{max-width:640px;margin:0 auto;display:grid;gap:10px;padding-top:14px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .handle{width:44px;height:5px;border-radius:3px;background:var(--line);margin:4px auto 0}
 .sheet-h{max-width:640px;margin:0 auto;display:flex;align-items:center;gap:10px}
 .sheet-ic{flex:none;width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.08);color:var(--brass);display:grid;place-items:center}
 .sheet-h h2{flex:1;margin:0;font:700 1.45rem/1 var(--f-disp);letter-spacing:.03em;color:var(--brass)}
 .smallbtn{border:0;background:rgba(255,255,255,.1);color:var(--brass);font-weight:700;font-size:.85rem;border-radius:999px;padding:10px 14px;cursor:pointer}
-.closebtn{width:42px;height:42px;border-radius:50%;border:0;background:rgba(255,255,255,.1);color:var(--brass);display:grid;place-items:center;cursor:pointer}
 .sheet-act{display:flex;gap:10px;position:sticky;bottom:0;padding-block:8px;background:var(--bg)}
 .sheet-act button{flex:1;min-height:52px;border-radius:999px;border:0;font-weight:700;font-size:1rem;cursor:pointer;box-shadow:var(--shadow)}
 .sheet-act .yes{background:var(--accent);color:var(--accent-ink)}
@@ -180,20 +159,15 @@ html.is-dark .mitem .i-moon{display:none}
 .he-ic{width:64px;height:64px;border-radius:50%;background:var(--accent-soft);color:var(--accent-text);display:grid;place-items:center;margin-bottom:4px}
 .he-t{font-weight:700;font-size:1.05rem}
 .he-s{font-size:.9rem;color:var(--muted);max-width:30ch}
-.histitem{background:var(--surface)!important;box-shadow:var(--shadow)}
-.histitem{transition:background .2s,border-color .2s}
-.histitem:active{background:var(--surface-2)!important}
-.histitem.sel{background:var(--accent-soft)!important;border-color:var(--accent)}
-.histitem.sel+.confirm{margin-top:-2px}
+.histitem:active{background:var(--surface-2)}
+.histitem.sel{background:var(--accent-soft);border-color:var(--accent)}
 .histlist{list-style:none;margin:0;padding:0;display:grid;gap:8px}
-.histitem{width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;align-items:center;text-align:left;border:2px solid transparent;background:var(--surface-2);border-radius:16px;padding:12px 14px;cursor:pointer}
+.histitem{width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;align-items:center;text-align:left;border:2px solid transparent;background:var(--surface);box-shadow:var(--shadow);border-radius:16px;padding:12px 14px;cursor:pointer;transition:background .2s,border-color .2s}
 .histitem.cur{border-color:var(--accent)}
 .h1l{font-weight:700}
 .htime{font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums}
 .h2l{grid-column:1/-1;font-size:.85rem;color:var(--muted);overflow-wrap:anywhere}
 .h3l{color:var(--ink);font-weight:600}
-.hgo{font-size:.85rem;font-weight:700;color:var(--accent-text)}
-.histitem.cur .hgo{color:var(--muted);font-weight:500}
 .confirm{display:grid;gap:10px;margin-top:6px;padding:14px;border-radius:16px;background:var(--accent-soft);font-size:.92rem;font-weight:500}
 .cbtns{display:flex;gap:10px}
 .cbtns button{flex:1;min-height:46px;border-radius:999px;border:0;font-weight:700;cursor:pointer}
@@ -226,12 +200,11 @@ html.is-dark .mitem .i-moon{display:none}
 
 <form class="app" id="f" autocomplete="off">
 
-  <details class="card fold" open data-key="bok">
-    <summary>
+  <section class="card" data-key="bok">
+    <div class="sec-h">
       <span class="sec-ic"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M5 6h14M5 18h14"/></svg></span>
       <span class="sec-t">Korpus</span>
-      <span class="chev"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
-    </summary>
+    </div>
     <div class="body">
       <div class="grid2">
         <label class="field"><span class="f-lab">Wysokość boku</span><span class="f-row"><input type="number" inputmode="decimal" id="H" value="720" min="100" step="1"><span class="f-unit">mm</span></span></label>
@@ -245,14 +218,13 @@ html.is-dark .mitem .i-moon{display:none}
       </div>
       <label class="field" id="cokolWrap"><span class="f-lab">Wieniec dolny podniesiony o (cokół)</span><span class="f-row"><input type="number" inputmode="decimal" id="c" value="0" min="0" step="1"><span class="f-unit">mm</span></span></label>
     </div>
-  </details>
+  </section>
 
-  <details class="card fold" open data-key="polki">
-    <summary>
+  <section class="card" data-key="polki">
+    <div class="sec-h">
       <span class="sec-ic"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 8h16M4 15h16"/><circle cx="6" cy="11" r="1.2" fill="currentColor" stroke="none"/><circle cx="18" cy="11" r="1.2" fill="currentColor" stroke="none"/></svg></span>
       <span class="sec-t">Półki</span>
-      <span class="chev"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
-    </summary>
+    </div>
     <div class="body">
       <div>
         <div class="stepper">
@@ -281,16 +253,15 @@ html.is-dark .mitem .i-moon{display:none}
       <label class="switch" id="fullWrap" hidden><input type="checkbox" id="full" role="switch"><span class="track"><span class="thumb"></span></span><span class="sw-t">Wierć pełny rząd rastra</span></label>
       <label class="switch"><input type="checkbox" id="round" role="switch" checked><span class="track"><span class="thumb"></span></span><span class="sw-t">Zaokrąglaj do pełnych milimetrów</span></label>
     </div>
-  </details>
+  </section>
 
   <div id="warn" class="warn" hidden></div>
 
-  <details class="card fold" open data-key="tabela">
-    <summary>
+  <section class="card" data-key="tabela">
+    <div class="sec-h">
       <span class="sec-ic"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 20V5M4 9l4-4 4 4M16 4v15M12 15l4 4 4-4"/></svg></span>
       <span class="sec-t">Wymiary</span>
-      <span class="chev"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
-    </summary>
+    </div>
     <div class="body">
       <div class="seg" id="dir" role="group" aria-label="Kierunek pomiaru">
         <button type="button" data-v="dol" aria-pressed="true">Od dołu</button>
@@ -299,7 +270,7 @@ html.is-dark .mitem .i-moon{display:none}
       <div class="shelves" id="tbl"></div>
       <div class="shelves" id="tblTop" hidden></div>
     </div>
-  </details>
+  </section>
 
 
   <button type="button" class="textbtn" id="reset">
@@ -341,7 +312,7 @@ html.is-dark .mitem .i-moon{display:none}
 <script>
 (function(){
 const $=id=>document.getElementById(id);
-const DEF={H:720,D:560,t:18,c:0,n:2,ts:18,p:2.5,k:1,fx:37,bx:37,dia:5,full:false,round:true,kon:"between",mode:"equal"};
+const DEF={H:720,t:18,c:0,n:2,ts:18,p:2.5,k:1,dia:5,full:false,round:true,kon:"between",mode:"equal"};
 const numIds=["H","t","c","n","ts","p","dia"];
 let state={...DEF};
 try{const s=JSON.parse(localStorage.getItem("otwory-polki-v5")||"null");if(s)state={...DEF,...s};}catch(e){}
@@ -349,7 +320,7 @@ try{const s=JSON.parse(localStorage.getItem("otwory-polki-v5")||"null");if(s)sta
 function setSeg(id,v){document.querySelectorAll("#"+id+" button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.v===v));}
 function toForm(){numIds.forEach(id=>$(id).value=state[id]);state.k=state.k>=1?1:0;$("full").checked=state.full;$("round").checked=state.round;
   setSeg("kon",state.kon);setSeg("mode",state.mode);setSeg("k",String(state.k));}
-function fromForm(){numIds.forEach(id=>{const v=parseFloat($(id).value);state[id]=isFinite(v)?v:0;});
+function fromForm(){numIds.forEach(id=>{const el=$(id);const raw=el.value===""&&el.dataset.prev!==undefined?el.dataset.prev:el.value;const v=parseFloat(raw);state[id]=isFinite(v)?v:0;});
   state.n=Math.max(0,Math.round(state.n));state.full=$("full").checked;state.round=$("round").checked;}
 const r1=x=>Math.round(x*10)/10;
 const fmt=x=>{const v=state.round?Math.round(x):r1(x);return (Number.isInteger(v)?v.toString():v.toFixed(1)).replace(".",",");};
@@ -450,41 +421,12 @@ function syncTheme(){const d=isDark();root.classList.toggle("is-dark",d);$("them
 try{const th=localStorage.getItem("otwory-motyw");if(th==="dark"||th==="light")root.setAttribute("data-theme",th);}catch(e){}
 syncTheme();
 try{matchMedia("(prefers-color-scheme: dark)").addEventListener("change",syncTheme);}catch(e){}
-$("themeBtn").addEventListener("click",()=>{closeMenu();const next=isDark()?"light":"dark";
+$("themeBtn").addEventListener("click",()=>{const next=isDark()?"light":"dark";
   if((next==="dark")===sysDark()){root.removeAttribute("data-theme");try{localStorage.removeItem("otwory-motyw");}catch(e){}}
   else{root.setAttribute("data-theme",next);try{localStorage.setItem("otwory-motyw",next);}catch(e){}}
   syncTheme();});
 
-// zwijane sekcje
-document.querySelectorAll("details.fold").forEach(d=>{
-  const key="otwory-zw2-"+d.dataset.key;
-  let open=d.dataset.default!=="0";
-  try{const v=localStorage.getItem(key);if(v==="1")open=true;else if(v==="0")open=false;}catch(e){}
-  d.open=open;
-  d.addEventListener("toggle",()=>{try{localStorage.setItem(key,d.open?"1":"0");}catch(e){}});
-  // animacja rozwijania i zwijania
-  const sm=d.querySelector("summary"), body=d.querySelector(".body");
-  let anim=null;
-  sm.addEventListener("click",e=>{
-    const reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if(reduce||!body.animate)return;
-    e.preventDefault();
-    if(anim){anim.cancel();anim=null;}
-    const opening=!d.open||d.classList.contains("closing");
-    body.style.overflow="hidden";
-    if(opening){
-      d.classList.remove("closing");d.open=true;
-      const h=body.scrollHeight;
-      anim=body.animate([{height:"0px",opacity:0,transform:"translateY(-6px)"},{height:h+"px",opacity:1,transform:"none"}],{duration:400,easing:"cubic-bezier(.2,.75,.25,1)"});
-      anim.onfinish=()=>{body.style.overflow="";anim=null;};
-    }else{
-      const h=body.scrollHeight;
-      d.classList.add("closing");
-      anim=body.animate([{height:h+"px",opacity:1,transform:"none"},{height:"0px",opacity:0,transform:"translateY(-6px)"}],{duration:320,easing:"cubic-bezier(.4,0,.6,1)"});
-      anim.onfinish=()=>{d.open=false;d.classList.remove("closing");body.style.overflow="";anim=null;};
-    }
-  });
-});
+
 
 // historia
 const HKEY="otwory-historia", HKEYS=["H","t","c","n","ts","p","k","dia","full","round","kon","mode"];
@@ -546,7 +488,7 @@ function closeSheet(){
   sc.animate([{opacity:1},{opacity:0}],{duration:300,easing:"ease-in",fill:"forwards"});
   sh.animate([{transform:"none"},{transform:"translateY(-100%)"}],{duration:300,easing:"cubic-bezier(.4,0,.7,.2)",fill:"forwards"}).onfinish=done;
 }
-$("histBtn").addEventListener("click",()=>{closeMenu();$("histPanel").hidden?openSheet():closeSheet();});
+$("histBtn").addEventListener("click",()=>{$("histPanel").hidden?openSheet():closeSheet();});
 $("histCancel").addEventListener("click",closeSheet);
 $("scrim").addEventListener("click",closeSheet);
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("histPanel").hidden)closeSheet();});
@@ -566,9 +508,7 @@ $("histClearYes").addEventListener("click",()=>{hist=[];try{localStorage.removeI
 $("reset").addEventListener("click",()=>{state={...DEF};toForm();render();window.scrollTo({top:0,behavior:"smooth"});});
 document.addEventListener("contextmenu",e=>{if(!e.target.closest("input"))e.preventDefault();});
 
-// ---- menu ----
-function closeMenu(){}
-document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeMenu();$("pdfModal").hidden=true;}});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$("pdfModal").hidden=true;});
 
 function toast(msg){const t=document.createElement("div");t.className="toast";t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2600);}
 
@@ -671,7 +611,6 @@ function buildPdf(jpegs){
 }
 function b64(bytes){let s="";const ch=0x8000;for(let i=0;i<bytes.length;i+=ch)s+=String.fromCharCode.apply(null,bytes.subarray(i,i+ch));return btoa(s);}
 async function sharePdf(){
-  closeMenu();
   try{await (document.fonts?document.fonts.ready:Promise.resolve());}catch(e){}
   const pages=pdfPages();
   const jpegs=pages.map(c=>({w:c.width,h:c.height,data:dataUrlBytes(c.toDataURL("image/jpeg",.9))}));
@@ -700,6 +639,14 @@ $("pdfModal").addEventListener("click",e=>{if(e.target===$("pdfModal"))$("pdfMod
     else if(d<-6)bar.classList.remove("hide");
     if(Math.abs(d)>6)last=y;ticking=false;});},{passive:true});})();
 try{$("year").textContent=Math.max(2026,new Date().getFullYear());}catch(e){}
+// po dotknięciu pola stara wartość staje się podpowiedzią, a pole jest puste do wpisania nowej
+(function(){
+  document.addEventListener("focusin",e=>{const el=e.target;if(!(el instanceof HTMLInputElement)||el.type!=="number")return;
+    el.dataset.prev=el.value;el.placeholder=el.value;el.value="";});
+  document.addEventListener("focusout",e=>{const el=e.target;if(!(el instanceof HTMLInputElement)||el.type!=="number"||el.dataset.prev===undefined)return;
+    if(el.value==="")el.value=el.dataset.prev;
+    delete el.dataset.prev;el.placeholder="";fromForm();render();});
+})();
 toForm();render();histReady=true;histRender();
 })();
 </script>
