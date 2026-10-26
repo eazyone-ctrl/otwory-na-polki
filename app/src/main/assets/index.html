@@ -87,7 +87,8 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
 .stp{width:56px;height:52px;border:0;border-radius:14px;background:var(--surface);color:var(--accent-text);font:600 1.6rem var(--f-body);display:grid;place-items:center;cursor:pointer;box-shadow:var(--shadow);touch-action:manipulation}
 .stp:active{background:var(--accent);color:var(--accent-ink)}
 .stp:disabled{opacity:.35;cursor:default;box-shadow:none}
-.stepper input{all:unset;text-align:center;font:700 2rem var(--f-disp);color:var(--ink);min-width:0}
+.stepper input{all:unset;display:block;width:100%;box-sizing:border-box;text-align:center;font:700 2rem var(--f-disp);color:var(--ink);min-width:0}
+.stepper>div{min-width:0;text-align:center}
 .stepper .cap{display:block;text-align:center;font-size:.72rem;color:var(--muted);font-weight:600;margin-top:-4px}
 
 .switch{display:flex;align-items:center;gap:14px;min-height:48px;cursor:pointer;padding:4px 4px}
