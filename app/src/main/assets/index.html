@@ -34,6 +34,25 @@ header{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 16px;margin-bott
 .top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex:1 1 100%}
 .themebtn{flex:none;width:44px;height:44px;display:grid;place-items:center;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--accent-text);cursor:pointer;padding:0}
 .themebtn:hover{border-color:var(--accent)}
+.tools{display:flex;gap:10px;flex:none}
+#histBtn[aria-expanded=true]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.histpanel{flex:1 1 100%;display:grid;gap:10px;margin-top:8px}
+.hist-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.hist-head h2{margin:0;font-size:1.1rem}
+.linkbtn{font:500 .9rem var(--f-body);color:var(--accent-text);background:none;border:0;padding:8px 4px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.histlist{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.histitem{width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:4px 12px;text-align:left;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;cursor:pointer}
+.histitem:hover{border-color:var(--accent)}
+.histitem .h1l{font-weight:600}
+.histitem .h2l{grid-column:1;font:400 .88rem var(--f-mono);color:var(--muted);overflow-wrap:anywhere}
+.histitem .htime{grid-column:2;grid-row:1;font:400 .82rem var(--f-mono);color:var(--muted)}
+.histitem .hgo{grid-column:2;grid-row:2;font:600 .88rem var(--f-body);color:var(--accent-text)}
+.histitem.cur{border-color:var(--accent)}
+.histitem.cur .hgo{color:var(--muted);font-weight:400}
+.histconfirm{display:grid;gap:10px;margin-top:6px;padding:12px;border:1px solid var(--accent);border-radius:8px;background:var(--panel);font-size:.95rem}
+.hc-btns{display:flex;gap:10px;flex-wrap:wrap}
+.hc-btns .btn{flex:1 1 120px;min-height:44px}
+.histempty{color:var(--muted);font-size:.92rem;margin:0}
 .themebtn .i-sun{display:none}
 html.is-dark .themebtn .i-sun{display:block}
 html.is-dark .themebtn .i-moon{display:none}
@@ -154,11 +173,20 @@ th{font-size:.9rem}
   <header>
     <div class="top">
       <h1>Pułkownik</h1>
+      <div class="tools">
       <button type="button" class="themebtn" id="themeBtn" aria-label="Przełącz tryb ciemny" title="Tryb ciemny">
         <svg class="i-moon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
         <svg class="i-sun" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>
       </button>
+      <button type="button" class="themebtn" id="histBtn" aria-label="Historia ustawień" aria-expanded="false" aria-controls="histPanel" title="Historia">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 3.5V8h4.5"/><path d="M12 7.5V12l3 2"/></svg>
+      </button>
+      </div>
     </div>
+    <section class="histpanel card" id="histPanel" hidden aria-label="Historia ustawień">
+      <div class="hist-head"><h2>Ostatnie ustawienia</h2><button type="button" class="linkbtn" id="histClear">Wyczyść</button></div>
+      <ol class="histlist" id="histList"></ol>
+    </section>
     <p>Podaj wymiary boku i liczbę półek. Kalkulator wyznacza osie otworów pod podpórki, mierzone od dolnej krawędzi boku.</p>
   </header>
 
@@ -380,6 +408,7 @@ function render(){
   R.shelves.forEach(sh=>L.push(`Półka ${sh.i}: oś ${fmt(sh.hole)} mm od dołu`+(sh.adj.length?` — otwory: ${sh.adj.concat([sh.hole]).sort((a,b)=>a-b).map(fmt).join(", ")}`:"")));
   $("copyOut").value=L.join("\n");
   try{localStorage.setItem("otwory-polki-v5",JSON.stringify(state));}catch(e){}
+  if(histReady)histSchedule();
 }
 
 $("f").addEventListener("input",()=>{fromForm();render();});
@@ -410,8 +439,59 @@ document.querySelectorAll("details.fold").forEach(d=>{
   const sync=()=>{hint.textContent=d.open?"Ukryj":"Pokaż";};sync();
   d.addEventListener("toggle",()=>{sync();try{localStorage.setItem(key,d.open?"1":"0");}catch(e){}});
 });
+// ---- historia: 5 ostatnich ustawień ----
+const HKEY="otwory-historia", HKEYS=["H","t","c","n","ts","p","k","dia","full","round","kon","mode"];
+let histReady=false, histTimer=null, hist=[], histPending=null;
+try{hist=JSON.parse(localStorage.getItem(HKEY)||"[]");if(!Array.isArray(hist))hist=[];}catch(e){hist=[];}
+const snap=()=>{const o={};HKEYS.forEach(k=>o[k]=state[k]);return o;};
+const same=(a,b)=>HKEYS.every(k=>a[k]===b[k]);
+function histSave(){
+  const sn=snap();
+  hist=hist.filter(h=>!same(h.s,sn));
+  hist.unshift({t:Date.now(),s:sn});
+  hist=hist.slice(0,5);
+  try{localStorage.setItem(HKEY,JSON.stringify(hist));}catch(e){}
+  histRender();
+}
+function histSchedule(){clearTimeout(histTimer);histTimer=setTimeout(histSave,1500);}
+function plPolki(n){const a=n%10,b=n%100;return n===1?"półka":(a>=2&&a<=4&&!(b>=12&&b<=14))?"półki":"półek";}
+function histTime(t){const d=new Date(t),n=new Date(),p=x=>String(x).padStart(2,"0");
+  const hm=p(d.getHours())+":"+p(d.getMinutes());
+  return d.toDateString()===n.toDateString()?hm:p(d.getDate())+"."+p(d.getMonth()+1)+" "+hm;}
+function histRender(){
+  const L=$("histList"); if(!L)return;
+  if(!hist.length){L.innerHTML='<li><p class="histempty">Brak zapisanych ustawień. Pojawią się tu po zmianie wymiarów.</p></li>';$("histClear").hidden=true;return;}
+  $("histClear").hidden=false;
+  const cur=snap();
+  L.innerHTML=hist.map((h,i)=>{
+    const s=h.s, R=compute(s), f=x=>{const v=s.round?Math.round(x):Math.round(x*10)/10;return String(v).replace(".",",");};
+    const holes=R.shelves.map(sh=>f(sh.hole)).join(", ")||"—";
+    const isCur=same(s,cur);
+    return `<li><button type="button" class="histitem${isCur?" cur":""}" data-i="${i}">
+      <span class="h1l">${f(s.H)} mm · ${s.n} ${plPolki(s.n)}</span><span class="htime">${histTime(h.t)}</span>
+      <span class="h2l">${s.kon==="between"?"wieńce między bokami":"wieńce nakładane"} · osie: ${holes}</span><span class="hgo">${isCur?"obecne":"Przywróć"}</span>
+    </button>${histPending===i?`<div class="histconfirm" role="group" aria-label="Potwierdź przywrócenie">
+      <span>Przywrócić te ustawienia? Obecne zostaną zastąpione.</span>
+      <div class="hc-btns"><button type="button" class="btn hc-yes" data-i="${i}">Przywróć</button><button type="button" class="btn ghost hc-no">Anuluj</button></div>
+    </div>`:""}</li>`;}).join("");
+}
+$("histList").addEventListener("click",e=>{
+  if(e.target.closest(".hc-no")){histPending=null;histRender();return;}
+  const it=e.target.closest(".histitem");
+  if(it){const i=+it.dataset.i;if(it.classList.contains("cur"))return;histPending=histPending===i?null:i;histRender();
+    const y=$("histList").querySelector(".hc-yes");if(y)y.focus();return;}
+  const b=e.target.closest(".hc-yes");if(!b)return;
+  histPending=null;
+  const h=hist[+b.dataset.i];if(!h)return;
+  clearTimeout(histTimer);
+  state={...DEF,...h.s};toForm();render();clearTimeout(histTimer);histRender();
+  $("histPanel").hidden=true;$("histBtn").setAttribute("aria-expanded","false");
+  window.scrollTo({top:0,behavior:"smooth"});});
+$("histBtn").addEventListener("click",()=>{if(histTimer){clearTimeout(histTimer);histTimer=null;histSave();}
+  histPending=null;const p=$("histPanel");p.hidden=!p.hidden;$("histBtn").setAttribute("aria-expanded",String(!p.hidden));histRender();});
+$("histClear").addEventListener("click",()=>{hist=[];try{localStorage.removeItem(HKEY);}catch(e){}histRender();});
 $("reset").addEventListener("click",()=>{state={...DEF};toForm();render();});
-toForm();render();
+toForm();render();histReady=true;histRender();
 })();
 </script>
 </body>
