@@ -85,7 +85,7 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
 .seg button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink);box-shadow:0 2px 6px rgba(30,37,27,.2)}
 
 .stepper{display:grid;grid-template-columns:56px minmax(0,1fr) 56px;align-items:center;background:var(--surface-2);border-radius:18px;padding:6px}
-.stp{width:56px;height:52px;border:0;border-radius:14px;background:var(--surface);color:var(--accent-text);font:600 1.6rem var(--f-body);display:grid;place-items:center;cursor:pointer;box-shadow:var(--shadow);touch-action:manipulation}
+.stp{width:56px;height:52px;border:0;border-radius:14px;background:var(--surface);color:var(--accent-text);padding:0;line-height:0;display:grid;place-items:center;justify-self:center;cursor:pointer;box-shadow:var(--shadow);touch-action:manipulation}
 .stp:active{background:var(--accent);color:var(--accent-ink)}
 .stp:disabled{opacity:.35;cursor:default;box-shadow:none}
 .stepper input{all:unset;display:block;width:100%;box-sizing:border-box;text-align:center;font:700 2rem var(--f-disp);color:var(--ink);min-width:0}
@@ -205,9 +205,9 @@ input[type=number]{-moz-appearance:textfield;appearance:textfield}
     <div class="body">
       <div>
         <div class="stepper">
-          <button type="button" class="stp" id="nMinus" aria-label="Mniej półek">−</button>
+          <button type="button" class="stp" id="nMinus" aria-label="Mniej półek"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg></button>
           <div><input type="number" inputmode="numeric" id="n" value="2" min="1" max="20" step="1" aria-label="Liczba półek"><span class="cap">liczba półek</span></div>
-          <button type="button" class="stp" id="nPlus" aria-label="Więcej półek">+</button>
+          <button type="button" class="stp" id="nPlus" aria-label="Więcej półek"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg></button>
         </div>
       </div>
       <label class="field"><span class="f-lab">Grubość półki</span><span class="f-row"><input type="number" inputmode="decimal" id="ts" value="18" min="1" step="0.5"><span class="f-unit">mm</span></span></label>
