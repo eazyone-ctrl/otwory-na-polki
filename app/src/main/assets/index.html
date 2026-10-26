@@ -56,6 +56,8 @@ header{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 16px;margin-bott
 .histconfirm{display:grid;gap:10px;margin-top:6px;padding:12px;border:1px solid var(--accent);border-radius:8px;background:var(--panel);font-size:.95rem}
 .hc-btns{display:flex;gap:10px;flex-wrap:wrap}
 .hc-btns .btn{flex:1 1 120px;min-height:44px}
+.resetcard{display:flex;justify-content:center}
+.resetcard .btn{min-height:44px;flex:0 1 320px}
 .histempty{color:var(--muted);font-size:.92rem;margin:0}
 .themebtn .i-sun{display:none}
 html.is-dark .themebtn .i-sun{display:block}
@@ -261,18 +263,6 @@ th{font-size:.9rem}
         </div>
       </details>
 
-      <details class="card drawing fold" data-key="rysunek" data-default="0">
-        <summary class="fold-h"><h2>Rysunek boku</h2><span class="sumhint"></span></summary>
-        <div class="fold-b">
-        <div class="legend">
-          <span><i style="background:var(--hole)"></i>otwór środkowy (półka)</span>
-          <span><i style="background:var(--hole-soft)"></i>otwór regulacyjny ±32</span>
-          <span><i style="background:var(--shelf);border-radius:1px;height:4px;vertical-align:2px"></i>półka</span>
-          <span>przód boku po lewej</span>
-        </div>
-        <div id="svgHost"></div>
-        </div>
-      </details>
 
       <details class="card fold" open data-key="tabela">
         <summary class="fold-h"><h2>Wymiary od dołu</h2><span class="sumhint"></span></summary>
@@ -280,7 +270,6 @@ th{font-size:.9rem}
         <div class="tablewrap"><table id="tbl"></table></div>
         <div class="actions">
           <button type="button" class="btn" id="copy">Kopiuj wymiary</button>
-          <button type="button" class="btn ghost" id="reset">Przywróć domyślne</button>
         </div>
         <textarea id="copyOut" rows="6" readonly hidden aria-label="Wymiary do skopiowania"></textarea>
       </div>
@@ -293,6 +282,10 @@ th{font-size:.9rem}
         <div class="tablewrap"><table id="tblTop"></table></div>
       </div>
       </details>
+
+      <section class="card resetcard" aria-label="Ustawienia domyślne">
+        <button type="button" class="btn ghost" id="reset">Przywróć domyślne</button>
+      </section>
 
     </div>
   </div>
@@ -416,7 +409,6 @@ function render(){
     ["Wnętrze",R.inner>0?fmt(R.inner)+" mm":"—"],
     ["Prześwit",gaps.length?(s.mode==="equal"?fmt(gaps[0]):fmt(Math.min(...gaps))+"–"+fmt(Math.max(...gaps)))+" mm":"—"],
   ].map(([a,b])=>`<div><dt>${a}</dt><dd>${b}</dd></div>`).join("");
-  $("svgHost").innerHTML=R.inner>0?svgEl(s,R):"";
   let t=`<thead><tr><th>Półka</th><th>Oś otworu od dołu</th><th>Od góry boku</th><th>Spód półki</th><th>Wszystkie otwory półki</th></tr></thead><tbody>`;
   R.shelves.forEach((sh,idx)=>{
     t+=`<tr><td class="sh"><span class="m">Półka </span>${sh.i}</td><td class="key" data-l="Oś otworu od dołu">${fmt(sh.hole)}</td><td data-l="Od góry boku">${fmt(s.H-sh.hole)}</td><td data-l="Spód półki">${fmt(sh.bottom)}</td><td class="adj" data-l="Otwory">${sh.adj.concat([sh.hole]).sort((a,b)=>a-b).map(y=>y===sh.hole?"<b>"+fmt(y)+"</b>":fmt(y)).join(" · ")}</td></tr>`;
@@ -460,7 +452,7 @@ $("themeBtn").addEventListener("click",()=>{const next=isDark()?"light":"dark";
   else{root.setAttribute("data-theme",next);try{localStorage.setItem("otwory-motyw",next);}catch(e){}}
   syncTheme();});
 document.querySelectorAll("details.fold").forEach(d=>{
-  const key="otwory-zw-"+d.dataset.key, hint=d.querySelector(".sumhint");
+  const key="otwory-zw2-"+d.dataset.key, hint=d.querySelector(".sumhint");
   let open=d.dataset.default!=="0";
   try{const v=localStorage.getItem(key);if(v==="1")open=true;else if(v==="0")open=false;}catch(e){}
   d.open=open;
