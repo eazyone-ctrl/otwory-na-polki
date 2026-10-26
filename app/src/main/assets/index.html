@@ -57,14 +57,15 @@ html.is-dark .iconbtn .i-moon{display:none}
 
 /* treść */
 .app{max-width:640px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr);gap:14px;padding-block:16px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-.card{background:var(--surface);border-radius:22px;box-shadow:var(--shadow);padding:6px 16px 16px;min-width:0}
+.card{background:var(--surface);border-radius:22px;box-shadow:var(--shadow);padding:6px 16px;min-width:0}
 details.card>summary{list-style:none;display:flex;align-items:center;gap:12px;min-height:56px;cursor:pointer;user-select:none}
 details.card>summary::-webkit-details-marker{display:none}
 .sec-ic{flex:none;width:36px;height:36px;border-radius:11px;background:var(--accent-soft);color:var(--accent-text);display:grid;place-items:center}
 .sec-t{flex:1;font-weight:700;font-size:1.02rem}
-.chev{flex:none;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;color:var(--muted);transition:transform .2s}
+.chev{flex:none;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;color:var(--muted);transition:transform .32s}
 details[open]>summary .chev{transform:rotate(180deg)}
-.body{display:grid;gap:12px;padding-top:4px}
+details.closing>summary .chev{transform:none}
+.body{display:grid;gap:12px;padding-top:4px;padding-bottom:10px}
 
 /* pola */
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:stretch}
@@ -380,9 +381,11 @@ $("f").addEventListener("input",()=>{fromForm();render();});
 $("f").addEventListener("change",()=>{fromForm();render();});
 $("f").addEventListener("submit",e=>e.preventDefault());
 let dir="dol";try{if(localStorage.getItem("otwory-kierunek")==="gora")dir="gora";}catch(e){}
-function syncDir(){setSeg("dir",dir);$("tbl").hidden=dir!=="dol";$("tblTop").hidden=dir!=="gora";}
+function syncDir(anim){setSeg("dir",dir);$("tbl").hidden=dir!=="dol";$("tblTop").hidden=dir!=="gora";
+  const el=$(dir==="dol"?"tbl":"tblTop");
+  if(anim&&el.animate&&!(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches))el.animate([{opacity:0,transform:"translateX("+(dir==="dol"?"-":"")+"14px)"},{opacity:1,transform:"none"}],{duration:340,easing:"cubic-bezier(.2,.75,.25,1)"});}
 syncDir();
-$("dir").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;dir=b.dataset.v;syncDir();try{localStorage.setItem("otwory-kierunek",dir);}catch(e){}});
+$("dir").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;if(dir===b.dataset.v)return;dir=b.dataset.v;syncDir(true);try{localStorage.setItem("otwory-kierunek",dir);}catch(e){}});
 $("k").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;state.k=+b.dataset.v;setSeg("k",b.dataset.v);render();});
 ["kon","mode"].forEach(id=>$(id).addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;state[id]=b.dataset.v;setSeg(id,b.dataset.v);render();}));
 function stepN(d){const v=Math.min(20,Math.max(1,(Math.round(state.n)||0)+d));$("n").value=v;fromForm();render();}
@@ -409,6 +412,28 @@ document.querySelectorAll("details.fold").forEach(d=>{
   try{const v=localStorage.getItem(key);if(v==="1")open=true;else if(v==="0")open=false;}catch(e){}
   d.open=open;
   d.addEventListener("toggle",()=>{try{localStorage.setItem(key,d.open?"1":"0");}catch(e){}});
+  // animacja rozwijania i zwijania
+  const sm=d.querySelector("summary"), body=d.querySelector(".body");
+  let anim=null;
+  sm.addEventListener("click",e=>{
+    const reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if(reduce||!body.animate)return;
+    e.preventDefault();
+    if(anim){anim.cancel();anim=null;}
+    const opening=!d.open||d.classList.contains("closing");
+    body.style.overflow="hidden";
+    if(opening){
+      d.classList.remove("closing");d.open=true;
+      const h=body.scrollHeight;
+      anim=body.animate([{height:"0px",opacity:0,transform:"translateY(-6px)"},{height:h+"px",opacity:1,transform:"none"}],{duration:400,easing:"cubic-bezier(.2,.75,.25,1)"});
+      anim.onfinish=()=>{body.style.overflow="";anim=null;};
+    }else{
+      const h=body.scrollHeight;
+      d.classList.add("closing");
+      anim=body.animate([{height:h+"px",opacity:1,transform:"none"},{height:"0px",opacity:0,transform:"translateY(-6px)"}],{duration:320,easing:"cubic-bezier(.4,0,.6,1)"});
+      anim.onfinish=()=>{d.open=false;d.classList.remove("closing");body.style.overflow="";anim=null;};
+    }
+  });
 });
 
 // historia
