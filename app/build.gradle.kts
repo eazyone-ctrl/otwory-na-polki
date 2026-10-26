@@ -10,12 +10,27 @@ android {
         applicationId = "pl.otwory.polki"
         minSdk = 24
         targetSdk = 34
-        versionCode = 2
-        versionName = "1.1"
+        versionCode = 3
+        versionName = "1.2"
+    }
+
+    signingConfigs {
+        create("staly") {
+            storeFile = file("otwory.jks")
+            storePassword = "WlLFTYIjXWuI59dKb3QFj4rt"
+            keyAlias = "otwory"
+            keyPassword = "WlLFTYIjXWuI59dKb3QFj4rt"
+        }
     }
 
     buildTypes {
-        release { isMinifyEnabled = false }
+        release {
+            isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("staly")
+        }
+        debug {
+            signingConfig = signingConfigs.getByName("staly")
+        }
     }
 
     compileOptions {

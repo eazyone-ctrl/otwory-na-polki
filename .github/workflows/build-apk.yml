@@ -24,10 +24,10 @@ jobs:
           gradle-version: "8.9"
 
       - name: Budowanie APK
-        run: gradle assembleDebug --no-daemon
+        run: gradle assembleRelease --no-daemon
 
       - name: Zmiana nazwy pliku
-        run: cp app/build/outputs/apk/debug/app-debug.apk otwory-na-polki.apk
+        run: cp app/build/outputs/apk/release/app-release.apk otwory-na-polki.apk
 
       - uses: actions/upload-artifact@v4
         with:
