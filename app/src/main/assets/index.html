@@ -307,10 +307,10 @@ function render(){
     ["Prześwit",gaps.length?(s.mode==="equal"?fmt(gaps[0]):fmt(Math.min(...gaps))+"–"+fmt(Math.max(...gaps)))+" mm":"—"],
   ].map(([a,b])=>`<div><dt>${a}</dt><dd>${b}</dd></div>`).join("");
   $("svgHost").innerHTML=R.inner>0?svgEl(s,R):"";
-  let t=`<thead><tr><th>Półka</th><th>Oś otworu od dołu</th><th>Od góry boku</th><th>Spód półki</th><th>Prześwit pod</th><th>Wszystkie otwory półki</th></tr></thead><tbody>`;
+  let t=`<thead><tr><th>Półka</th><th>Oś otworu od dołu</th><th>Od góry boku</th><th>Spód półki</th><th>Prześwit pomiędzy</th><th>Wszystkie otwory półki</th></tr></thead><tbody>`;
   R.shelves.slice().reverse().forEach((sh,idx)=>{
     if(idx===0)t+=`<tr class="gaprow"><td>nad półką ${sh.i}</td><td class="e"></td><td class="e"></td><td class="e"></td><td data-l="Prześwit">${fmt(R.gapTop)}</td><td class="e"></td></tr>`;
-    t+=`<tr><td class="sh"><span class="m">Półka </span>${sh.i}</td><td class="key" data-l="Oś otworu od dołu">${fmt(sh.hole)}</td><td data-l="Od góry boku">${fmt(s.H-sh.hole)}</td><td data-l="Spód półki">${fmt(sh.bottom)}</td><td data-l="Prześwit pod">${fmt(sh.gapBelow)}</td><td class="adj" data-l="Otwory">${sh.adj.concat([sh.hole]).sort((a,b)=>a-b).map(y=>y===sh.hole?"<b>"+fmt(y)+"</b>":fmt(y)).join(" · ")}</td></tr>`;
+    t+=`<tr><td class="sh"><span class="m">Półka </span>${sh.i}</td><td class="key" data-l="Oś otworu od dołu">${fmt(sh.hole)}</td><td data-l="Od góry boku">${fmt(s.H-sh.hole)}</td><td data-l="Spód półki">${fmt(sh.bottom)}</td><td data-l="Prześwit pomiędzy">${fmt(sh.gapBelow)}</td><td class="adj" data-l="Otwory">${sh.adj.concat([sh.hole]).sort((a,b)=>a-b).map(y=>y===sh.hole?"<b>"+fmt(y)+"</b>":fmt(y)).join(" · ")}</td></tr>`;
   });
   t+="</tbody>";
   $("tbl").innerHTML=R.shelves.length?t:"<tbody><tr><td>Brak półek do wyznaczenia.</td></tr></tbody>";
