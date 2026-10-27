@@ -124,7 +124,7 @@ body{padding-bottom:calc(80px + env(safe-area-inset-bottom,0px))}
 
 .shelves{display:grid;gap:10px}
 .shelf{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 14px;align-items:center;background:var(--surface-2);border-radius:18px;padding:12px 14px}
-.badge{grid-row:span 4;align-self:center;width:52px;min-height:52px;border-radius:13px;background:var(--accent);color:var(--accent-ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:5px 3px;text-align:center}
+.badge{grid-row:span 3;align-self:center;width:52px;min-height:52px;border-radius:13px;background:var(--accent);color:var(--accent-ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:5px 3px;text-align:center}
 .badge small{font:700 .52rem/1 var(--f-body);letter-spacing:.02em;text-transform:uppercase;opacity:.85}
 .badge b{font:700 1.35rem/1 var(--f-disp)}
 .s-lab{font-size:.74rem;color:var(--muted);font-weight:600}
@@ -396,7 +396,7 @@ html[data-style="tech"] .toast{border-radius:4px}
   </button>
 </form>
 
-<footer class="foot"><span class="foot-line" aria-hidden="true"></span><span>© <span id="year">2026</span> Pracownia Stolarska Maciej Łagun</span><span class="foot-ver">wersja <span id="ver">8.6</span></span></footer>
+<footer class="foot"><span class="foot-line" aria-hidden="true"></span><span>© <span id="year">2026</span> Pracownia Stolarska Maciej Łagun</span><span class="foot-ver">wersja <span id="ver">8.7</span></span></footer>
 
 <section class="sumbar" aria-label="Szybki pasek">
   <div class="stats" id="bar">
@@ -578,7 +578,6 @@ function shelfCard(i,main,mainLab,holes,sub){
   return `<article class="shelf" data-shelf="${i}">
     <div class="badge"><small>Półka</small><b>${i}</b></div>
     <div class="s-lab">${mainLab}</div>
-    <div class="s-main">${main}<small>mm</small></div>
     <div class="chips">${holes}</div>
     ${sub?`<div class="s-sub">${sub}</div>`:""}
   </article>`;
@@ -602,13 +601,13 @@ function render(){
   const none='<p class="empty">Brak półek do wyznaczenia.</p>';
   $("tbl").innerHTML=R.shelves.length?R.shelves.map(sh=>{
     const all=sh.adj.concat([sh.hole]).sort((a,b)=>a-b);
-    const chips=all.length>1?all.map(y=>`<span class="chip${y===sh.hole?" main":""}">${fmt(y)}</span>`).join(""):"";
+    const chips=all.map(y=>`<span class="chip${y===sh.hole?" main":""}">${fmt(y)}</span>`).join("");
     return shelfCard(sh.i,fmt(sh.hole),"Oś otworu od dołu",chips,"Spód półki: "+fmt(sh.bottom)+" mm");
   }).join(""):none;
   $("tblTop").innerHTML=R.shelves.length?R.shelves.map(sh=>{
     const top=y=>s.H-y;
     const all=sh.adj.concat([sh.hole]).sort((a,b)=>b-a);
-    const chips=all.length>1?all.map(y=>`<span class="chip${y===sh.hole?" main":""}">${fmt(top(y))}</span>`).join(""):"";
+    const chips=all.map(y=>`<span class="chip${y===sh.hole?" main":""}">${fmt(top(y))}</span>`).join("");
     return shelfCard(sh.i,fmt(top(sh.hole)),"Oś otworu od góry",chips,"Wierzch półki od góry: "+fmt(top(sh.bottom+s.ts))+" mm");
   }).join(""):none;
   $("svgHost").innerHTML=R.inner>0&&R.shelves.length?svgEl(s,R,dir==="gora"):'<p class="empty">Brak półek do narysowania.</p>';
