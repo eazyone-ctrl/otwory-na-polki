@@ -123,14 +123,15 @@ body{padding-bottom:calc(80px + env(safe-area-inset-bottom,0px))}
 .warn{background:var(--warn-bg);color:var(--warn);border-radius:14px;padding:10px 14px;font-size:.88rem;font-weight:500;display:grid;gap:4px}
 
 .shelves{display:grid;gap:10px}
-.shelf{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 14px;align-items:center;background:var(--surface-2);border-radius:18px;padding:12px 14px}
-.badge{grid-row:span 3;align-self:center;width:52px;min-height:52px;border-radius:13px;background:var(--accent);color:var(--accent-ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:5px 3px;text-align:center}
-.badge small{font:700 .52rem/1 var(--f-body);letter-spacing:.02em;text-transform:uppercase;opacity:.85}
-.badge b{font:700 1.35rem/1 var(--f-disp)}
+.shelf{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 10px;align-items:center;background:var(--surface-2);border-radius:18px;padding:12px 12px}
+.badge{grid-row:span 3;align-self:center;width:36px;min-height:40px;border-radius:10px;background:var(--accent);color:var(--accent-ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:4px 2px;text-align:center}
+.badge small{font:700 .42rem/1 var(--f-body);letter-spacing:.02em;text-transform:uppercase;opacity:.85}
+.badge b{font:700 1.1rem/1 var(--f-disp)}
 .s-lab{font-size:.74rem;color:var(--muted);font-weight:600}
 .s-main{font:700 2.3rem/1 var(--f-disp);color:var(--hole);font-variant-numeric:tabular-nums}
 .s-main small{font:600 .8rem var(--f-body);color:var(--muted);margin-left:3px}
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.shelf .chip{font-size:clamp(1rem,4.6vw,1.22rem);padding:.24em .42em .34em;min-width:3em;letter-spacing:0}
 .chip{display:inline-flex;align-items:center;justify-content:center;min-width:3.2em;font:700 1.22rem/1 var(--f-disp);letter-spacing:.02em;padding:.24em .6em .34em;border-radius:999px;text-align:center;background:var(--hole-soft);color:var(--ink);font-variant-numeric:tabular-nums}
 .chip.main{background:var(--hole);color:var(--surface)}
 .s-sub{grid-column:2;font-size:.82rem;color:var(--muted)}
@@ -396,7 +397,7 @@ html[data-style="tech"] .toast{border-radius:4px}
   </button>
 </form>
 
-<footer class="foot"><span class="foot-line" aria-hidden="true"></span><span>© <span id="year">2026</span> Pracownia Stolarska Maciej Łagun</span><span class="foot-ver">wersja <span id="ver">8.7</span></span></footer>
+<footer class="foot"><span class="foot-line" aria-hidden="true"></span><span>© <span id="year">2026</span> Pracownia Stolarska Maciej Łagun</span><span class="foot-ver">wersja <span id="ver">8.8</span></span></footer>
 
 <section class="sumbar" aria-label="Szybki pasek">
   <div class="stats" id="bar">
